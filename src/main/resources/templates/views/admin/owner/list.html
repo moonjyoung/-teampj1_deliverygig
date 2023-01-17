@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script th:inline="javascript">
+    const user = [[${session.loginUser}]]
+    if(user == null) { 
+      alert("관리자 전용페이지 입니다. 로그인 해 주세요"); 
+      location.href="/master";
+    }
+  </script>
+  <script th:inline="javascript">
+    const status = [[${session.loginUser.status}]];
+      if(status != 1) {
+        alert("승인된 관리자만 접근 가능한 메뉴입니다.");
+        location.href = "/master/index";
+      }
+  </script>
+</head>
+<body>
+  <h1>사장회원 리스트</h1>
+  <tr>
+    <td colspan="2">
+      <a href="/customer/list" style="color: black;"><button>일반회원 관리페이지</button></a>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">  
+      <a href="/master/logout" style="color: black;"><button>로그아웃</button></a>
+    </td>
+  </tr>
+  <table>
+    <thead>
+      <tr>
+        <th>번호</th>
+        <th>아이디</th>
+        <th>닉네임</th>
+        <th>이메일</th>
+        <th>휴대폰번호</th>
+        <th>가입일</th>
+        <th>상태</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="owner, i : ${ownerList}">
+      <td th:text="${owner.seq}"></td>
+      <td th:text="${owner.id}"></td>
+      <td th:text="${owner.nickname}"></td>
+      <td th:text="${owner.email}"></td>
+      <td th:text="${owner.phone}"></td>
+      <td th:text="${owner.joinDt}"></td>
+      <td>
+        <th:block th:switch="${owner.status}">
+        <span th:case="1">정상</span>
+        <span th:case="2">정지</span>
+        <span th:case="3">승인대기</span>
+        </th:block>
+      </td>
+      <td>
+        <th:block th:if="${owner.status == 1}">
+          <a th:href="@{ /owner/status (seq=${owner.seq}, status=2) }">블라인드</a>
+        </th:block>
+        <th:block th:if="${owner.status == 2}">
+          <a th:href="@{ /owner/status (seq=${owner.seq}, status=1) }">정지해제</a>
+        </th:block>
+        <th:block th:if="${owner.status == 3}">
+          <a th:href="@{ /owner/status (seq=${owner.seq}, status=1) }">가입승인</a>
+        </th:block>
+      </td>
+      <td>
+          <a th:href="@{ /owner/delete (seq=${owner.seq}) }">계정삭제</a>
+      </td>
+      </tr>
+    </tbody>
+  </table>
+  <div>
+    <span th:each="num : ${#numbers.sequence(1, totalPage)}">
+      <a th:href="@{/owner/list(page=${num-1}, size=10, sort=oiSeq,desc)}" th:text="${num}"></a>
+    </span>
+  </div>
+</body>
+</html>
