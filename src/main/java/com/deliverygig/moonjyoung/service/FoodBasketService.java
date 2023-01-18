@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.deliverygig.moonjyoung.entity.FoodDetailOptionCheckEntity;
-import com.deliverygig.moonjyoung.repository.FoodBasketRepository;
-import com.deliverygig.moonjyoung.repository.FoodDetailOptionCheckRepository;
-import com.deliverygig.moonjyoung.vo.FoodBasketVO;
+import com.deliverygig.moonjyoung.entity.mycart.FoodDetailOptionCheckEntity;
+import com.deliverygig.moonjyoung.repository.mycart.FoodBasketRepository;
+import com.deliverygig.moonjyoung.repository.mycart.FoodDetailOptionCheckRepository;
+import com.deliverygig.moonjyoung.vo.mycart.FoodBasketVO;
 
 @Service
 public class FoodBasketService {

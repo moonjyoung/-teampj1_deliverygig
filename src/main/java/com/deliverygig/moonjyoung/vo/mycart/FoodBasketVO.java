@@ -1,4 +1,4 @@
-package com.deliverygig.moonjyoung.vo;
+package com.deliverygig.moonjyoung.vo.mycart;
 
 import java.util.List;
 

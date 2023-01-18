@@ -1,4 +1,4 @@
-package com.deliverygig.moonjyoung.entity;
+package com.deliverygig.moonjyoung.entity.mycart;
 
 import org.hibernate.annotations.DynamicInsert;
 
