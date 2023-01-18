@@ -31,16 +31,5 @@ public class VOController {
     //     Map<String, Object> resultMap = voService.getPickUpArea();
     //     return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     // }
-    // 배달 장소/시간대별 가게 목록
-    @GetMapping("/store/list")
-    public ResponseEntity<Object> getDeliveryStoreList() {
-        Map<String, Object> resultMap = voService.getDeliveryStore();
-        return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
-    }
-    // 가게 정보 - 상세
-    @GetMapping("/store/detaillist")
-    public ResponseEntity<Object> getStoreDetailList() {
-        Map<String, Object> resultMap = voService.getDeliveryStoreDetail();
-        return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
-    }
+   
 }
