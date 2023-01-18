@@ -29,14 +29,14 @@ public class FoodBasketService {
             List<String> optionNameList = new ArrayList<String>();
             // optionNameList.clear();
             vo.setCiSeq(ciSeq);
-            vo.setMenuName(data.getFoodDetailOptionEntity().getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFmiName());
-            vo.setMenuPrice(data.getFoodDetailOptionEntity().getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFmiPrice());
-            for (FoodDetailOptionCheckEntity data2 : foodDetailOptionCheckRepository.findByFdocCiSeq(ciSeq)) {
-                if (data2.getFoodDetailOptionEntity().getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFmiSeq()==data.getFoodDetailOptionEntity().getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFmiSeq()) {
-                    optionPrice = optionPrice+data2.getFoodDetailOptionEntity().getFdoPrice();
-                    optionNameList.add(data2.getFoodDetailOptionEntity().getFdoName());
-                }
-            }
+            // vo.setMenuName(data.getFoodDetailOptionEntity().getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFmiName());
+            // vo.setMenuPrice(data.getFoodDetailOptionEntity().getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFmiPrice());
+            // for (FoodDetailOptionCheckEntity data2 : foodDetailOptionCheckRepository.findByFdocCiSeq(ciSeq)) {
+            //     if (data2.getFoodDetailOptionEntity().getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFmiSeq()==data.getFoodDetailOptionEntity().getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFmiSeq()) {
+            //         optionPrice = optionPrice+data2.getFoodDetailOptionEntity().getFdoPrice();
+            //         optionNameList.add(data2.getFoodDetailOptionEntity().getFdoName());
+            //     }
+            // }
             vo.setOptionPrice(optionPrice);
             vo.setMenuOptionList(optionNameList);
             vo.setTotalPrice(optionPrice+vo.getMenuPrice());

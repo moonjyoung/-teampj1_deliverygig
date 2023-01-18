@@ -33,9 +33,9 @@ public class FoodMenuOptionEntity {
     @Column(name="fmo_name") private String fmoName;
     @Column(name="fmo_duplicated") private Integer fmoDuplicated;
     @Column(name="fmo_required_option") private Integer fmoRequiredOption;
-    @Column(name="fmo_order") private Integer fmoOrder;
+    // @Column(name="fmo_order") private Integer fmoOrder;
 
-    @ManyToOne @JoinColumn(name = "fmo_fmi_seq") private FoodMenuInfoEntity foodMenuInfoEntity;
+    // @ManyToOne @JoinColumn(name = "fmo_fmi_seq") private FoodMenuInfoEntity foodMenuInfoEntity;
     
     @OneToMany(mappedBy = "foodMenuOptionEntity")
     private List<FoodDetailOptionEntity> fdoEntityList = new ArrayList<FoodDetailOptionEntity>();

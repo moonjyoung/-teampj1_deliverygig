@@ -168,7 +168,7 @@ public Map<String, Object> updateNickname(String value, String type, HttpSession
             resultMap.put("status", false);
             resultMap.put("message", "로그인이 필요합니다.");
             resultMap.put("code", HttpStatus.FORBIDDEN);
-             return resultMap;
+            return resultMap;
         }
         else if (!e.matcher(value).matches()) {
                 resultMap.put("status", "false");
@@ -192,13 +192,13 @@ public Map<String, Object> updateNickname(String value, String type, HttpSession
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         OwnerEntity loginOwner = (OwnerEntity) session.getAttribute("loginOwner");
         String phone_pattern = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$";
-         Pattern p = Pattern.compile(phone_pattern);
-         if (loginOwner == null) {
-             resultMap.put("status", false);
-             resultMap.put("message", "로그인이 필요합니다.");
-             resultMap.put("code", HttpStatus.FORBIDDEN);
-             return resultMap;
-         }
+        Pattern p = Pattern.compile(phone_pattern);
+        if (loginOwner == null) {
+            resultMap.put("status", false);
+            resultMap.put("message", "로그인이 필요합니다.");
+            resultMap.put("code", HttpStatus.FORBIDDEN);
+            return resultMap;
+        }
         else if(!p.matcher(value).matches()){
                 resultMap.put("status", "false");
                 resultMap.put("message", "올바르지 않은 폰 번호입니다. (01x-xxxx-xxxx)");

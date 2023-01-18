@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.deliverygig.moonjyoung.entity.food.FoodDetailOptionEntity;
+import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
+import com.deliverygig.moonjyoung.entity.food.FoodMenuOptionEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodOptionConnectEntity;
 import com.deliverygig.moonjyoung.repository.food.FoodDetailOptionRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodOptionConnectRepository;
@@ -42,9 +44,9 @@ public class ShowFoodService {
         //     returnList.add(vo);
         // }
         for (FoodOptionConnectEntity data : foodOptionConnectRepository.findAll()) {
-            // foodOptionConnectRepository.findBy
+            ShowFoodListVO vo = new ShowFoodListVO(data.getFoodMenuInfoEntity(), data.getFoodMenuOptionEntity());
+            returnList.add(vo);
         }
-
         resultMap.put("status", true);
         resultMap.put("code", HttpStatus.OK);
         resultMap.put("msg", "메뉴 조회 완료");
