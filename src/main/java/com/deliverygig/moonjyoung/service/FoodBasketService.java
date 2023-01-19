@@ -9,40 +9,61 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.deliverygig.moonjyoung.entity.mycart.FoodDetailOptionCheckEntity;
+import com.deliverygig.moonjyoung.entity.delivery.PickUpAreaEntity;
+import com.deliverygig.moonjyoung.entity.mycart.FoodBasketEntity;
+import com.deliverygig.moonjyoung.entity.mycart.PickFoodDetailOptionEntity;
+import com.deliverygig.moonjyoung.entity.mycart.PickFoodMenuEntity;
+import com.deliverygig.moonjyoung.repository.delivery.PickUpAreaRepository;
 import com.deliverygig.moonjyoung.repository.mycart.FoodBasketRepository;
-import com.deliverygig.moonjyoung.repository.mycart.FoodDetailOptionCheckRepository;
+import com.deliverygig.moonjyoung.repository.mycart.PickFoodDetailOptionRepository;
+import com.deliverygig.moonjyoung.repository.mycart.PickFoodMenuRepository;
+import com.deliverygig.moonjyoung.vo.mycart.FoodBasketMenuOptionVO;
 import com.deliverygig.moonjyoung.vo.mycart.FoodBasketVO;
 
 @Service
 public class FoodBasketService {
     @Autowired FoodBasketRepository foodBasketRepository;
-    @Autowired FoodDetailOptionCheckRepository foodDetailOptionCheckRepository;
+    @Autowired PickFoodMenuRepository pickFoodMenuRepository;
+    @Autowired PickFoodDetailOptionRepository pickFoodDetailOptionRepository;
+    @Autowired PickUpAreaRepository pickUpAreaRepository;
 
-    public Map<String, Object> getFoodBasket(Long ciSeq) {
+    public Map<String, Object> getFoodBasket() {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<FoodBasketVO> returnList = new ArrayList<FoodBasketVO>();
-        Integer optionPrice = 0;
-        FoodBasketVO vo = new FoodBasketVO();
-        for (FoodDetailOptionCheckEntity data : foodDetailOptionCheckRepository.findByFdocCiSeq(ciSeq)) {
-            optionPrice = 0;
-            List<String> optionNameList = new ArrayList<String>();
-            // optionNameList.clear();
-            vo.setCiSeq(ciSeq);
-            // vo.setMenuName(data.getFoodDetailOptionEntity().getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFmiName());
-            // vo.setMenuPrice(data.getFoodDetailOptionEntity().getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFmiPrice());
-            // for (FoodDetailOptionCheckEntity data2 : foodDetailOptionCheckRepository.findByFdocCiSeq(ciSeq)) {
-            //     if (data2.getFoodDetailOptionEntity().getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFmiSeq()==data.getFoodDetailOptionEntity().getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFmiSeq()) {
-            //         optionPrice = optionPrice+data2.getFoodDetailOptionEntity().getFdoPrice();
-            //         optionNameList.add(data2.getFoodDetailOptionEntity().getFdoName());
-            //     }
-            // }
-            vo.setOptionPrice(optionPrice);
-            vo.setMenuOptionList(optionNameList);
-            vo.setTotalPrice(optionPrice+vo.getMenuPrice());
-            vo.setCount(1); // 메뉴 구매 갯수 어디다가 추가할까?
+
+        for (PickFoodMenuEntity data : pickFoodMenuRepository.findAll()) {
+            Integer menuPrice = 0;
+            Integer optionPrice = 0;
+            String tmpOption = "";
+            List<FoodBasketMenuOptionVO> list = new ArrayList<FoodBasketMenuOptionVO>();
+            FoodBasketMenuOptionVO vo = new FoodBasketMenuOptionVO();
+            String tmpMenu = data.getFoodMenuInfoEntity().getFmiName();
+            menuPrice = data.getFoodMenuInfoEntity().getFmiPrice();
+
+            for (PickFoodDetailOptionEntity data2 : pickFoodDetailOptionRepository.findAll()) {
+                if (data2.getPickFoodMenuEntity().getPfmSeq()==data.getPfmSeq()) {
+                    tmpOption += " "+data2.getFoodDetailOptionEntity().getFdoName();
+                    optionPrice += data2.getFoodDetailOptionEntity().getFdoPrice();
+                }
+                else {
+                    continue;
+                }
+            }
+            vo.setMenu(tmpMenu);
+            vo.setOption(tmpOption);
+            vo.setPrice(optionPrice);
+            list.add(vo);
+            FoodBasketVO vo2 = new FoodBasketVO(data);
+            vo2.setMenuoptionList(list);
+            vo2.setPrice(menuPrice+optionPrice);
+            data.setPrice(menuPrice+optionPrice);
+            pickFoodMenuRepository.save(data);
+            vo2.setDeliveryLocation("임시테스트"); // 배송지 입력받게 변경
+            //     PickUpAreaEntity entity = pickUpAreaRepository.findByPuaSeq(7L);
+            //     vo.setDeliveryLocation(entity.getPuaName());
+            returnList.add(vo2);
         }
-        returnList.add(vo);
+
         resultMap.put("status", true);
         resultMap.put("code", HttpStatus.OK);
         resultMap.put("msg", "장바구니 조회 완료");

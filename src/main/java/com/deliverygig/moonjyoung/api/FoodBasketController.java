@@ -16,8 +16,8 @@ public class FoodBasketController {
     @Autowired FoodBasketService foodBasketService;
 
     @GetMapping("/mycart")
-    public ResponseEntity<Object> getMycart(@RequestParam Long ciSeq) {
-        Map<String, Object> resultMap = foodBasketService.getFoodBasket(ciSeq);
+    public ResponseEntity<Object> getMycart(/* @RequestParam Long ciSeq */) {
+        Map<String, Object> resultMap = foodBasketService.getFoodBasket();
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
 }
