@@ -9,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.deliverygig.moonjyoung.entity.food.FoodDetailOptionEntity;
-import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
-import com.deliverygig.moonjyoung.entity.food.FoodMenuOptionEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodOptionConnectEntity;
 import com.deliverygig.moonjyoung.repository.food.FoodDetailOptionRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodOptionConnectRepository;

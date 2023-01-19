@@ -2,9 +2,7 @@ package com.deliverygig.moonjyoung.vo.mycart;
 
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Map;
 
-import com.deliverygig.moonjyoung.entity.mycart.PickFoodDetailOptionEntity;
 import com.deliverygig.moonjyoung.entity.mycart.PickFoodMenuEntity;
 
 import lombok.Data;
@@ -15,6 +13,7 @@ public class FoodBasketVO {
     private String fbNumber;
     private String siName;
     private List<FoodBasketMenuOptionVO> menuoptionList;
+    private Integer count;
     private Integer price;
     private String deliveryLocation;
     private LocalTime deliveryTime;

@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.deliverygig.moonjyoung.entity.food.FoodDetailOptionEntity;
-import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

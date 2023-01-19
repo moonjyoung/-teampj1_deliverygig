@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.DynamicInsert;
 
-import com.deliverygig.moonjyoung.entity.account.CustomerInfoEntity;
-import com.deliverygig.moonjyoung.entity.delivery.PickUpAreaEntity;
 import com.deliverygig.moonjyoung.entity.delivery.UnivTimeInfoEntity;
 
 import jakarta.persistence.Column;
