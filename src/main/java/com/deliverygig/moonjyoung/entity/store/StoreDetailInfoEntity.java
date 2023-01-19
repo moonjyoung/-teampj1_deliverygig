@@ -35,7 +35,5 @@ public class StoreDetailInfoEntity {
     @Column(name="sdi_origin") private String sdiOrigin;
     @Column(name="sdi_min_order_price") private Integer sdiMinOrderPrice;
     @Column(name="sdi_delivery_price") private Integer sdiDeliveryPrice;
-    @Column(name="si_oi_seq") private Long siOiSeq;
-
     @ManyToOne @JoinColumn(name = "sdi_si_seq") private StoreInfoEntity storeInfoEntity;
 }

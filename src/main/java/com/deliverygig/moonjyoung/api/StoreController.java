@@ -19,11 +19,10 @@ import com.deliverygig.moonjyoung.service.AddStoreDetailInfoService;
 import com.deliverygig.moonjyoung.service.AddstoreInfoService;
 import com.deliverygig.moonjyoung.service.VOService;
 import com.deliverygig.moonjyoung.vo.store.AddstoreInfoVo;
-import com.deliverygig.moonjyoung.vo.store.UpdateStoreDetailVO;
+import com.deliverygig.moonjyoung.vo.store.StoreDetailInfoVO;
 import com.deliverygig.moonjyoung.vo.store.UpdateStoreVO;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/store")
@@ -60,12 +59,10 @@ public class StoreController {
         Map<String, Object> resultMap = aService.UpdateStore(data, siSeq, type, session);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
-    @PatchMapping("/update/{type}")
-    public ResponseEntity<Object> updateStoreDetailInfo(HttpSession session, @PathVariable String type,
-            @RequestParam Long siSeq, @RequestBody UpdateStoreDetailVO data) {
-        Map<String, Object> resultMap = dService.addStoreDetail(data, type, siSeq, session);
+
+    @PutMapping("/add/detail")
+    public ResponseEntity<Object> getAddStoreDetail(@RequestBody StoreDetailInfoVO data, HttpSession session, @RequestParam Long seq) {
+        Map<String, Object> resultMap = dService.addStoreDetail(data, seq, session);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
-    
-    
 }
