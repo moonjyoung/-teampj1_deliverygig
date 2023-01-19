@@ -29,7 +29,7 @@ public class FoodDetailOptionEntity {
     @Column(name="fdo_name") private String fdoName;
     @Column(name="fdo_price") private Integer fdoPrice;
     @Column(name="fdo_order") private Integer fdoOrder;
-    @Column(name="fdo_check") private Integer fdoCheck;
+    // @Column(name="fdo_check") private Integer fdoCheck;
 
     @ManyToOne @JoinColumn(name = "fdo_fmo_seq") private FoodMenuOptionEntity foodMenuOptionEntity;
     public void setFoodMenuOptionEntity(FoodMenuOptionEntity foodMenuOptionEntity) {

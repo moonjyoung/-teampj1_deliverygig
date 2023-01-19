@@ -30,5 +30,5 @@ public class FoodOptionConnectEntity {
     @Column(name = "foc_fmo_order") private Integer focFmoOrder;
 
     @ManyToOne @JoinColumn(name = "foc_fmi_seq") private FoodMenuInfoEntity foodMenuInfoEntity;
-    @ManyToOne @JoinColumn(name = "foc_fmo_seq") private FoodMenuOptionEntity foodmenuOptionEntity;
+    @ManyToOne @JoinColumn(name = "foc_fmo_seq") private FoodMenuOptionEntity foodMenuOptionEntity;
 }

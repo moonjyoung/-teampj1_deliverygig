@@ -7,4 +7,5 @@ import com.deliverygig.moonjyoung.entity.delivery.PickUpAreaEntity;
 
 @Repository
 public interface PickUpAreaRepository extends JpaRepository<PickUpAreaEntity, Long> {
+    public PickUpAreaEntity findByPuaSeq(Long puaSeq);
 }
