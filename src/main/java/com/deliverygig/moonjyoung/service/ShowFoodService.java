@@ -46,7 +46,7 @@ public class ShowFoodService {
         }
         resultMap.put("status", true);
         resultMap.put("code", HttpStatus.OK);
-        resultMap.put("msg", "메뉴 조회 완료");
+        resultMap.put("message", "메뉴 조회 완료");
         resultMap.put("list", returnList);
         return resultMap;
     }

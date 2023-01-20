@@ -27,20 +27,20 @@ public class MasterService {
         if (name==null || name.equals("")) {
             resultMap.put("status", false);
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
-            resultMap.put("msg", "올바른 대학명을 입력해주세요.");
+            resultMap.put("message", "올바른 대학명을 입력해주세요.");
             return resultMap;
         }
         else if (univInfoRepository.countByUiName(name)!=0) {
             resultMap.put("status", false);
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
-            resultMap.put("msg", "이미 있는 대학명입니다.");
+            resultMap.put("message", "이미 있는 대학명입니다.");
             return resultMap;
         }
         else {
             univInfoRepository.save(vo.toUnivInfoEntity());
             resultMap.put("status", true);
             resultMap.put("code", HttpStatus.CREATED);
-            resultMap.put("msg", "새 대학 추가 성공");
+            resultMap.put("message", "새 대학 추가 성공");
         }
         
         return resultMap;
@@ -52,7 +52,7 @@ public class MasterService {
         if (univInfoRepository.findByUiName(univ)==null) {
             resultMap.put("status", false);
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
-            resultMap.put("msg", "존재하지 않는 대학입니다.");
+            resultMap.put("message", "존재하지 않는 대학입니다.");
             return resultMap;
         }
         else {
@@ -61,7 +61,7 @@ public class MasterService {
         }
         resultMap.put("status", true);
         resultMap.put("code", HttpStatus.CREATED);
-        resultMap.put("msg", "새 수령장소 추가 성공");
+        resultMap.put("message", "새 수령장소 추가 성공");
         return resultMap;
     }
 }

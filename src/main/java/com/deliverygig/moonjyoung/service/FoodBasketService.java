@@ -55,7 +55,7 @@ public class FoodBasketService {
             if (vo2.getCiSeq()!=ciSeq) {
                 resultMap.put("status", false);
                 resultMap.put("code", HttpStatus.NOT_FOUND);
-                resultMap.put("msg", "장바구니가 비어있습니다.");
+                resultMap.put("message", "장바구니가 비어있습니다.");
                 return resultMap;
             }
             vo2.setMenuoptionList(list);
@@ -70,7 +70,7 @@ public class FoodBasketService {
 
         resultMap.put("status", true);
         resultMap.put("code", HttpStatus.OK);
-        resultMap.put("msg", "장바구니 조회 완료");
+        resultMap.put("message", "장바구니 조회 완료");
         resultMap.put("list", returnList);
         return resultMap;
     }
