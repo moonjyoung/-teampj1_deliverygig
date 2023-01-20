@@ -25,13 +25,13 @@ public class AddStoreDetailInfoService {
     OwnerRepository oRepo;
 
     // 가게 디테일 정보 등록
-    public Map<String, Object> addStoreDetail(StoreDetailInfoVO data, Long seq) {
+    public Map<String, Object> addStoreDetail(StoreDetailInfoVO data, Long siSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         // OwnerEntity data2 = (OwnerEntity) session.getAttribute("loginOwner");
         // StoreDetailInfoEntity entity2 = dRepo.findBySdiSeq(seq); // 수정할 때 필요함. 
         String phone_pattern = "^\\d{2,3}-\\d{3,4}-\\d{4}$";
         Pattern p = Pattern.compile(phone_pattern);
-        StoreInfoEntity entity1 = sRepo.findBySiSeq(seq);
+        StoreInfoEntity entity1 = sRepo.findBySiSeq(siSeq);
 
         // if (session.getAttribute("loginOwner") == null) {
         //     resultMap.put("message", "로그인 먼저 해주세요.");
@@ -49,7 +49,11 @@ public class AddStoreDetailInfoService {
         //     resultMap.put("code", HttpStatus.BAD_REQUEST);
         //     return resultMap;
         // }
-
+        else if (dRepo.countBySdiSiSeq(siSeq) == 1) {
+            resultMap.put("message", "해당 가게의 상세정보가 이미 있습니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            return resultMap;
+        }
         else if (data.getSdiMinOrderPrice() < 0 || data.getSdiDeliveryPrice() < 0) {
             resultMap.put("message", "알맞지 않은 최소주문금액이거나 배달비금액 입니다.");
             resultMap.put("code", HttpStatus.BAD_REQUEST);
@@ -69,7 +73,7 @@ public class AddStoreDetailInfoService {
         entity.setSdiOwnerWord(data.getSdiOwnerWord()); // 사장님 한마디
         // entity.getStoreInfoEntity().setSiSeq(seq); 
         // entity.Setsdinum(seq); 
-        entity.setStoreInfoEntity(sRepo.findBySiSeq(seq)); // 가게 번호 
+        entity.setStoreInfoEntity(sRepo.findBySiSeq(siSeq)); // 가게 번호 
         entity.setSdiPhoneNumber(data.getSdiPhoneNumber()); // 폰 번호
         entity.setSdiAddress(data.getSdiAddress()); // 주소
         entity.setSdiOrigin(data.getSdiOrigin()); // 원산지 
@@ -78,14 +82,15 @@ public class AddStoreDetailInfoService {
         entity.setSdiBusinessNumber(data.getSdiAddress()); // 사업자 번호
         dRepo.save(entity);
         resultMap.put("status", true);
+        resultMap.put("message", "가게 디테일 정보가 등록되었습니다.");
         resultMap.put("code", HttpStatus.CREATED);
         return resultMap;
     }
     // 디테일 수정 
-    public Map<String, Object> updateStoreDetail(UpdateStoreDetailVO data, Long seq) {
+    public Map<String, Object> updateStoreDetail(UpdateStoreDetailVO data, Long siSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         // StoreInfoEntity entity = sRepo.findBySiSeq(seq);
-        StoreDetailInfoEntity entity2 = dRepo.findBySdiSeq(seq); // 수정할 때 필요함. 
+        StoreDetailInfoEntity entity2 = dRepo.findBySdiSeq(siSeq); // 수정할 때 필요함. 
         String phone_pattern = "^\\d{2,3}-\\d{3,4}-\\d{4}$";
         Pattern p = Pattern.compile(phone_pattern);
         if (entity2 == null) {

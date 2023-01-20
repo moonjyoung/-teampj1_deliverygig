@@ -58,14 +58,14 @@ public class StoreController {
     }
     // 디테일 등록
     @PostMapping("/add/detail")
-    public ResponseEntity<Object> postAddStoreDetail(@RequestBody StoreDetailInfoVO data, @RequestParam Long seq) {
-        Map<String, Object> resultMap = dService.addStoreDetail(data, seq);
+    public ResponseEntity<Object> postAddStoreDetail(@RequestBody StoreDetailInfoVO data, @RequestParam Long siSeq) {
+        Map<String, Object> resultMap = dService.addStoreDetail(data, siSeq);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
     // 디테일 수정
     @PostMapping("/update/detail")
-     public ResponseEntity<Object> postUdateStoreDetail(@RequestBody UpdateStoreDetailVO data, @RequestParam Long seq) {
-         Map<String, Object> resultMap = dService.updateStoreDetail(data, seq);
+     public ResponseEntity<Object> postUdateStoreDetail(@RequestBody UpdateStoreDetailVO data, @RequestParam Long siSeq) {
+         Map<String, Object> resultMap = dService.updateStoreDetail(data, siSeq);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
 }
