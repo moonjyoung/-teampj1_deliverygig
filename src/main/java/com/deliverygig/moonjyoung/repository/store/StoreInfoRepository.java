@@ -7,5 +7,5 @@ import com.deliverygig.moonjyoung.entity.store.StoreInfoEntity;
 
 @Repository
 public interface StoreInfoRepository extends JpaRepository<StoreInfoEntity, Long> {
-    
+    public StoreInfoEntity findBySiSeq(Long siSeq);
 }

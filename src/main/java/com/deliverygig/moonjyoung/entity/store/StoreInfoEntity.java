@@ -25,8 +25,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "store_info")
 public class StoreInfoEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "si_seq") private Long siSeq;
-    @Column(name = "si_name") private String siName;
-    @Column(name = "si_discount") @ColumnDefault("0") private Double siDiscount;
-    @Column(name = "si_regdt") @ColumnDefault("now()") private LocalDate siRegdt;
+    @Column(name = "si_seq")    private Long   siSeq;
+    @Column(name = "si_name")   private String siName;
+    @Column(name = "si_discount") @ColumnDefault("0")     private Double    siDiscount;
+    @Column(name = "si_regdt")    @ColumnDefault("now()") private LocalDate siRegdt;
 }
