@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "store_info")
 public class StoreInfoEntity {
+<<<<<<< HEAD
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // @OneToMany(mappedBy = "storeInfoEntity") @JoinColumn(name = "si_seq")
@@ -50,6 +51,13 @@ public class StoreInfoEntity {
     // public void setSiSeqq(Long num) {
     //     this.siSeq = num;
     // }
+=======
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "si_seq")    private Long   siSeq;
+    @Column(name = "si_name")   private String siName;
+    @Column(name = "si_discount") @ColumnDefault("0")     private Double    siDiscount;
+    @Column(name = "si_regdt")    @ColumnDefault("now()") private LocalDate siRegdt;
+>>>>>>> master
 }
 
 
