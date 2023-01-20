@@ -3,18 +3,17 @@ package com.deliverygig.moonjyoung.service;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import com.deliverygig.moonjyoung.entity.account.OwnerEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreDetailInfoEntity;
+import com.deliverygig.moonjyoung.entity.store.StoreInfoEntity;
+import com.deliverygig.moonjyoung.repository.account.OwnerRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreDetailInfoRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreInfoRepository;
 import com.deliverygig.moonjyoung.vo.store.StoreDetailInfoVO;
+import com.deliverygig.moonjyoung.vo.store.UpdateStoreDetailVO;
 
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class AddStoreDetailInfoService {
@@ -22,48 +21,55 @@ public class AddStoreDetailInfoService {
     StoreDetailInfoRepository dRepo;
     @Autowired
     StoreInfoRepository sRepo;
+    @Autowired
+    OwnerRepository oRepo;
 
-    public Map<String, Object> addStoreDetail(StoreDetailInfoVO data,Long seq, HttpSession session) {
+    // 가게 디테일 정보 등록
+    public Map<String, Object> addStoreDetail(StoreDetailInfoVO data, Long seq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        OwnerEntity data2 = (OwnerEntity) session.getAttribute("loginOwner");
-        boolean status = true;
-        if (session.getAttribute("loginOwner") == null) {
-            resultMap.put("message", "로그인 먼저 해주세요.");
-            status = false;
-        }
-        if (sRepo.findBySiSeq(seq) == null) {
-                resultMap.put("message", "가게 정보가 없습니다.");
-                status = false;
-            }
-            StoreDetailInfoEntity entity = dRepo.findBySdiSeq(seq);
-            // StoreInfoEntity entity2 = sRepo.findBySiSeq(sdiSeq);
-        if (!entity.getStoreInfoEntity().getSiOiSeq().equals(data2.getOiSeq())) {
-            resultMap.put("message", "해당 회원의 가게가 아닙니다.");
-            status = false;
-        }
+        // OwnerEntity data2 = (OwnerEntity) session.getAttribute("loginOwner");
+        // StoreDetailInfoEntity entity2 = dRepo.findBySdiSeq(seq); // 수정할 때 필요함. 
         String phone_pattern = "^\\d{2,3}-\\d{3,4}-\\d{4}$";
         Pattern p = Pattern.compile(phone_pattern);
-        if (data.getSdiMinOrderPrice() < 0 || data.getSdiDeliveryPrice() < 0) {
-            status = false;
-            resultMap.put("message", "알맞지 않은 최소주문금액이거나 배달비금액 입니다.");
-        }
-        if (data.getSdiDeliveryPrice() == null || data.getSdiMinOrderPrice() == null) {
-                status = false;
-                resultMap.put("message", "최소주문금액이나 배달비는 반드시 작성해주셔야 합니다.");
-        }
-        if (!p.matcher(data.getSdiPhoneNumber()).matches()) {
-            status = false;
-            resultMap.put("message", "알맞지 않은 전화번호입니다.");
-        }
-        if (!status) {
-            resultMap.put("status", false);
+        StoreInfoEntity entity1 = sRepo.findBySiSeq(seq);
+
+        // if (session.getAttribute("loginOwner") == null) {
+        //     resultMap.put("message", "로그인 먼저 해주세요.");
+        //     resultMap.put("code", HttpStatus.BAD_REQUEST);
+        //     return resultMap;
+        // }
+
+        if (entity1 == null) {
+            resultMap.put("message", "가게 정보가 없습니다.");
             resultMap.put("code", HttpStatus.BAD_REQUEST);
             return resultMap;
         }
+        // else if(entity1.getSiOiSeq() != data2.getOiSeq()){
+        //      resultMap.put("message", "해당 회원의 가게정보가 아닙니다.");
+        //     resultMap.put("code", HttpStatus.BAD_REQUEST);
+        //     return resultMap;
+        // }
+
+        else if (data.getSdiMinOrderPrice() < 0 || data.getSdiDeliveryPrice() < 0) {
+            resultMap.put("message", "알맞지 않은 최소주문금액이거나 배달비금액 입니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            return resultMap;
+        } else if (data.getSdiDeliveryPrice() == null || data.getSdiMinOrderPrice() == null) {
+            resultMap.put("message", "최소주문금액이나 배달비는 반드시 작성해주셔야 합니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            return resultMap;
+        } else if (!p.matcher(data.getSdiPhoneNumber()).matches()) {
+            resultMap.put("message", "알맞지 않은 전화번호입니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            return resultMap;
+        }
+        StoreDetailInfoEntity entity = new StoreDetailInfoEntity();
         entity.setSdiDeliveryPrice(data.getSdiDeliveryPrice()); // 배달비
         entity.setSdiMinOrderPrice(data.getSdiMinOrderPrice()); // 최소주문금액
         entity.setSdiOwnerWord(data.getSdiOwnerWord()); // 사장님 한마디
-        entity.getStoreInfoEntity().setSiSeq(seq); // 가게 번호
+        // entity.getStoreInfoEntity().setSiSeq(seq); 
+        // entity.Setsdinum(seq); 
+        entity.setStoreInfoEntity(sRepo.findBySiSeq(seq)); // 가게 번호 
         entity.setSdiPhoneNumber(data.getSdiPhoneNumber()); // 폰 번호
         entity.setSdiAddress(data.getSdiAddress()); // 주소
         entity.setSdiOrigin(data.getSdiOrigin()); // 원산지 
@@ -75,4 +81,64 @@ public class AddStoreDetailInfoService {
         resultMap.put("code", HttpStatus.CREATED);
         return resultMap;
     }
+    // 디테일 수정 
+    public Map<String, Object> updateStoreDetail(UpdateStoreDetailVO data, Long seq) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        // StoreInfoEntity entity = sRepo.findBySiSeq(seq);
+        StoreDetailInfoEntity entity2 = dRepo.findBySdiSeq(seq); // 수정할 때 필요함. 
+        String phone_pattern = "^\\d{2,3}-\\d{3,4}-\\d{4}$";
+        Pattern p = Pattern.compile(phone_pattern);
+        if (entity2 == null) {
+            resultMap.put("status", false);
+            resultMap.put("message", "가게 정보가 없습니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            return resultMap;
+        }
+        //  아무것도 정보가 입력되지 않았을 경우 원래 그대로의 정보로 수정한다. 
+        if (data.getNewsdiAddress() == null)
+            data.setNewsdiAddress(entity2.getSdiAddress());
+         if (data.getNewsdiBusinessNumber() == null)
+            data.setNewsdiBusinessNumber(entity2.getSdiBusinessNumber());
+         if (data.getNewsdiDeliveryPrice() == null)
+            data.setNewsdiDeliveryPrice(entity2.getSdiDeliveryPrice());
+         if (data.getNewsdiMinOrderPrice() == null)
+            data.setNewsdiMinOrderPrice(entity2.getSdiMinOrderPrice());
+         if (data.getNewsdiOrigin() == null)
+            data.setNewsdiOrigin(entity2.getSdiOrigin());
+         if (data.getNewsdiOwnerName() == null)
+            data.setNewsdiOwnerName(entity2.getSdiOwnerName());
+         if (data.getNewsdiOwnerWord() == null)
+            data.setNewsdiOwnerWord(entity2.getSdiOwnerWord());
+         if (data.getNewsdiStoreName() == null)
+            data.setNewsdiStoreName(entity2.getSdiStoreName());
+         if (data.getNewsdiPhoneNumber() == null)
+            data.setNewsdiPhoneNumber(entity2.getSdiPhoneNumber());
+         if (!p.matcher(data.getNewsdiPhoneNumber()).matches()) {
+            resultMap.put("message", "알맞지 않은 전화번호입니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            return resultMap;
+        }
+        else if (data.getNewsdiDeliveryPrice() < 0 || data.getNewsdiMinOrderPrice() < 0) {
+            resultMap.put("message", "알맞지 않은 최소주문금액이거나 배달비금액 입니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            return resultMap;
+        }
+       
+        entity2.setSdiAddress(data.getNewsdiAddress());
+        entity2.setSdiBusinessNumber(data.getNewsdiBusinessNumber());
+        entity2.setSdiDeliveryPrice(data.getNewsdiDeliveryPrice());
+        entity2.setSdiMinOrderPrice(data.getNewsdiMinOrderPrice());
+        entity2.setSdiOrigin(data.getNewsdiOrigin());
+        entity2.setSdiOwnerName(data.getNewsdiOrigin());
+        entity2.setSdiStoreName(data.getNewsdiStoreName());
+        entity2.setSdiPhoneNumber(data.getNewsdiPhoneNumber());
+        entity2.setSdiOwnerWord(data.getNewsdiOwnerWord());
+
+        dRepo.save(entity2);
+        resultMap.put("status", true);
+        resultMap.put("message", "가게 디테일 정보가 수정되었습니다.");
+        resultMap.put("code", HttpStatus.ACCEPTED);
+        return resultMap;
+
+    }        
 }

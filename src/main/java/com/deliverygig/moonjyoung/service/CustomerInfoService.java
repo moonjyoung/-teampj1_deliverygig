@@ -80,16 +80,16 @@ public class CustomerInfoService {
         // }
 
         if (cRepo.countByCiId(replaceid) == 1) {
-            resultMap.put("idmessage", replaceid + " 은/는 이미 등록된 아이디입니다.");
+            resultMap.put("message", replaceid + " 은/는 이미 등록된 아이디입니다.");
             status = false;
         } else if (cRepo.countByCiNickName(replacenickname) == 1) {
-            resultMap.put("ninknamemessage", replacenickname + " 은/는 이미 등록된 닉네임입니다.");
+            resultMap.put("message", replacenickname + " 은/는 이미 등록된 닉네임입니다.");
             status = false;
         } else if (cRepo.countByCiEmail(replaceemail) == 1) {
-            resultMap.put("emailmessage", replaceemail + " 은/는 이미 등록된 이메일입니다.");
+            resultMap.put("message", replaceemail + " 은/는 이미 등록된 이메일입니다.");
             status = false;
         } else if (cRepo.countByCiPhone(replacephone) == 1) {
-            resultMap.put("phonemessage", replacephone + " 은/는 이미 등록된 전화번호입니다.");
+            resultMap.put("message", replacephone + " 은/는 이미 등록된 전화번호입니다.");
             status = false;
         }
         
@@ -133,7 +133,7 @@ public class CustomerInfoService {
             resultMap.put("message", "닉네임은 한글로만 입력해주세요.");
             status = false;
         } else if (!b.matcher(replaceemail).matches()) {
-            resultMap.put("emessage", "잘못된 이메일 입력방식입니다.");
+            resultMap.put("message", "잘못된 이메일 입력방식입니다.");
             status = false;
         }
 
@@ -448,7 +448,7 @@ public class CustomerInfoService {
             }
             else if (cRepo.countByCiNickName(replacenickname) == 1) {
                 resultMap.put("status", "false");
-                resultMap.put("memessage", replacenickname + " 은/는 이미 등록된 닉네임입니다.");
+                resultMap.put("message", replacenickname + " 은/는 이미 등록된 닉네임입니다.");
                 resultMap.put("code", HttpStatus.BAD_REQUEST);
                 return resultMap;
             }

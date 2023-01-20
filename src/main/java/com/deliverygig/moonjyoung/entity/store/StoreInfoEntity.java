@@ -1,8 +1,5 @@
 package com.deliverygig.moonjyoung.entity.store;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 // import com.deliverygig.moonjyoung.vo.store.UpdateStoreVO;
@@ -12,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+// import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,8 +17,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor
 @DynamicInsert
 @Entity
@@ -28,6 +26,8 @@ import lombok.NoArgsConstructor;
 public class StoreInfoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @OneToMany(mappedBy = "storeInfoEntity") @JoinColumn(name = "si_seq")
+    // private List<StoreDetailInfoEntity> sdiList = new ArrayList<>();
     @Column(name = "si_seq")
     private Long siSeq;
     @Column(name = "si_name")
@@ -43,13 +43,12 @@ public class StoreInfoEntity {
     @Column(name = "si_status")
     @ColumnDefault("9")
     private Integer siStatus;
+    
+    // @OneToOne(mappedBy = "store_info")
+    // private StoreDetailInfoEntity storeDetailInfoEntity;
 
-    // public StoreInfoEntity(LoginOwnerVO data) {
-    //     this.siOiSeq = data.getOiSeq();
-    // }
-    // public StoreInfoEntity(UpdateStoreVO data) {
-    //     this.siName = data.getSiName();
-    //     this.siDiscount = data.getSiDiscount();
+    // public void setSiSeqq(Long num) {
+    //     this.siSeq = num;
     // }
 }
 
