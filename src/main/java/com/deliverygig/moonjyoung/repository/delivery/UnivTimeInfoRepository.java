@@ -7,5 +7,6 @@ import com.deliverygig.moonjyoung.entity.delivery.UnivTimeInfoEntity;
 
 @Repository
 public interface UnivTimeInfoRepository extends JpaRepository<UnivTimeInfoEntity, Long>{
-    
+    public Integer countByUtiSeq(Long utiSeq);
+    public UnivTimeInfoEntity findByUtiSeq(Long utiSeq);
 }
