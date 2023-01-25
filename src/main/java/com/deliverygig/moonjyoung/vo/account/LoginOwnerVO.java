@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class LoginOwnerVO {
-  private String oiId;
-  private String oiPwd;
-  private Long oiSeq;
+  private String owner_id;
+  private String owner_pwd;
 }
