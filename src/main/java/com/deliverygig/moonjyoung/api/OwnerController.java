@@ -6,6 +6,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,16 +17,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.deliverygig.moonjyoung.service.OwnerInfoService;
 import com.deliverygig.moonjyoung.vo.account.JoinOwnerVO;
 import com.deliverygig.moonjyoung.vo.account.LoginOwnerVO;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@RestController
-@RequestMapping("/owner")
+@Controller
+@RequestMapping("/oowner")
 public class OwnerController {
     @Autowired OwnerInfoService oService;
 
@@ -34,10 +36,21 @@ public class OwnerController {
     return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
   }
 
+  @GetMapping("/login") 
+  public String getLogin() {
+      return "/store/index";
+  }
   @PostMapping("/login")
-  public ResponseEntity<Object> ownerLogin(@RequestBody LoginOwnerVO data, HttpSession session) {
-    Map<String, Object> resultMap = oService.loginOwner(data, session);
-    return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+  public String ownerLogin(LoginOwnerVO data, HttpSession session, Model model) {
+    Map<String, Object> resultMap = oService.loginOwner(data);
+    if((Boolean)resultMap.get("status")) {
+      session.setAttribute("loginUser", resultMap.get("login"));
+      return "redirect:/store/main";
+    }
+    else {
+      model.addAttribute("message", resultMap.get("message"));
+      return "/store/index";
+    }
   }
 
 //  @GetMapping ("/logout")  

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.deliverygig.moonjyoung.entity.account.OwnerEntity;
 import com.deliverygig.moonjyoung.repository.account.OwnerRepository;
 import com.deliverygig.moonjyoung.vo.account.JoinOwnerVO;
+import com.deliverygig.moonjyoung.vo.account.LoginOwnerInfoVO;
 import com.deliverygig.moonjyoung.vo.account.LoginOwnerVO;
 
 import jakarta.servlet.http.HttpSession;
@@ -24,13 +25,6 @@ import lombok.Builder;
 public class OwnerInfoService {
     @Autowired
     OwnerRepository oRepo;
-    // @Autowired OwnerEntity oEntity;
-        //@Autowired OwnerJoinVO ovo;
-
-
-
-
-//회원가입
 public Map<String, Object> addOwner (JoinOwnerVO data) {
     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
     
@@ -77,19 +71,25 @@ public Map<String, Object> addOwner (JoinOwnerVO data) {
 
 
 //로그인
-public Map<String, Object> loginOwner (LoginOwnerVO data, HttpSession session) {
+public Map<String, Object> loginOwner (LoginOwnerVO data) {
     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-    OwnerEntity Ownerlogin = oRepo.findByOiIdAndOiPwd(data.getOiId(), data.getOiPwd());
-    if (Ownerlogin == null) {
+    OwnerEntity Ownerlogin = oRepo.findByOiIdAndOiPwd(data.getOwner_id(), data.getOwner_pwd()); 
+    if(Ownerlogin == null) {
         resultMap.put("status" , false);
         resultMap.put("message", "아이디 또는 비밀번호의 오류입니다");
-        resultMap.put("code", HttpStatus.BAD_REQUEST);
+    }
+    else if(Ownerlogin.getOiStatus() == 2 ) { // (1.정상 2 블라인드 3. 가입대기)
+        resultMap.put("status", false);
+        resultMap.put("message", "블라인드 처리된 계정입니다.");
+    }
+    else if(Ownerlogin.getOiStatus() == 3 ) {
+        resultMap.put("status", false);
+        resultMap.put("message", "가입대기중 입니다.");
     }
     else {
-        session.setAttribute("loginOwner", Ownerlogin);
         resultMap.put("status" , true);
         resultMap.put("message", "로그인이 완료되었습니다");
-        resultMap.put("code", HttpStatus.ACCEPTED);
+        resultMap.put("login", new LoginOwnerInfoVO(Ownerlogin));
     }
     return resultMap;
 }
