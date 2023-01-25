@@ -5,7 +5,7 @@ import com.deliverygig.moonjyoung.entity.delivery.UnivInfoEntity;
 import lombok.Data;
 
 @Data
-public class ShowUnivListVO  {
+public class ShowUnivListVO {
     private Long uiSeq;
     private String uiName;
 
