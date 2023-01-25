@@ -55,12 +55,27 @@ public class MasterService {
     public Map<String, Object> addPickUpArea(String univ, String pickUpArea) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         PickUpAreaEntity pickUpAreaEntity = new PickUpAreaEntity();
+        UnivInfoEntity data = univInfoRepository.findByUiName(univ);
+        Long univ_no = data.getUiSeq();
         if (univInfoRepository.findByUiName(univ) == null) {
             resultMap.put("status", false);
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
             resultMap.put("message", "존재하지 않는 대학입니다.");
             return resultMap;
-        } else {
+        } 
+        else if (pickUpArea == null || pickUpArea.equals("")) {
+            resultMap.put("status", false);
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            resultMap.put("message", "올바른 수령장소를 입력해주세요");
+            return resultMap;
+        }
+        else if(pickUpAreaRepository.findByPuaSeqAndPuaName(univ_no, pickUpArea) != null) {
+            resultMap.put("status", false);
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            resultMap.put("message", "이미 존재하는 수령장소입니다.");
+            return resultMap;
+        }
+         else {
             UnivInfoEntity entity = univInfoRepository.findByUiName(univ);
             pickUpAreaRepository
                     .save(pickUpAreaEntity.builder().puaSeq(null).puaName(pickUpArea).univInfoEntity(entity).build());
