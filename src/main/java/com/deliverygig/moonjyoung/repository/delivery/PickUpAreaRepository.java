@@ -12,6 +12,11 @@ import com.deliverygig.moonjyoung.entity.delivery.PickUpAreaEntity;
 @Repository
 public interface PickUpAreaRepository extends JpaRepository<PickUpAreaEntity, Long> {
     public PickUpAreaEntity findByPuaSeq(Long puaSeq);
+    
     @Query(value = "select * from pick_up_area where pua_ui_seq = :puaUiSeq", nativeQuery = true)
     public List<PickUpAreaEntity> findAllByPuaUiSeq(@Param("puaUiSeq") Long puaUiSeq);
+
+    @Query(value = "select * from pick_up_area where pua_ui_seq = :puaUiSeq and pua_name = :puaName", nativeQuery = true)
+    public PickUpAreaEntity findByPuaSeqAndPuaName(@Param("puaUiSeq") Long puaUiSeq, @Param("puaName") String puaName);
+    
 }
