@@ -33,8 +33,10 @@ public class MasterController {
     
     @PostMapping("/univTime/add")
     public ResponseEntity<Object> postUnivTimeAdd(@RequestBody UnivTimeVO data, @RequestParam Long seq) {
-        Map<String, Object> resultMap = mService.addUnivTime(data, seq); 
-        return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+        Map<String, Object> resultMap = mService.addUnivTime(data, seq);
+        return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
+    
+
 
 }
