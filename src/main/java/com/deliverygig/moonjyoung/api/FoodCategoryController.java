@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +28,7 @@ public class FoodCategoryController {
     @Autowired FoodCategoryService fcService;
 
     // Create
-    @PutMapping("/insert")
+    @PostMapping("/insert")
     public ResponseEntity<Object> cateInsert(@RequestBody CateAddVO data) {
         Map<String, Object> resultMap = fcService.addCategory(data);
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
@@ -39,13 +40,13 @@ public class FoodCategoryController {
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
     // Update
-    @PatchMapping("/update/{seq}")
-    public ResponseEntity<Object> categoryUpdate(@PathVariable String seq, @RequestParam String value, @RequestBody CateUpdateVO data) {
-        Map<String, Object> resultMap = fcService.cateUpdate(seq, value, data);
+    @PostMapping("/update")
+    public ResponseEntity<Object> categoryUpdate(@RequestParam Long seq, @RequestBody CateUpdateVO data) {
+        Map<String, Object> resultMap = fcService.cateUpdate(seq, data);
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
     // Delete
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public ResponseEntity<Object> deleteCate(@RequestBody FoodCategoryEntity data) {
         Map<String, Object> resultMap = fcService.dCate(data);
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
