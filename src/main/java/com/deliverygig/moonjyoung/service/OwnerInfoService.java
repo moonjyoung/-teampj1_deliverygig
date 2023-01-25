@@ -6,10 +6,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.QAbstractAuditable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deliverygig.moonjyoung.entity.account.OwnerEntity;
 import com.deliverygig.moonjyoung.repository.account.OwnerRepository;

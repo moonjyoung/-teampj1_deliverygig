@@ -64,8 +64,13 @@ public class StoreController {
     }
     // 디테일 수정
     @PostMapping("/update/detail")
-     public ResponseEntity<Object> postUdateStoreDetail(@RequestBody UpdateStoreDetailVO data, @RequestParam Long siSeq) {
-         Map<String, Object> resultMap = dService.updateStoreDetail(data, siSeq);
+    public ResponseEntity<Object> postUdateStoreDetail(@RequestBody UpdateStoreDetailVO data,
+            @RequestParam Long siSeq) {
+        Map<String, Object> resultMap = dService.updateStoreDetail(data, siSeq);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
+    // @PostMapping("/add/storeTime")
+    // public ResponseEntity<Object> postAddStoreDetail() {
+        
+    // }
 }

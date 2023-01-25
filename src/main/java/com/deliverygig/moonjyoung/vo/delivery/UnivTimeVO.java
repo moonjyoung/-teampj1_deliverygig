@@ -10,4 +10,5 @@ public class UnivTimeVO {
     private String timeName;
     private LocalTime deliTime1;
     private LocalTime deliTime2;
+    private LocalTime closeTime;
 }
