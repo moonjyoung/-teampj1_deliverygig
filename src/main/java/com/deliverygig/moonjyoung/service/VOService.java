@@ -29,6 +29,7 @@ import com.deliverygig.moonjyoung.vo.delivery.StoreUnivTimeVO;
 import com.deliverygig.moonjyoung.vo.delivery.ShowUnivListVO;
 import com.deliverygig.moonjyoung.vo.delivery.ShowUnivTimeVO;
 import com.deliverygig.moonjyoung.vo.delivery.UnivTimeVO;
+import com.deliverygig.moonjyoung.vo.store.ShowStoreInfoVO;
 import com.deliverygig.moonjyoung.vo.store.ShowStoreListVO;
 import com.deliverygig.moonjyoung.vo.store.StoreDetailInfoVO;
 import com.deliverygig.moonjyoung.vo.store.StoreListInfoVO;
@@ -152,39 +153,39 @@ public class VOService {
         return resultMap;
     }
 
-    public Map<String, Object> getDeliveryStoreDetail() {
-        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        List<StoreDetailInfoVO> returnList = new ArrayList<StoreDetailInfoVO>();
-        for (StoreDetailInfoEntity data : storeDetailInfoRepository.findAll()) {
-            StoreDetailInfoVO vo = new StoreDetailInfoVO();
-            vo.setSdiOwnerWord(data.getSdiOwnerWord());
-            vo.setSdiPhoneNumber(data.getSdiPhoneNumber());
-            vo.setSdiAddress(data.getSdiAddress());
-            vo.setSdiOwnerName(data.getSdiOwnerName());
-            vo.setSdiStoreName(data.getSdiStoreName());
-            vo.setSdiBusinessNumber(data.getSdiBusinessNumber());
-            vo.setSdiOrigin(data.getSdiOrigin());
-            List<ClosePickupTimeVO> list = new ArrayList<ClosePickupTimeVO>();
-            for (StoreTimeDetailEntity data2 : storeTimeDetailRepository.findAll()) {
-                if (data2.getStoreInfoEntity().getSiSeq()==data.getStoreInfoEntity().getSiSeq()) {
-                    ClosePickupTimeVO vo2 = new ClosePickupTimeVO();
-                    vo2.setName(data2.getUnivTimeInfoEntity().getUtiName());
-                    vo2.setCloseTime(data2.getStdCloseTime());
-                    vo2.setPickupTime(data2.getUnivTimeInfoEntity().getUtiPickupTime1());
-                    list.add(vo2);
-                }
-            }
-            vo.setClosePickupTimeVoList(list);
-            vo.setSdiMinOrderPrice(data.getSdiDeliveryPrice());
-            vo.setSdiDeliveryPrice(data.getSdiDeliveryPrice());
-            returnList.add(vo);
-        }
-        resultMap.put("status", true);
-        resultMap.put("code", HttpStatus.OK);
-        resultMap.put("message", "조회 완료");
-        resultMap.put("list", returnList);
-        return resultMap;
-    }
+    // public Map<String, Object> getDeliveryStoreDetail() {
+    //     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+    //     List<StoreDetailInfoVO> returnList = new ArrayList<StoreDetailInfoVO>();
+    //     for (StoreDetailInfoEntity data : storeDetailInfoRepository.findAll()) {
+    //         StoreDetailInfoVO vo = new StoreDetailInfoVO();
+    //         vo.setSdiOwnerWord(data.getSdiOwnerWord());
+    //         vo.setSdiPhoneNumber(data.getSdiPhoneNumber());
+    //         vo.setSdiAddress(data.getSdiAddress());
+    //         vo.setSdiOwnerName(data.getSdiOwnerName());
+    //         vo.setSdiStoreName(data.getSdiStoreName());
+    //         vo.setSdiBusinessNumber(data.getSdiBusinessNumber());
+    //         vo.setSdiOrigin(data.getSdiOrigin());
+    //         List<ClosePickupTimeVO> list = new ArrayList<ClosePickupTimeVO>();
+    //         for (StoreTimeDetailEntity data2 : storeTimeDetailRepository.findAll()) {
+    //             if (data2.getStoreInfoEntity().getSiSeq()==data.getStoreInfoEntity().getSiSeq()) {
+    //                 ClosePickupTimeVO vo2 = new ClosePickupTimeVO();
+    //                 vo2.setName(data2.getUnivTimeInfoEntity().getUtiName());
+    //                 vo2.setCloseTime(data2.getStdCloseTime());
+    //                 vo2.setPickupTime(data2.getUnivTimeInfoEntity().getUtiPickupTime1());
+    //                 list.add(vo2);
+    //             }
+    //         }
+    //         vo.setClosePickupTimeVoList(list);
+    //         vo.setSdiMinOrderPrice(data.getSdiDeliveryPrice());
+    //         vo.setSdiDeliveryPrice(data.getSdiDeliveryPrice());
+    //         returnList.add(vo);
+    //     }
+    //     resultMap.put("status", true);
+    //     resultMap.put("code", HttpStatus.OK);
+    //     resultMap.put("message", "조회 완료");
+    //     resultMap.put("list", returnList);
+    //     return resultMap;
+    // }
 
     // 이하 코드는 20230120 이후 코드.
     // 각 페이지별로 띄워줄 리스트 정보를 다를 예정
@@ -322,6 +323,46 @@ public class VOService {
         }
         resultMap.put("timeName", univTimeInfoRepository.findByUtiSeq(utiSeq).getUtiName());
         resultMap.put("list", returnList);
+        return resultMap;
+    }
+
+    public Map<String, Object> getStoreInfo(Long siSeq, Long utiSeq) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+
+        if (storeInfoRepository.findById(siSeq).isEmpty()) {
+            resultMap.put("status", false);
+            resultMap.put("message", "존재하지 않는 가게입니다.");
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else if (univTimeInfoRepository.findById(utiSeq).isEmpty()) {
+            resultMap.put("status", false);
+            resultMap.put("message", "해당하는 배달시간이 없습니다.");
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else if (storeTimeDetailRepository.findByStdSiSeqAndStdUtiSeq(siSeq, utiSeq)==null) {
+            resultMap.put("status", false);
+            resultMap.put("message", "이 가게는 이 시간/장소에 배달하지 않습니다.");
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else {
+            ShowStoreInfoVO returnData = new ShowStoreInfoVO(storeDetailInfoRepository.findBySdiSeq(siSeq), storeTimeDetailRepository.findByStdSiSeqAndStdUtiSeq(siSeq, utiSeq));
+            List<ClosePickupTimeVO> timeList = new ArrayList<ClosePickupTimeVO>();
+            for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAllByStdSiSeq(siSeq)) {
+                if (data.getUnivTimeInfoEntity().getUnivInfoEntity()==univTimeInfoRepository.findByUtiSeq(utiSeq).getUnivInfoEntity()) {
+                    ClosePickupTimeVO vo = new ClosePickupTimeVO(data);
+                    if (data.getUnivTimeInfoEntity().getUtiSeq()==utiSeq) {
+                        vo.setThisTime(true);
+                    }
+                    timeList.add(vo);
+                }
+            }
+            returnData.setClosePickUpTimeList(timeList);
+            resultMap.put("status", true);
+            resultMap.put("message", "조회 완료");
+            resultMap.put("code", HttpStatus.OK);
+            resultMap.put("data", returnData);
+        }
+
         return resultMap;
     }
 }
