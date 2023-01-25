@@ -43,14 +43,11 @@ public class StoreInfoEntity {
     @Column(name = "si_status")
     @ColumnDefault("9")
     private Integer siStatus;
-    
+
     // @OneToOne(mappedBy = "store_info")
     // private StoreDetailInfoEntity storeDetailInfoEntity;
 
     // public void setSiSeqq(Long num) {
     //     this.siSeq = num;
-    // }
 
 }
-
-
