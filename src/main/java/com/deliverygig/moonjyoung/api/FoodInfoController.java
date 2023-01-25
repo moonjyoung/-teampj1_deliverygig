@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ public class FoodInfoController {
     @Autowired FoodCategoryRepository foodCategoryRepository;
 
     // C
-    @PutMapping("/insert")
+    @PostMapping("/insert")
     public ResponseEntity<Object> foodInsert(@RequestBody FoodAddVO data, HttpSession session) {
         Map<String, Object> resultMap = fService.addFood(data);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
@@ -47,16 +48,16 @@ public class FoodInfoController {
     }
 
     // U
-    @PatchMapping("/update/{seq}")
-    public ResponseEntity<Object> foodUpdate(@PathVariable String seq, @RequestParam String value,
+    @PostMapping("/update")
+    public ResponseEntity<Object> foodUpdate(@RequestParam Long seq,
             @RequestBody FoodUpdateVO data) {
-        Map<String, Object> resultMap = fService.modifyFood(seq, value, data);
+        Map<String, Object> resultMap = fService.modifyFood(seq,data);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
 
     }
 
     // D
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public ResponseEntity<Object> deleteFood(@RequestBody FoodMenuInfoEntity data) {
         Map<String, Object> resultMap = fService.dFood(data);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));

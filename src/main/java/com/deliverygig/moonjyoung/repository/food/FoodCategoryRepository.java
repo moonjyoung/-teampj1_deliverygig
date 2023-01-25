@@ -11,5 +11,7 @@ public interface FoodCategoryRepository extends JpaRepository<FoodCategoryEntity
     public FoodCategoryEntity findByFcSeq(Long fcSeq);
     public Integer countByFcName(String fcName);
     public void deleteByFcSeq(Long fcSeq);
+
+    public Integer countByFcSeq(Long fcSeq);
     
 }
