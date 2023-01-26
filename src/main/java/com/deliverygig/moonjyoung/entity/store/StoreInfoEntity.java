@@ -51,9 +51,12 @@ public class StoreInfoEntity {
     //     this.siSeq = num;
     // }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> hozin2
+=======
+>>>>>>> shiningok2
 }
 
 

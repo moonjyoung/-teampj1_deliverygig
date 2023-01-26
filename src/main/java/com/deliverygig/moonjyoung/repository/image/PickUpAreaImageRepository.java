@@ -11,6 +11,8 @@ import com.deliverygig.moonjyoung.entity.image.PickUpAreaImageEntity;
 @Repository
 public interface PickUpAreaImageRepository extends JpaRepository <PickUpAreaImageEntity , Long>{
     public List<PickUpAreaEntity> findByPuaiUri (String puaiUri);
+    public void deleteByPuaiSeq (Long puaiSeq);
+    public Integer countByPuaiSeq(Long puaiSeq );
     
 }
 

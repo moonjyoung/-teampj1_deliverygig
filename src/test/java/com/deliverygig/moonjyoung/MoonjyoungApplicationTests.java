@@ -47,6 +47,7 @@ class MoonjyoungApplicationTests {
 
 		}
 
+		
 	@Test
 	public void addUniv() { // 새로운 대학 추가 test
 		PickUpAreaVO vo = new PickUpAreaVO();
