@@ -1,16 +1,17 @@
 package com.deliverygig.moonjyoung.vo.food;
 
-import com.deliverygig.moonjyoung.entity.food.FoodDetailOptionEntity;
+import java.util.List;
+
+import com.deliverygig.moonjyoung.entity.food.FoodOptionConnectEntity;
 
 import lombok.Data;
 
 @Data
 public class ShowFoodOptionVO {
-    private String optionName;
-    private Integer optionPrice;
+    private String optionCateName;
+    private List<ShowFoodDetailOptionVO> detailOptionList;
 
-    public ShowFoodOptionVO(FoodDetailOptionEntity fdoEntity) {
-        this.optionName = fdoEntity.getFdoName();
-        this.optionPrice = fdoEntity.getFdoPrice();
+    public ShowFoodOptionVO(FoodOptionConnectEntity entity) {
+        this.optionCateName = entity.getFoodMenuOptionEntity().getFmoName();
     }
 }

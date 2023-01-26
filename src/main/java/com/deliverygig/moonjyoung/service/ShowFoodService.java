@@ -6,13 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.deliverygig.moonjyoung.entity.food.FoodCategoryEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
-import com.deliverygig.moonjyoung.entity.food.FoodOptionConnectEntity;
 import com.deliverygig.moonjyoung.repository.food.FoodCategoryRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodDetailOptionRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodMenuInfoRepository;
@@ -50,6 +48,24 @@ public class ShowFoodService {
             return resultMap;
         }
         else {
+            // 대표메뉴
+            ShowFoodListVO bestVO = new ShowFoodListVO();
+            Integer count = 0;
+            if (foodMenuInfoRepository.findAllByFmiBest(1).size()!=0) {
+                List<ShowMenuInfoVO> bestMenuList = new ArrayList<ShowMenuInfoVO>();
+                for (FoodMenuInfoEntity data : foodMenuInfoRepository.findAllByFmiBest(1)) {
+                    if (data.getFoodCategoryEntity().getStoreInfoEntity().getSiSeq()==siSeq) {
+                        count++;
+                        ShowMenuInfoVO vo2 = new ShowMenuInfoVO(data);
+                        bestMenuList.add(vo2);
+                    }
+                }
+                if (count!=0) {
+                    bestVO.setCateName("대표메뉴 "+count+"개");
+                    bestVO.setMenuList(bestMenuList);
+                    returnList.add(bestVO);
+                }
+            }
             for (FoodCategoryEntity data2 : foodCategoryRepository.findAllBySiSeq(siSeq)) {
                 ShowFoodListVO vo = new ShowFoodListVO();
                 List<ShowMenuInfoVO> menuList = new ArrayList<ShowMenuInfoVO>();
@@ -59,7 +75,6 @@ public class ShowFoodService {
                     for (FoodMenuInfoEntity data : foodMenuInfoRepository.findAllByFmiFcSeq(data2.getFcSeq())) {
                         ShowMenuInfoVO vo2 = new ShowMenuInfoVO(data);
                         menuList.add(vo2);
-                        // menuList.add(new ShowMenuInfoVO(data));
                     }
                     vo.setMenuList(menuList);
                 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -14,11 +15,19 @@ import com.deliverygig.moonjyoung.entity.delivery.PickUpAreaEntity;
 import com.deliverygig.moonjyoung.entity.delivery.StoreTimeDetailEntity;
 import com.deliverygig.moonjyoung.entity.delivery.UnivInfoEntity;
 import com.deliverygig.moonjyoung.entity.delivery.UnivTimeInfoEntity;
+import com.deliverygig.moonjyoung.entity.food.FoodDetailOptionEntity;
+import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
+import com.deliverygig.moonjyoung.entity.food.FoodMenuOptionEntity;
+import com.deliverygig.moonjyoung.entity.food.FoodOptionConnectEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreDetailInfoEntity;
 import com.deliverygig.moonjyoung.repository.delivery.PickUpAreaRepository;
 import com.deliverygig.moonjyoung.repository.delivery.StoreTimeDetailRepository;
 import com.deliverygig.moonjyoung.repository.delivery.UnivInfoRepository;
 import com.deliverygig.moonjyoung.repository.delivery.UnivTimeInfoRepository;
+import com.deliverygig.moonjyoung.repository.food.FoodDetailOptionRepository;
+import com.deliverygig.moonjyoung.repository.food.FoodMenuInfoRepository;
+import com.deliverygig.moonjyoung.repository.food.FoodMenuOptionRepository;
+import com.deliverygig.moonjyoung.repository.food.FoodOptionConnectRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreDetailInfoRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreInfoRepository;
 import com.deliverygig.moonjyoung.vo.delivery.ClosePickupTimeVO;
@@ -29,6 +38,9 @@ import com.deliverygig.moonjyoung.vo.delivery.StoreUnivTimeVO;
 import com.deliverygig.moonjyoung.vo.delivery.ShowUnivListVO;
 import com.deliverygig.moonjyoung.vo.delivery.ShowUnivTimeVO;
 import com.deliverygig.moonjyoung.vo.delivery.UnivTimeVO;
+import com.deliverygig.moonjyoung.vo.food.ShowFoodDetailOptionVO;
+import com.deliverygig.moonjyoung.vo.food.ShowFoodOptionVO;
+import com.deliverygig.moonjyoung.vo.food.ShowMenuDetailVO;
 import com.deliverygig.moonjyoung.vo.store.ShowStoreInfoVO;
 import com.deliverygig.moonjyoung.vo.store.ShowStoreListVO;
 import com.deliverygig.moonjyoung.vo.store.StoreDetailInfoVO;
@@ -49,6 +61,10 @@ public class VOService {
     @Autowired StoreTimeDetailRepository storeTimeDetailRepository;
     @Autowired UnivTimeInfoRepository univTimeInfoRepository;
     @Autowired StoreDetailInfoRepository storeDetailInfoRepository;
+    @Autowired FoodMenuInfoRepository foodMenuInfoRepository;
+    @Autowired FoodOptionConnectRepository foodOptionConnectRepository;
+    @Autowired FoodMenuOptionRepository foodMenuOptionRepository;
+    @Autowired FoodDetailOptionRepository foodDetailOptionRepository;
 
     public Map<String, Object> getLocationList() {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
@@ -190,6 +206,7 @@ public class VOService {
     // 이하 코드는 20230120 이후 코드.
     // 각 페이지별로 띄워줄 리스트 정보를 다를 예정
 
+    // 대학리스트 조회에 사용
     public Map<String, Object> getUnivList() {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<ShowUnivListVO> returnList = new ArrayList<ShowUnivListVO>();
@@ -235,6 +252,7 @@ public class VOService {
         }
     }
 
+    // 수령장소 조회에 사용
     public Map<String, Object> getpuaList(Long uiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<ShowPuaVO> returnList = new ArrayList<>();
@@ -264,6 +282,7 @@ public class VOService {
         return resultMap;
     }
 
+    // 배달시간 조회에 사용
     public Map<String, Object> getUnivTimeList(Long uiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<ShowUnivTimeVO> returnList = new ArrayList<ShowUnivTimeVO>();
@@ -295,6 +314,7 @@ public class VOService {
         return resultMap;
     }
 
+    // 가게목록 조회에 사용
     public Map<String, Object> getStoreList(Long utiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<ShowStoreListVO> returnList = new ArrayList<ShowStoreListVO>();
@@ -326,6 +346,7 @@ public class VOService {
         return resultMap;
     }
 
+    // 가게 상세정보 조회에 사용
     public Map<String, Object> getStoreInfo(Long siSeq, Long utiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
 
@@ -362,7 +383,49 @@ public class VOService {
             resultMap.put("code", HttpStatus.OK);
             resultMap.put("data", returnData);
         }
+        return resultMap;
+    }
 
+    // 메뉴 옵션 조회
+    public Map<String, Object> getMenuOptionList(Long fmiSeq) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        List<ShowFoodOptionVO> menuOptionList = new ArrayList<ShowFoodOptionVO>();
+        if (foodOptionConnectRepository.findAllByFocFmiSeq(fmiSeq).size()==0) {
+            Optional<FoodMenuInfoEntity> entity = foodMenuInfoRepository.findById(fmiSeq);
+            if (entity.isEmpty()) {
+                resultMap.put("status", false);
+                resultMap.put("message", "등록되지않은 메뉴번호 입니다.");
+                resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+                return resultMap;
+            }
+            else {
+                ShowMenuDetailVO vo = new ShowMenuDetailVO(entity.get());
+                resultMap.put("status", true);
+                resultMap.put("message", "옵션이 없는 메뉴");
+                resultMap.put("code", HttpStatus.OK);
+                resultMap.put("data", vo);
+                return resultMap;
+            }            
+        }
+        ShowMenuDetailVO showMenuDetailVO = new ShowMenuDetailVO(foodOptionConnectRepository.findAllByFocFmiSeq(fmiSeq).get(0).getFoodMenuInfoEntity());
+
+        for (FoodOptionConnectEntity data : foodOptionConnectRepository.findAllByFocFmiSeq(fmiSeq)) {
+            List<ShowFoodDetailOptionVO> detailOptionList = new ArrayList<ShowFoodDetailOptionVO>();
+            ShowFoodOptionVO vo = new ShowFoodOptionVO(data);
+
+            for (FoodDetailOptionEntity data2 : data.getFoodMenuOptionEntity().getFdoEntityList()) {
+                detailOptionList.add(new ShowFoodDetailOptionVO(data2));
+            }
+
+            vo.setDetailOptionList(detailOptionList);
+            menuOptionList.add(vo);
+        }
+        showMenuDetailVO.setOptionList(menuOptionList);
+        
+        resultMap.put("status", true);
+        resultMap.put("message", "조회 완료");
+        resultMap.put("code", HttpStatus.OK);
+        resultMap.put("data", showMenuDetailVO);
         return resultMap;
     }
 }

@@ -45,6 +45,7 @@ public class StoreController {
         //     Map<String, Object> resultMap = voService.getDeliveryStoreDetail();
         //     return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
         // }
+    // 가게 상세정보 조회
     @GetMapping("/info")
     public ResponseEntity<Object> getStoreInfo(@RequestParam Long siSeq, @RequestParam Long utiSeq) {
         Map<String, Object> resultMap = voService.getStoreInfo(siSeq, utiSeq);
