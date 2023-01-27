@@ -11,4 +11,5 @@ public class FoodListVO {
     private Long    fmiFcSeq;
     private Integer fmiBest;
     
+    
 }

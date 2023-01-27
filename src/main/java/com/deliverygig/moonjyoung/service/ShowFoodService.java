@@ -17,6 +17,7 @@ import com.deliverygig.moonjyoung.repository.food.FoodCategoryRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodDetailOptionRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodMenuInfoRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodOptionConnectRepository;
+import com.deliverygig.moonjyoung.repository.image.FoodImageRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreInfoRepository;
 import com.deliverygig.moonjyoung.vo.food.ShowFoodListVO;
 import com.deliverygig.moonjyoung.vo.food.ShowMenuInfoVO;
@@ -25,12 +26,15 @@ import lombok.Data;
 
 @Data
 @Service
+
+
 public class ShowFoodService {
     @Autowired StoreInfoRepository storeInfoRepository;
     @Autowired FoodCategoryRepository foodCategoryRepository;
     @Autowired FoodMenuInfoRepository foodMenuInfoRepository;
     @Autowired FoodDetailOptionRepository foodDetailOptionRepository;
     @Autowired FoodOptionConnectRepository foodOptionConnectRepository;
+    @Autowired FoodImageRepository foodImageRepository;
 
     public Map<String, Object> getMenuList(Long siSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
@@ -52,6 +56,7 @@ public class ShowFoodService {
         else {
             for (FoodCategoryEntity data2 : foodCategoryRepository.findAllBySiSeq(siSeq)) {
                 ShowFoodListVO vo = new ShowFoodListVO();
+                //vo.setFiFmiSeq(foodImageRepository.findByFiFmiSeq(data2.getFmiSeq().getFmiSeq()));
                 List<ShowMenuInfoVO> menuList = new ArrayList<ShowMenuInfoVO>();
                 if (data2.getStoreInfoEntity().getSiSeq()==siSeq) {
                     storeName = data2.getStoreInfoEntity().getSiName();

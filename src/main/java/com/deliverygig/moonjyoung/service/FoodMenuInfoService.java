@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
 import com.deliverygig.moonjyoung.repository.food.FoodCategoryRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodMenuInfoRepository;
+import com.deliverygig.moonjyoung.repository.image.FoodImageRepository;
 import com.deliverygig.moonjyoung.vo.food.FoodAddVO;
 import com.deliverygig.moonjyoung.vo.food.FoodListVO;
 import com.deliverygig.moonjyoung.vo.food.FoodUpdateVO;
@@ -26,6 +27,7 @@ public class FoodMenuInfoService {
     @Autowired FoodMenuInfoRepository fRepo;
     // @Autowired FoodEntity fEntity;
     @Autowired FoodCategoryRepository fcRepo;
+    @Autowired FoodImageRepository foodImageRepository;
 
     // Create
     public Map<String, Object> addFood(FoodAddVO data) {
@@ -65,6 +67,7 @@ public class FoodMenuInfoService {
             flVO.setFmiPrice(data.getFmiPrice());
             flVO.setFmiFcSeq(data.getFoodCategoryEntity().getFcSeq());
             flVO.setFmiBest(data.getFmiBest());
+    
 
             returnList.add(flVO);
         }

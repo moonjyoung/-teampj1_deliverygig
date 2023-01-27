@@ -12,6 +12,7 @@ public class ShowStoreListVO {
     private String storeName;
     private LocalTime storeCloseTime;
     private Double discount;
+    private Long simgSiSeq;
 
     public ShowStoreListVO(StoreTimeDetailEntity entity) {
         this.storeSeq = entity.getStoreInfoEntity().getSiSeq();

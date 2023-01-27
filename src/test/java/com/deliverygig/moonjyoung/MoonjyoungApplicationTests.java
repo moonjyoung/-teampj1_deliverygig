@@ -13,6 +13,7 @@ import com.deliverygig.moonjyoung.entity.account.CustomerInfoEntity;
 import com.deliverygig.moonjyoung.repository.account.CustomerRepository;
 import com.deliverygig.moonjyoung.repository.delivery.PickUpAreaRepository;
 import com.deliverygig.moonjyoung.repository.delivery.UnivInfoRepository;
+import com.deliverygig.moonjyoung.repository.image.PickUpAreaImageRepository;
 import com.deliverygig.moonjyoung.vo.delivery.PickUpAreaVO;
 
 import jakarta.servlet.http.HttpSession;
@@ -25,6 +26,7 @@ class MoonjyoungApplicationTests {
 	@Autowired PickUpAreaRepository pickUpAreaRepository;
 	@Autowired UnivInfoRepository univInfoRepository;
 	@Autowired CustomerRepository cRepo;
+	@Autowired PickUpAreaImageRepository pickUpAreaImageRepository;
 
 	@Transactional
 	@Test
@@ -53,6 +55,11 @@ class MoonjyoungApplicationTests {
 		PickUpAreaVO vo = new PickUpAreaVO();
 		vo.setUiName("testname");
 		univInfoRepository.save(vo.toUnivInfoEntity());
+	}
+	@Test
+	public void PickUpAreaImageEntity() {
+		 System.out.println(pickUpAreaImageRepository.findAll());
+		
 	}
 
 }

@@ -10,13 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.deliverygig.moonjyoung.service.VOService;
+
 
 
 @RestController
 @RequestMapping("/list")
 public class VOController {
     @Autowired VOService voService;
+
 
     // 배달 장소 & 시간대 정보 목록
     // @GetMapping("/location/list")
@@ -59,4 +62,7 @@ public class VOController {
         Map<String, Object> resultMap = voService.getStoreList(utiSeq);
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
-}
+
+   
+    }
+

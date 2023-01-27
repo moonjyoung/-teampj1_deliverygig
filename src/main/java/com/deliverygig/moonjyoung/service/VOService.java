@@ -19,6 +19,8 @@ import com.deliverygig.moonjyoung.repository.delivery.PickUpAreaRepository;
 import com.deliverygig.moonjyoung.repository.delivery.StoreTimeDetailRepository;
 import com.deliverygig.moonjyoung.repository.delivery.UnivInfoRepository;
 import com.deliverygig.moonjyoung.repository.delivery.UnivTimeInfoRepository;
+import com.deliverygig.moonjyoung.repository.image.PickUpAreaImageRepository;
+import com.deliverygig.moonjyoung.repository.image.StoreImageRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreDetailInfoRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreInfoRepository;
 import com.deliverygig.moonjyoung.vo.delivery.ClosePickupTimeVO;
@@ -49,6 +51,8 @@ public class VOService {
     @Autowired StoreTimeDetailRepository storeTimeDetailRepository;
     @Autowired UnivTimeInfoRepository univTimeInfoRepository;
     @Autowired StoreDetailInfoRepository storeDetailInfoRepository;
+    @Autowired PickUpAreaImageRepository pickUpAreaImageRepository;
+    @Autowired StoreImageRepository storeImageRepository;
 
     public Map<String, Object> getLocationList() {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
@@ -144,6 +148,7 @@ public class VOService {
             vo.setUtiPickupTime(data.getUnivTimeInfoEntity().getUtiPickupTime1());
             vo.setSiCloseTime(data.getStdCloseTime());
             vo.setSiDiscount(data.getStoreInfoEntity().getSiDiscount());
+           
             returnList.add(vo);
         }
         resultMap.put("status", true);
@@ -241,6 +246,7 @@ public class VOService {
 
         for (PickUpAreaEntity data : pickUpAreaRepository.findAllByPuaUiSeq(uiSeq)) {
             ShowPuaVO vo = new ShowPuaVO(data);
+            vo.setPuaiPuaSeq(pickUpAreaImageRepository.findByPuaiPuaSeq(data.getPuaSeq()).getPuaiSeq());
             returnList.add(vo);
         }
 
@@ -325,7 +331,7 @@ public class VOService {
         resultMap.put("list", returnList);
         return resultMap;
     }
-
+    // 가게 목록 조회
     public Map<String, Object> getStoreInfo(Long siSeq, Long utiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
 
