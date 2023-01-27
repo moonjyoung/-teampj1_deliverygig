@@ -8,6 +8,7 @@ import lombok.Data;
 
 @Data
 public class ShowMenuDetailVO {
+    private Long menuSeq;
     private String name;
     private String explain;
     private Integer price;
@@ -15,6 +16,7 @@ public class ShowMenuDetailVO {
     private List<ShowFoodOptionVO> optionList;
 
     public ShowMenuDetailVO(FoodMenuInfoEntity entity) {
+        this.menuSeq = entity.getFmiSeq();
         this.name = entity.getFmiName();
         this.explain = entity.getFmiExplanation();
         this.price = entity.getFmiPrice();
