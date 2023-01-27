@@ -35,7 +35,6 @@ import com.deliverygig.moonjyoung.entity.image.PickUpAreaImageEntity;
 import com.deliverygig.moonjyoung.entity.image.StoreImageEntity;
 import com.deliverygig.moonjyoung.repository.image.FoodImageRepository;
 import com.deliverygig.moonjyoung.repository.image.PickUpAreaImageRepository;
-import com.deliverygig.moonjyoung.repository.mycart.PickFoodDetailOptionRepository;
 import com.deliverygig.moonjyoung.service.image.FoodImageService;
 import com.deliverygig.moonjyoung.service.image.PickUpAreaImageService;
 import com.deliverygig.moonjyoung.service.image.StoreImageService;
