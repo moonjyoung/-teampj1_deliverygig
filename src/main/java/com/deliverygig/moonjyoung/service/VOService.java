@@ -23,6 +23,7 @@ import com.deliverygig.moonjyoung.entity.food.FoodDetailOptionEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodMenuOptionEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodOptionConnectEntity;
+import com.deliverygig.moonjyoung.entity.store.StoreClosedDayEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreDetailInfoEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreInfoEntity;
 import com.deliverygig.moonjyoung.repository.delivery.PickUpAreaRepository;
@@ -326,11 +327,10 @@ public class VOService {
         List<ShowStoreListVO> returnList = new ArrayList<ShowStoreListVO>();
 
         for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAll()) {
-            if (data.getUnivTimeInfoEntity().getUtiSeq()==utiSeq) {
-                if (data.getStoreInfoEntity().getSiStatus() == 1) {
+            if (data.getUnivTimeInfoEntity().getUtiSeq() == utiSeq) {
                 ShowStoreListVO vo = new ShowStoreListVO(data);
-                returnList.add(vo);
-                }
+                System.out.println(vo);
+                returnList.add(vo); 
             }
         }
 
@@ -360,24 +360,23 @@ public class VOService {
             resultMap.put("status", false);
             resultMap.put("message", "존재하지 않는 가게입니다.");
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
-        }
-        else if (univTimeInfoRepository.findById(utiSeq).isEmpty()) {
+        } else if (univTimeInfoRepository.findById(utiSeq).isEmpty()) {
             resultMap.put("status", false);
             resultMap.put("message", "해당하는 배달시간이 없습니다.");
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
-        }
-        else if (storeTimeDetailRepository.findByStdSiSeqAndStdUtiSeq(siSeq, utiSeq)==null) {
+        } else if (storeTimeDetailRepository.findByStdSiSeqAndStdUtiSeq(siSeq, utiSeq) == null) {
             resultMap.put("status", false);
             resultMap.put("message", "이 가게는 이 시간/장소에 배달하지 않습니다.");
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
-        }
-        else {
-            ShowStoreInfoVO returnData = new ShowStoreInfoVO(storeDetailInfoRepository.findBySdiSeq(siSeq), storeTimeDetailRepository.findByStdSiSeqAndStdUtiSeq(siSeq, utiSeq));
+        } else {
+            ShowStoreInfoVO returnData = new ShowStoreInfoVO(storeDetailInfoRepository.findBySdiSeq(siSeq),
+                    storeTimeDetailRepository.findByStdSiSeqAndStdUtiSeq(siSeq, utiSeq));
             List<ClosePickupTimeVO> timeList = new ArrayList<ClosePickupTimeVO>();
             for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAllByStdSiSeq(siSeq)) {
-                if (data.getUnivTimeInfoEntity().getUnivInfoEntity()==univTimeInfoRepository.findByUtiSeq(utiSeq).getUnivInfoEntity()) {
+                if (data.getUnivTimeInfoEntity().getUnivInfoEntity() == univTimeInfoRepository.findByUtiSeq(utiSeq)
+                        .getUnivInfoEntity()) {
                     ClosePickupTimeVO vo = new ClosePickupTimeVO(data);
-                    if (data.getUnivTimeInfoEntity().getUtiSeq()==utiSeq) {
+                    if (data.getUnivTimeInfoEntity().getUtiSeq() == utiSeq) {
                         vo.setThisTime(true);
                     }
                     timeList.add(vo);
@@ -420,24 +419,24 @@ public class VOService {
     public Map<String, Object> getMenuOptionList(Long fmiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<ShowFoodOptionVO> menuOptionList = new ArrayList<ShowFoodOptionVO>();
-        if (foodOptionConnectRepository.findAllByFocFmiSeq(fmiSeq).size()==0) {
+        if (foodOptionConnectRepository.findAllByFocFmiSeq(fmiSeq).size() == 0) {
             Optional<FoodMenuInfoEntity> entity = foodMenuInfoRepository.findById(fmiSeq);
             if (entity.isEmpty()) {
                 resultMap.put("status", false);
                 resultMap.put("message", "등록되지않은 메뉴번호 입니다.");
                 resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
                 return resultMap;
-            }
-            else {
+            } else {
                 ShowMenuDetailVO vo = new ShowMenuDetailVO(entity.get());
                 resultMap.put("status", true);
                 resultMap.put("message", "옵션이 없는 메뉴");
                 resultMap.put("code", HttpStatus.OK);
                 resultMap.put("data", vo);
                 return resultMap;
-            }            
+            }
         }
-        ShowMenuDetailVO showMenuDetailVO = new ShowMenuDetailVO(foodOptionConnectRepository.findAllByFocFmiSeq(fmiSeq).get(0).getFoodMenuInfoEntity());
+        ShowMenuDetailVO showMenuDetailVO = new ShowMenuDetailVO(
+                foodOptionConnectRepository.findAllByFocFmiSeq(fmiSeq).get(0).getFoodMenuInfoEntity());
 
         for (FoodOptionConnectEntity data : foodOptionConnectRepository.findAllByFocFmiSeq(fmiSeq)) {
             List<ShowFoodDetailOptionVO> detailOptionList = new ArrayList<ShowFoodDetailOptionVO>();
@@ -451,25 +450,14 @@ public class VOService {
             menuOptionList.add(vo);
         }
         showMenuDetailVO.setOptionList(menuOptionList);
-        
+
         resultMap.put("status", true);
         resultMap.put("message", "조회 완료");
         resultMap.put("code", HttpStatus.OK);
         resultMap.put("data", showMenuDetailVO);
         return resultMap;
     }
-    //       for (UnivInfoEntity data : univInfoRepository.findAllByUiNameContaining(keyword)) {
-    //           resultList.add(new ShowUnivListVO(data));
-    //     resultMap.put("status", true);
-    //     resultMap.put("code", HttpStatus.OK);
-    //     resultMap.put("message", "성공");
-    //     resultMap.put("list", resultList);
-    //     return resultMap;
-    // }
 
-
-
-}
 
 
     // public List<StoreClosedDayInfoVO> getClosedDayVOList(Long scdiSiSeq) {
@@ -487,18 +475,23 @@ public class VOService {
     //     return list;
     // }
 
-    // public StoreInfoEntity closedDaystatus(Long siSeq) {
+    // public StoreInfoEntity closedDaystatus() {
     //     LocalDate now = LocalDate.now();
-    //      DayOfWeek dayOfWeek = now.getDayOfWeek();
-    //      int dayOfWeekNumber = dayOfWeek.getValue();
-    //      StoreInfoEntity entity = new StoreInfoEntity();
+    //     DayOfWeek dayOfWeek = now.getDayOfWeek();
+    //     int dayOfWeekNumber = dayOfWeek.getValue();
+    //     // StoreInfoEntity entity = new StoreInfoEntity();
     //     List<StoreClosedDayEntity> list = new ArrayList<StoreClosedDayEntity>();
     //     for (StoreClosedDayEntity data : list) {
     //         if (data.getScdiDayNo() == dayOfWeekNumber) {
-            
+    //             StoreInfoEntity entity = storeInfoRepository.findBySiSeq(data.getStoreInfoEntity().getSiSeq());
+              
     //         }
-    //      }
+    //     }
+    //     // return  entity.setSiStatus(3);
+
     // }
+
+}
 
  
 

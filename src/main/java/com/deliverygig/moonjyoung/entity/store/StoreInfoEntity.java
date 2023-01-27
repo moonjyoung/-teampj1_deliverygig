@@ -48,5 +48,8 @@ public class StoreInfoEntity {
     // public void setSiSeqq(Long num) {
     //     this.siSeq = num;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> asako9
 }
