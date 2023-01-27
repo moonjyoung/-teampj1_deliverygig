@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.deliverygig.moonjyoung.service.OwnerInfoService;
 import com.deliverygig.moonjyoung.vo.account.JoinOwnerVO;
 import com.deliverygig.moonjyoung.vo.account.LoginOwnerVO;
-
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller

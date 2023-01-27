@@ -6,11 +6,15 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import com.deliverygig.moonjyoung.entity.store.StoreClosedDayEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreDetailInfoEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreInfoEntity;
 import com.deliverygig.moonjyoung.repository.account.OwnerRepository;
+import com.deliverygig.moonjyoung.repository.store.StoreClosedDayRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreDetailInfoRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreInfoRepository;
+import com.deliverygig.moonjyoung.vo.store.StoreClosedDayInfoVO;
 import com.deliverygig.moonjyoung.vo.store.StoreDetailInfoVO;
 import com.deliverygig.moonjyoung.vo.store.UpdateStoreDetailVO;
 
@@ -23,6 +27,9 @@ public class AddStoreDetailInfoService {
     StoreInfoRepository sRepo;
     @Autowired
     OwnerRepository oRepo;
+
+    @Autowired
+    StoreClosedDayRepository cRepo;
 
     // 가게 디테일 정보 등록
     public Map<String, Object> addStoreDetail(StoreDetailInfoVO data, Long siSeq) {
@@ -102,33 +109,32 @@ public class AddStoreDetailInfoService {
         //  아무것도 정보가 입력되지 않았을 경우 원래 그대로의 정보로 수정한다. 
         if (data.getNewsdiAddress() == null)
             data.setNewsdiAddress(entity2.getSdiAddress());
-         if (data.getNewsdiBusinessNumber() == null)
+        if (data.getNewsdiBusinessNumber() == null)
             data.setNewsdiBusinessNumber(entity2.getSdiBusinessNumber());
-         if (data.getNewsdiDeliveryPrice() == null)
+        if (data.getNewsdiDeliveryPrice() == null)
             data.setNewsdiDeliveryPrice(entity2.getSdiDeliveryPrice());
-         if (data.getNewsdiMinOrderPrice() == null)
+        if (data.getNewsdiMinOrderPrice() == null)
             data.setNewsdiMinOrderPrice(entity2.getSdiMinOrderPrice());
-         if (data.getNewsdiOrigin() == null)
+        if (data.getNewsdiOrigin() == null)
             data.setNewsdiOrigin(entity2.getSdiOrigin());
-         if (data.getNewsdiOwnerName() == null)
+        if (data.getNewsdiOwnerName() == null)
             data.setNewsdiOwnerName(entity2.getSdiOwnerName());
-         if (data.getNewsdiOwnerWord() == null)
+        if (data.getNewsdiOwnerWord() == null)
             data.setNewsdiOwnerWord(entity2.getSdiOwnerWord());
-         if (data.getNewsdiStoreName() == null)
+        if (data.getNewsdiStoreName() == null)
             data.setNewsdiStoreName(entity2.getSdiStoreName());
-         if (data.getNewsdiPhoneNumber() == null)
+        if (data.getNewsdiPhoneNumber() == null)
             data.setNewsdiPhoneNumber(entity2.getSdiPhoneNumber());
-         if (!p.matcher(data.getNewsdiPhoneNumber()).matches()) {
+        if (!p.matcher(data.getNewsdiPhoneNumber()).matches()) {
             resultMap.put("message", "알맞지 않은 전화번호입니다.");
             resultMap.put("code", HttpStatus.BAD_REQUEST);
             return resultMap;
-        }
-        else if (data.getNewsdiDeliveryPrice() < 0 || data.getNewsdiMinOrderPrice() < 0) {
+        } else if (data.getNewsdiDeliveryPrice() < 0 || data.getNewsdiMinOrderPrice() < 0) {
             resultMap.put("message", "알맞지 않은 최소주문금액이거나 배달비금액 입니다.");
             resultMap.put("code", HttpStatus.BAD_REQUEST);
             return resultMap;
         }
-       
+
         entity2.setSdiAddress(data.getNewsdiAddress());
         entity2.setSdiBusinessNumber(data.getNewsdiBusinessNumber());
         entity2.setSdiDeliveryPrice(data.getNewsdiDeliveryPrice());
@@ -145,5 +151,66 @@ public class AddStoreDetailInfoService {
         resultMap.put("code", HttpStatus.ACCEPTED);
         return resultMap;
 
-    }        
+    }
+    //  휴무일 등록 
+    public Map<String, Object> addStoreClosedDay(String value,Long seq) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();  
+        StoreClosedDayInfoVO data = new StoreClosedDayInfoVO();
+        if (sRepo.findBySiSeq(seq) == null) {
+            resultMap.put("status", false);
+            resultMap.put("message", "가게 정보가 없습니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            return resultMap;
+        }
+        else if (value.equals("월")) {
+            data.setScdi_day_no(1);
+            data.setScdi_day(value);
+        }
+        else if (value.equals("화")) {
+            data.setScdi_day_no(2);
+            data.setScdi_day(value);
+        }
+        else if (value.equals("수")) {
+            data.setScdi_day_no(3);
+            data.setScdi_day(value);
+        }
+        else if (value.equals("목")) {
+            data.setScdi_day_no(4);
+            data.setScdi_day(value);
+        }
+        else if (value.equals("금")) {
+            data.setScdi_day_no(5);
+            data.setScdi_day(value);
+        }
+        else if (value.equals("토")) {
+            data.setScdi_day_no(6);
+            data.setScdi_day(value);
+        }
+        else if (value.equals("일")) {
+            data.setScdi_day_no(7);
+            data.setScdi_day(value);
+        }
+        else {
+            resultMap.put("status", false);
+            resultMap.put("message", "올바르지 않은 요일 형식입니다 ex ) 월");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            return resultMap;
+        }
+        if (cRepo.findByScdiSeqAndScdiDay(seq, value) != null) {
+            resultMap.put("status", false);
+            resultMap.put("message", "이미 존재하는 휴무일입니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            return resultMap;
+        }
+        StoreClosedDayEntity entity = new StoreClosedDayEntity();
+        entity.setScdiDay(data.getScdi_day());
+        entity.setStoreInfoEntity(sRepo.findBySiSeq(seq));
+        entity.setScdiDayNo(data.getScdi_day_no());
+        cRepo.save(entity);
+        resultMap.put("status", true);
+        resultMap.put("message", "휴무일이 등록되었습니다.");
+        resultMap.put("code", HttpStatus.ACCEPTED);
+        return resultMap;
+        
+    }
 }

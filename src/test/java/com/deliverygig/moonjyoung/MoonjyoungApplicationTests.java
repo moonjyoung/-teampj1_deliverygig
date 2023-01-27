@@ -53,5 +53,11 @@ class MoonjyoungApplicationTests {
 		vo.setUiName("testname");
 		univInfoRepository.save(vo.toUnivInfoEntity());
 	}
+	@Test
+	public void checkClosedDay() {
+		LocalDate now = LocalDate.now();
+        int dayOfWeekValue = now.getDayOfWeek().getValue();
+		System.out.println(dayOfWeekValue);
+	}
 
 }

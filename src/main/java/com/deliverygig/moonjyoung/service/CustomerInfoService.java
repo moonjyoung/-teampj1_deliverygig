@@ -312,23 +312,29 @@ public class CustomerInfoService {
     }
 
     // 탈퇴
-    public Map<String, Object> DeleteMember(LoginUserVO data2, HttpSession session) throws Exception {
+    public Map<String, Object> DeleteMember(/*LoginUserVO data2,*/ Long ciSeq, HttpSession session) throws Exception {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        LoginUserVO data = (LoginUserVO) session.getAttribute("loginUser");
-        if (session.getAttribute("loginUser") == null) {
+        // LoginUserVO data = (LoginUserVO) session.getAttribute("loginUser");
+        // if (session.getAttribute("loginUser") == null) {
+        //     resultMap.put("status", false);
+        //     resultMap.put("message", "회원정보가 없습니다. 로그인 먼저해주세요.");
+        //     resultMap.put("code", HttpStatus.BAD_REQUEST);
+        //     return resultMap;
+        // }
+        // String encPwd = AESAlgorithm.Encrypt(data2.getCiPwd());
+        // if (!data.getCiPwd().equals(encPwd)) {
+        //     resultMap.put("status", false);
+        //     resultMap.put("message", "잘못된 비밀번호입니다.");
+        //     resultMap.put("code", HttpStatus.BAD_REQUEST);
+        //     return resultMap;
+        // }
+        if (cRepo.findByCiSeq(ciSeq) == null) {
             resultMap.put("status", false);
-            resultMap.put("message", "회원정보가 없습니다. 로그인 먼저해주세요.");
+            resultMap.put("message", "알맞지 않은 회원번호입니다..");
             resultMap.put("code", HttpStatus.BAD_REQUEST);
-            return resultMap;
+            return resultMap;  
         }
-        String encPwd = AESAlgorithm.Encrypt(data2.getCiPwd());
-        if (!data.getCiPwd().equals(encPwd)) {
-            resultMap.put("status", false);
-            resultMap.put("message", "잘못된 비밀번호입니다.");
-            resultMap.put("code", HttpStatus.BAD_REQUEST);
-            return resultMap;
-        }
-        CustomerInfoEntity entity = cRepo.findById(data.getCiSeq()).get();
+        CustomerInfoEntity entity = cRepo.findById(ciSeq).get();
         cRepo.delete(entity);
         session.invalidate();
         resultMap.put("status", true);

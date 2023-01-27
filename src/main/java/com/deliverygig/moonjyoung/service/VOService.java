@@ -1,5 +1,8 @@
 package com.deliverygig.moonjyoung.service;
 
+import java.sql.Date;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -14,11 +17,14 @@ import com.deliverygig.moonjyoung.entity.delivery.PickUpAreaEntity;
 import com.deliverygig.moonjyoung.entity.delivery.StoreTimeDetailEntity;
 import com.deliverygig.moonjyoung.entity.delivery.UnivInfoEntity;
 import com.deliverygig.moonjyoung.entity.delivery.UnivTimeInfoEntity;
+import com.deliverygig.moonjyoung.entity.store.StoreClosedDayEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreDetailInfoEntity;
+import com.deliverygig.moonjyoung.entity.store.StoreInfoEntity;
 import com.deliverygig.moonjyoung.repository.delivery.PickUpAreaRepository;
 import com.deliverygig.moonjyoung.repository.delivery.StoreTimeDetailRepository;
 import com.deliverygig.moonjyoung.repository.delivery.UnivInfoRepository;
 import com.deliverygig.moonjyoung.repository.delivery.UnivTimeInfoRepository;
+import com.deliverygig.moonjyoung.repository.store.StoreClosedDayRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreDetailInfoRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreInfoRepository;
 import com.deliverygig.moonjyoung.vo.delivery.ClosePickupTimeVO;
@@ -30,6 +36,7 @@ import com.deliverygig.moonjyoung.vo.delivery.ShowUnivListVO;
 import com.deliverygig.moonjyoung.vo.delivery.ShowUnivTimeVO;
 import com.deliverygig.moonjyoung.vo.delivery.UnivTimeVO;
 import com.deliverygig.moonjyoung.vo.store.ShowStoreListVO;
+import com.deliverygig.moonjyoung.vo.store.StoreClosedDayInfoVO;
 import com.deliverygig.moonjyoung.vo.store.StoreDetailInfoVO;
 import com.deliverygig.moonjyoung.vo.store.StoreListInfoVO;
 
@@ -42,12 +49,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VOService {
-    @Autowired UnivInfoRepository univInfoRepository;
-    @Autowired PickUpAreaRepository pickUpAreaRepository;
-    @Autowired StoreInfoRepository storeInfoRepository;
-    @Autowired StoreTimeDetailRepository storeTimeDetailRepository;
-    @Autowired UnivTimeInfoRepository univTimeInfoRepository;
-    @Autowired StoreDetailInfoRepository storeDetailInfoRepository;
+    @Autowired
+    UnivInfoRepository univInfoRepository;
+    @Autowired
+    PickUpAreaRepository pickUpAreaRepository;
+    @Autowired
+    StoreInfoRepository storeInfoRepository;
+    @Autowired
+    StoreTimeDetailRepository storeTimeDetailRepository;
+    @Autowired
+    UnivTimeInfoRepository univTimeInfoRepository;
+    @Autowired
+    StoreDetailInfoRepository storeDetailInfoRepository;
+    @Autowired
+    StoreClosedDayRepository storeClosedDayRepository;
 
     public Map<String, Object> getLocationList() {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
@@ -55,13 +70,12 @@ public class VOService {
         for (PickUpAreaEntity puaData : pickUpAreaRepository.findAll()) {
             LocationListVO vo = new LocationListVO();
             for (UnivTimeInfoEntity data : univTimeInfoRepository.findAll()) {
-                if (data.getUnivInfoEntity().getUiSeq()==puaData.getUnivInfoEntity().getUiSeq()) {
+                if (data.getUnivInfoEntity().getUiSeq() == puaData.getUnivInfoEntity().getUiSeq()) {
                     vo.setUiSeq(data.getUnivInfoEntity().getUiSeq());
                     vo.setUiName(data.getUnivInfoEntity().getUiName());
                     vo.setPuaSeq(puaData.getPuaSeq());
                     vo.setPuaName(puaData.getPuaName());
-                }
-                else {
+                } else {
                     continue;
                 }
                 List<UnivTimeVO> timeVOList = getUnivTimeVOList(data.getUnivInfoEntity().getUiSeq());
@@ -80,13 +94,12 @@ public class VOService {
         List<UnivTimeVO> list = new ArrayList<UnivTimeVO>();
         for (UnivTimeInfoEntity data : univTimeInfoRepository.findAll()) {
             UnivTimeVO timeVO = new UnivTimeVO();
-            if (uiSeq==data.getUnivInfoEntity().getUiSeq()) {
+            if (uiSeq == data.getUnivInfoEntity().getUiSeq()) {
                 timeVO.setUiSeq(data.getUnivInfoEntity().getUiSeq());
                 timeVO.setTimeName(data.getUtiName());
                 timeVO.setDeliTime1(data.getUtiPickupTime1());
                 timeVO.setDeliTime2(data.getUtiPickupTime2());
-            }
-            else {
+            } else {
                 continue;
             }
             list.add(timeVO);
@@ -97,7 +110,7 @@ public class VOService {
     public Map<String, Object> getStoreUnivTime() {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<StoreUnivTimeVO> returnList = new ArrayList<StoreUnivTimeVO>();
-        
+
         for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAll()) {
             StoreUnivTimeVO vo = new StoreUnivTimeVO();
             vo.setUiName(data.getUnivTimeInfoEntity().getUnivInfoEntity().getUiName());
@@ -166,7 +179,7 @@ public class VOService {
             vo.setSdiOrigin(data.getSdiOrigin());
             List<ClosePickupTimeVO> list = new ArrayList<ClosePickupTimeVO>();
             for (StoreTimeDetailEntity data2 : storeTimeDetailRepository.findAll()) {
-                if (data2.getStoreInfoEntity().getSiSeq()==data.getStoreInfoEntity().getSiSeq()) {
+                if (data2.getStoreInfoEntity().getSiSeq() == data.getStoreInfoEntity().getSiSeq()) {
                     ClosePickupTimeVO vo2 = new ClosePickupTimeVO();
                     vo2.setName(data2.getUnivTimeInfoEntity().getUtiName());
                     vo2.setCloseTime(data2.getStdCloseTime());
@@ -197,15 +210,14 @@ public class VOService {
             ShowUnivListVO vo = new ShowUnivListVO(data);
             returnList.add(vo);
         }
-        
+
         resultMap.put("status", true);
         if (returnList.size() == 0) {
             resultMap.put("message", "조회 완료(등록된 대학이 없습니다.)");
             resultMap.put("code", HttpStatus.OK);
             resultMap.put("list", returnList);
             return resultMap;
-        }
-        else {
+        } else {
             resultMap.put("message", "조회 완료");
             resultMap.put("code", HttpStatus.OK);
             resultMap.put("list", returnList);
@@ -218,15 +230,14 @@ public class VOService {
         List<ShowUnivListVO> returnList = new ArrayList<ShowUnivListVO>();
 
         ShowUnivListVO vo = new ShowUnivListVO(univInfoRepository.findByUiName(keyword));
-        
+
         resultMap.put("status", true);
         if (returnList.size() == 0) {
             resultMap.put("message", "조회 완료(등록된 대학이 없습니다.)");
             resultMap.put("code", HttpStatus.OK);
             resultMap.put("list", returnList);
             return resultMap;
-        }
-        else {
+        } else {
             resultMap.put("message", "조회 완료");
             resultMap.put("code", HttpStatus.OK);
             resultMap.put("list", returnList);
@@ -249,12 +260,10 @@ public class VOService {
             resultMap.put("message", "존재하지 않는 대학입니다.");
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
             return resultMap;
-        }
-        else if (returnList.size() == 0) {
+        } else if (returnList.size() == 0) {
             resultMap.put("message", "조회 완료(등록된 장소가 없습니다.)");
             resultMap.put("code", HttpStatus.OK);
-        }
-        else {
+        } else {
             resultMap.put("message", "조회 완료");
             resultMap.put("code", HttpStatus.OK);
         }
@@ -268,24 +277,22 @@ public class VOService {
         List<ShowUnivTimeVO> returnList = new ArrayList<ShowUnivTimeVO>();
 
         for (UnivTimeInfoEntity data : univTimeInfoRepository.findAll(Sort.by(Sort.Direction.ASC, "utiCloseTime"))) {
-            if (data.getUnivInfoEntity().getUiSeq()==uiSeq) {
+            if (data.getUnivInfoEntity().getUiSeq() == uiSeq) {
                 ShowUnivTimeVO vo = new ShowUnivTimeVO(data);
                 returnList.add(vo);
             }
         }
-        
+
         resultMap.put("status", true);
         if (univInfoRepository.countByUiSeq(uiSeq) == 0) {
             resultMap.put("status", false);
             resultMap.put("message", "존재하지 않는 대학입니다.");
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
             return resultMap;
-        }
-        else if (returnList.size() == 0) {
+        } else if (returnList.size() == 0) {
             resultMap.put("message", "조회 완료(등록된 시간이 없습니다.)");
             resultMap.put("code", HttpStatus.OK);
-        }
-        else {
+        } else {
             resultMap.put("message", "조회 완료");
             resultMap.put("code", HttpStatus.OK);
         }
@@ -294,29 +301,35 @@ public class VOService {
         return resultMap;
     }
 
+    // 대학 배달시간 별 가게 조회 
     public Map<String, Object> getStoreList(Long utiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<ShowStoreListVO> returnList = new ArrayList<ShowStoreListVO>();
-
         for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAll()) {
-            if (data.getUnivTimeInfoEntity().getUtiSeq()==utiSeq) {
-                ShowStoreListVO vo = new ShowStoreListVO(data);
-                returnList.add(vo);
+            ShowStoreListVO vo = new ShowStoreListVO();
+            if (data.getUnivTimeInfoEntity().getUtiSeq() == utiSeq) {
+                if (data.getStoreInfoEntity().getSiStatus() == 1) {
+
+                    vo.setStatus(data.getStoreInfoEntity().getSiStatus());
+                    vo.setStoreSeq(data.getStoreInfoEntity().getSiSeq());
+                    vo.setStoreName(data.getStoreInfoEntity().getSiName());
+                    vo.setStoreCloseTime(data.getUnivTimeInfoEntity().getUtiCloseTime());
+                    returnList.add(vo);
+                }
+
             }
         }
-        
+
         resultMap.put("status", true);
         if (univTimeInfoRepository.countByUtiSeq(utiSeq) == 0) {
             resultMap.put("status", false);
             resultMap.put("message", "존재하지 않는 시간정보 입니다.");
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
             return resultMap;
-        }
-        else if (returnList.size() == 0) {
+        } else if (returnList.size() == 0) {
             resultMap.put("message", "조회 완료(배달하는 가게가 없습니다.)");
             resultMap.put("code", HttpStatus.OK);
-        }
-        else {
+        } else {
             resultMap.put("message", "조회 완료");
             resultMap.put("code", HttpStatus.OK);
         }
@@ -324,4 +337,40 @@ public class VOService {
         resultMap.put("list", returnList);
         return resultMap;
     }
+
+    // public List<StoreClosedDayInfoVO> getClosedDayVOList(Long scdiSiSeq) {
+    //     List<StoreClosedDayInfoVO> list = new ArrayList<StoreClosedDayInfoVO>();
+    //     for (StoreClosedDayEntity data : storeClosedDayRepository.findAll()) {
+    //         StoreClosedDayInfoVO closedDayVO = new StoreClosedDayInfoVO();
+    //         if (scdiSiSeq == data.getStoreInfoEntity().getSiSeq()) {
+    //             closedDayVO.setScdi_day(data.getScdiDay());
+    //             closedDayVO.setScdi_day_no(data.getScdiDayNo());
+    //         } else {
+    //             continue;
+    //         }
+    //         list.add(closedDayVO);
+    //     }
+    //     return list;
+    // }
+
+    // public StoreInfoEntity closedDaystatus(Long siSeq) {
+    //     LocalDate now = LocalDate.now();
+    //      DayOfWeek dayOfWeek = now.getDayOfWeek();
+    //      int dayOfWeekNumber = dayOfWeek.getValue();
+    //      StoreInfoEntity entity = new StoreInfoEntity();
+    //     List<StoreClosedDayEntity> list = new ArrayList<StoreClosedDayEntity>();
+    //     for (StoreClosedDayEntity data : list) {
+    //         if (data.getScdiDayNo() == dayOfWeekNumber) {
+            
+    //         }
+    //      }
+    // }
 }
+ 
+
+    
+
+    
+
+
+

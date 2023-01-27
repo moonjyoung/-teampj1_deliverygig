@@ -16,12 +16,13 @@ import com.deliverygig.moonjyoung.vo.delivery.UnivTimeVO;
 
 @RestController
 public class MasterController {
-    @Autowired MasterService mService;
+    @Autowired
+    MasterService mService;
 
     @PostMapping("/univ/add")
     public ResponseEntity<Object> postUnivAdd(@RequestParam("univ") String univ, Model model) {
         Map<String, Object> resultMap = mService.addUniv(univ);
-        return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+        return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
 
     @PostMapping("/location/add")
@@ -30,13 +31,16 @@ public class MasterController {
         Map<String, Object> resultMap = mService.addPickUpArea(univ, pua);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
-    
+
     @PostMapping("/univTime/add")
     public ResponseEntity<Object> postUnivTimeAdd(@RequestBody UnivTimeVO data, @RequestParam Long seq) {
         Map<String, Object> resultMap = mService.addUnivTime(data, seq);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
-    
 
-
+    @PostMapping("/storeStatus/update")
+    public ResponseEntity<Object> storeStatusUpdate(@RequestParam Integer status) {
+        Map<String, Object> resultMap = mService.updateStatus(status);
+        return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
+    }
 }
