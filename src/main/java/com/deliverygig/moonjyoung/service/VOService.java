@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deliverygig.moonjyoung.entity.delivery.PickUpAreaEntity;
 import com.deliverygig.moonjyoung.entity.delivery.StoreTimeDetailEntity;
 import com.deliverygig.moonjyoung.entity.delivery.UnivInfoEntity;
 import com.deliverygig.moonjyoung.entity.delivery.UnivTimeInfoEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreDetailInfoEntity;
+import com.deliverygig.moonjyoung.entity.store.StoreInfoEntity;
 import com.deliverygig.moonjyoung.repository.delivery.PickUpAreaRepository;
 import com.deliverygig.moonjyoung.repository.delivery.StoreTimeDetailRepository;
 import com.deliverygig.moonjyoung.repository.delivery.UnivInfoRepository;
@@ -34,11 +36,13 @@ import com.deliverygig.moonjyoung.vo.store.ShowStoreListVO;
 import com.deliverygig.moonjyoung.vo.store.StoreDetailInfoVO;
 import com.deliverygig.moonjyoung.vo.store.StoreListInfoVO;
 
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @Service
 @AllArgsConstructor
 @NoArgsConstructor
@@ -198,6 +202,7 @@ public class VOService {
             ShowUnivListVO vo = new ShowUnivListVO(data);
             returnList.add(vo);
         }
+
         
         resultMap.put("status", true);
         if (returnList.size() == 0) {
@@ -214,25 +219,24 @@ public class VOService {
         }
     }
 
+    //localhost:8888/list/univ/search?keyword=대학
     public Map<String, Object> searchUniv(String keyword) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        List<ShowUnivListVO> returnList = new ArrayList<ShowUnivListVO>();
-
-        ShowUnivListVO vo = new ShowUnivListVO(univInfoRepository.findByUiName(keyword));
-        
+        List<ShowUnivListVO> resultList = new ArrayList<ShowUnivListVO>();
+        if (keyword==null || keyword.equals("")) {
+            resultMap.put("status", false);
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            resultMap.put("message", "검색어를 입력하세요.");
+            return resultMap;
+        }
+        for (UnivInfoEntity data : univInfoRepository.findAllByUiNameContaining(keyword)) {
+            resultList.add(new ShowUnivListVO(data));
+        }
         resultMap.put("status", true);
-        if (returnList.size() == 0) {
-            resultMap.put("message", "조회 완료(등록된 대학이 없습니다.)");
-            resultMap.put("code", HttpStatus.OK);
-            resultMap.put("list", returnList);
-            return resultMap;
-        }
-        else {
-            resultMap.put("message", "조회 완료");
-            resultMap.put("code", HttpStatus.OK);
-            resultMap.put("list", returnList);
-            return resultMap;
-        }
+        resultMap.put("code", HttpStatus.OK);
+        resultMap.put("message", "성공");
+        resultMap.put("list", resultList);
+        return resultMap;
     }
 
     public Map<String, Object> getpuaList(Long uiSeq) {
@@ -362,7 +366,41 @@ public class VOService {
             resultMap.put("code", HttpStatus.OK);
             resultMap.put("data", returnData);
         }
-
         return resultMap;
     }
+
+    //localhost:8888/list/store/search?keyword=닭
+    public Map<String, Object> searchStore(String keyword) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        List<ShowStoreListVO> resultList = new ArrayList<ShowStoreListVO>();
+        if (keyword==null || keyword.equals("")) {
+            resultMap.put("status", false);
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            resultMap.put("message", "검색어를 입력하세요.");
+            return resultMap;
+        }
+        // 1. keyword -> storeInfoEntity검색 -> List<StoreInfoEntity> -> List<Long(siSeq)>
+        for (StoreInfoEntity data : storeInfoRepository.findAllBySiNameContaining(keyword)) {
+            //resultList.add( new StoreInfoEntity(data));
+            
+            //resultList.add(new (Long)StoreInfoEntity(data));
+            // resultList.add(new ShowStoreListVO(data));
+        }
+        resultMap.put("status", true);
+        resultMap.put("code", HttpStatus.OK);
+        resultMap.put("message", "성공");
+        resultMap.put("list", resultList);
+        return resultMap;
+    }
+    //       for (UnivInfoEntity data : univInfoRepository.findAllByUiNameContaining(keyword)) {
+    //           resultList.add(new ShowUnivListVO(data));
+    //     resultMap.put("status", true);
+    //     resultMap.put("code", HttpStatus.OK);
+    //     resultMap.put("message", "성공");
+    //     resultMap.put("list", resultList);
+    //     return resultMap;
+    // }
+
+
+
 }

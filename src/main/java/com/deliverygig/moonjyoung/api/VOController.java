@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deliverygig.moonjyoung.service.VOService;
 
+import jakarta.annotation.Nullable;
+
 
 @RestController
 @RequestMapping("/list")
@@ -57,6 +59,19 @@ public class VOController {
     @GetMapping("/store")
     public ResponseEntity<Object> getStoreList(@RequestParam Long utiSeq) {
         Map<String, Object> resultMap = voService.getStoreList(utiSeq);
+        return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+    }
+
+
+
+    @GetMapping("/univ/search")
+    public ResponseEntity<Object> getUnivSearch(@RequestParam @Nullable String keyword) {
+        Map<String, Object> resultMap = voService.searchUniv(keyword);
+        return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+    }
+    @GetMapping("/store/search")
+    public ResponseEntity<Object> getStoreSearch(@RequestParam @Nullable String keyword) {
+        Map<String, Object> resultMap = voService.searchStore(keyword);
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
 }

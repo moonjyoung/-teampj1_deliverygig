@@ -9,4 +9,5 @@ import com.deliverygig.moonjyoung.entity.food.FoodOptionConnectEntity;
 public interface FoodOptionConnectRepository extends JpaRepository<FoodOptionConnectEntity, Long> {
     // public FoodMenuInfoEntity findByFocFmiSeq();
     // public FoodMenuOptionEntity findByFocFmoSeq();
+    // public FoodOptionConnectEntity findByFocFmiSeq(Long FocFmiSeq);
 }
