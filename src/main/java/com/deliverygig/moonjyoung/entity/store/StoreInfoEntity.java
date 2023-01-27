@@ -47,4 +47,6 @@ public class StoreInfoEntity {
 
     // public void setSiSeqq(Long num) {
     //     this.siSeq = num;
+
+
 }

@@ -14,4 +14,5 @@ public interface FoodOptionConnectRepository extends JpaRepository<FoodOptionCon
     @Query(value = "select * from food_option_connect where foc_fmi_seq = :focFmiSeq order by foc_fmo_order", nativeQuery = true)
     public List<FoodOptionConnectEntity> findAllByFocFmiSeq(@Param("focFmiSeq") Long focFmiSeq);
     // public FoodMenuOptionEntity findByFocFmoSeq();
+    // public FoodOptionConnectEntity findByFocFmiSeq(Long FocFmiSeq);
 }
