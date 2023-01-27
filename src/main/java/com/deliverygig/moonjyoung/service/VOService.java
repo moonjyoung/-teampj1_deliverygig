@@ -32,6 +32,8 @@ import com.deliverygig.moonjyoung.repository.food.FoodDetailOptionRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodMenuInfoRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodMenuOptionRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodOptionConnectRepository;
+import com.deliverygig.moonjyoung.repository.image.PickUpAreaImageRepository;
+import com.deliverygig.moonjyoung.repository.image.StoreImageRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreDetailInfoRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreInfoRepository;
 import com.deliverygig.moonjyoung.vo.delivery.ClosePickupTimeVO;
@@ -66,6 +68,8 @@ public class VOService {
     @Autowired StoreTimeDetailRepository storeTimeDetailRepository;
     @Autowired UnivTimeInfoRepository univTimeInfoRepository;
     @Autowired StoreDetailInfoRepository storeDetailInfoRepository;
+    @Autowired PickUpAreaImageRepository pickUpAreaImageRepository;
+    @Autowired StoreImageRepository storeImageRepository;
     @Autowired FoodMenuInfoRepository foodMenuInfoRepository;
     @Autowired FoodOptionConnectRepository foodOptionConnectRepository;
     @Autowired FoodMenuOptionRepository foodMenuOptionRepository;
@@ -163,6 +167,7 @@ public class VOService {
             vo.setUtiPickupTime(data.getUnivTimeInfoEntity().getUtiPickupTime1());
             vo.setSiCloseTime(data.getStdCloseTime());
             vo.setSiDiscount(data.getStoreInfoEntity().getSiDiscount());
+           
             returnList.add(vo);
         }
         resultMap.put("status", true);
@@ -260,6 +265,7 @@ public class VOService {
 
         for (PickUpAreaEntity data : pickUpAreaRepository.findAllByPuaUiSeq(uiSeq)) {
             ShowPuaVO vo = new ShowPuaVO(data);
+            vo.setPuaiPuaSeq(pickUpAreaImageRepository.findByPuaiPuaSeq(data.getPuaSeq()).getPuaiSeq());
             returnList.add(vo);
         }
 

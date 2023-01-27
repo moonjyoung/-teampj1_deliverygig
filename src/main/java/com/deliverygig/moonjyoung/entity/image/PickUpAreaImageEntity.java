@@ -26,7 +26,7 @@ public class PickUpAreaImageEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "puai_seq") private Long puaiSeq; // 수령장소이미지번호
     @Column(name = "puai_image") private String puaiImage; // 수령장소이미지
-   // @Column(name = "puai_pua_seq") private Long puaiPuaSeq; // 수령장소-세부랑 연결 번호
+//    @Column(name = "puai_pua_seq") private Long puaiPuaSeq; // 수령장소-세부랑 연결 번호
     @Column(name = "puai_uri") private String puaiUri; // url 추가
 
     @ManyToOne @JoinColumn(name = "puai_pua_seq") private PickUpAreaEntity pickUpAreaEntity;

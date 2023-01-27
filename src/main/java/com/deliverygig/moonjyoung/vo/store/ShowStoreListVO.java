@@ -14,6 +14,7 @@ public class ShowStoreListVO {
     private Double discount;
     private Integer status;
     // private List<StoreClosedDayInfoVO> storeClosedDay ; 
+    private Long simgSiSeq;
 
     public ShowStoreListVO(StoreTimeDetailEntity entity) {
         this.storeSeq = entity.getStoreInfoEntity().getSiSeq();
