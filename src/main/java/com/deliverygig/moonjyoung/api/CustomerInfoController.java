@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deliverygig.moonjyoung.repository.account.CustomerRepository;
@@ -45,9 +46,9 @@ public class CustomerInfoController {
         Map<String, Object> resultMap = cService.LogOutMember(session);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
-    @DeleteMapping("/delete")
-    public ResponseEntity<Object> memberDelete(@RequestBody LoginUserVO data2, HttpSession session) throws Exception {
-        Map<String, Object> resultMap = cService.DeleteMember(data2, session);
+    @PostMapping("/delete")
+    public ResponseEntity<Object> memberDelete(/*@RequestBody LoginUserVO data2,*/@RequestParam Long ciSeq, HttpSession session) throws Exception {
+        Map<String, Object> resultMap = cService.DeleteMember(ciSeq, session);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
     // @PostMapping("/update")
@@ -55,7 +56,7 @@ public class CustomerInfoController {
     //     Map<String, Object> resultMap = cService.UpdateMember(data2, session);
     //     return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     // }
-    @GetMapping("/check/{type}")
+    @PostMapping("/check/{type}")
     public ResponseEntity<Object> checkAvalible(@RequestBody CustomerAddVO data, @PathVariable String type) {
         Map<String, Object> resultMap = cService.AvailableMember(data, type);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));

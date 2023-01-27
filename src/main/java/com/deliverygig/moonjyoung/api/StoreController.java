@@ -19,6 +19,7 @@ import com.deliverygig.moonjyoung.vo.store.AddstoreInfoVo;
 import com.deliverygig.moonjyoung.vo.store.StoreDetailInfoVO;
 import com.deliverygig.moonjyoung.vo.store.UpdateStoreDetailVO;
 import com.deliverygig.moonjyoung.vo.store.UpdateStoreVO;
+
 @RestController
 @RequestMapping("/store")
 public class StoreController {
@@ -56,6 +57,7 @@ public class StoreController {
         Map<String, Object> resultMap = aService.addStore(data);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
+
     // 가게 기본정보 - 수정
     @PostMapping("/update/{type}")
     public ResponseEntity<Object> postUpdateStoreInfo(@PathVariable String type,
@@ -63,12 +65,14 @@ public class StoreController {
         Map<String, Object> resultMap = aService.UpdateStore(data, siSeq, type);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
+
     // 디테일 등록
     @PostMapping("/add/detail")
     public ResponseEntity<Object> postAddStoreDetail(@RequestBody StoreDetailInfoVO data, @RequestParam Long siSeq) {
         Map<String, Object> resultMap = dService.addStoreDetail(data, siSeq);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
+
     // 디테일 수정
     @PostMapping("/update/detail")
     public ResponseEntity<Object> postUdateStoreDetail(@RequestBody UpdateStoreDetailVO data,
@@ -76,8 +80,12 @@ public class StoreController {
         Map<String, Object> resultMap = dService.updateStoreDetail(data, siSeq);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
-    // @PostMapping("/add/storeTime")
-    // public ResponseEntity<Object> postAddStoreDetail() {
-        
-    // }
+    @PostMapping("/add/closedDay")
+    public ResponseEntity<Object> postAddClosedDay(@RequestParam Long seq, @RequestParam String value) {
+        Map<String, Object> resultMap = dService.addStoreClosedDay(value, seq);
+         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
+    }
+
+ 
+    
 }

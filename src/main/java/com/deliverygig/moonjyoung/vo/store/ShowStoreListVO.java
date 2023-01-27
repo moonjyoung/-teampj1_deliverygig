@@ -12,11 +12,21 @@ public class ShowStoreListVO {
     private String storeName;
     private LocalTime storeCloseTime;
     private Double discount;
+    private Integer status;
+    // private List<StoreClosedDayInfoVO> storeClosedDay ; 
 
     public ShowStoreListVO(StoreTimeDetailEntity entity) {
         this.storeSeq = entity.getStoreInfoEntity().getSiSeq();
         this.storeName = entity.getStoreInfoEntity().getSiName();
         this.storeCloseTime = entity.getStdCloseTime();
         this.discount = entity.getStoreInfoEntity().getSiDiscount();
+        this.status = entity.getStoreInfoEntity().getSiStatus();
+
     }
+
+    public ShowStoreListVO() {
+    }
+
+    
+    
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.deliverygig.moonjyoung.entity.delivery.PickUpAreaEntity;
 import com.deliverygig.moonjyoung.entity.delivery.UnivInfoEntity;
 import com.deliverygig.moonjyoung.entity.delivery.UnivTimeInfoEntity;
+import com.deliverygig.moonjyoung.entity.store.StoreInfoEntity;
 import com.deliverygig.moonjyoung.repository.delivery.PickUpAreaRepository;
 import com.deliverygig.moonjyoung.repository.delivery.UnivInfoRepository;
 import com.deliverygig.moonjyoung.repository.delivery.UnivTimeInfoRepository;
@@ -87,7 +88,7 @@ public class MasterService {
     }
 
     // 대학별 배달시간 정보 등록 
-    public Map<String, Object> addUnivTime(UnivTimeVO data,Long seq) {
+    public Map<String, Object> addUnivTime(UnivTimeVO data, Long seq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
 
         if (univInfoRepository.findByUiSeq(seq) == null) {
@@ -95,8 +96,7 @@ public class MasterService {
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
             resultMap.put("message", "존재하지 않는 대학입니다.");
             return resultMap;
-        }
-        else if (univTimeInfoRepository.countByUtiCloseTime(data.getCloseTime()) == 1) {
+        } else if (univTimeInfoRepository.countByUtiCloseTime(data.getCloseTime()) == 1) {
             resultMap.put("status", false);
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
             resultMap.put("message", "이미 존재하는 주문마감시간입니다.");
@@ -112,6 +112,16 @@ public class MasterService {
         resultMap.put("status", true);
         resultMap.put("message", "대학별 배달시간 정보가 등록되었습니다.");
         resultMap.put("code", HttpStatus.CREATED);
-        return resultMap; 
+        return resultMap;
+    }
+    // 가게 상태값 변경 
+    public Map<String, Object> updateStatus(Integer status) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        StoreInfoEntity data = new StoreInfoEntity();
+        data.setSiStatus(status);
+        resultMap.put("status", true);
+        resultMap.put("message", "가게 상태값이 변경되었습니다.");
+        resultMap.put("code", HttpStatus.CREATED);
+        return resultMap;
     }
 }
