@@ -13,4 +13,6 @@ public interface StoreDetailInfoRepository extends JpaRepository<StoreDetailInfo
 
     @Query(value = "select count(*) from store_detail_info where sdi_si_seq = :siSeq", nativeQuery = true)
     public Integer countBySdiSiSeq(@Param("siSeq") Long siSeq);
+
+    // @Query()
 }
