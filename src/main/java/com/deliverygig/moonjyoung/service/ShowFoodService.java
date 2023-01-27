@@ -9,55 +9,84 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.deliverygig.moonjyoung.entity.food.FoodOptionConnectEntity;
+import com.deliverygig.moonjyoung.entity.food.FoodCategoryEntity;
+import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
+import com.deliverygig.moonjyoung.repository.food.FoodCategoryRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodDetailOptionRepository;
+import com.deliverygig.moonjyoung.repository.food.FoodMenuInfoRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodOptionConnectRepository;
+import com.deliverygig.moonjyoung.repository.store.StoreInfoRepository;
 import com.deliverygig.moonjyoung.vo.food.ShowFoodListVO;
+import com.deliverygig.moonjyoung.vo.food.ShowMenuInfoVO;
 
 import lombok.Data;
 
 @Data
 @Service
 public class ShowFoodService {
+    @Autowired StoreInfoRepository storeInfoRepository;
+    @Autowired FoodCategoryRepository foodCategoryRepository;
+    @Autowired FoodMenuInfoRepository foodMenuInfoRepository;
     @Autowired FoodDetailOptionRepository foodDetailOptionRepository;
     @Autowired FoodOptionConnectRepository foodOptionConnectRepository;
 
-    public Map<String, Object> getMenuList() {
+    public Map<String, Object> getMenuList(Long siSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<ShowFoodListVO> returnList = new ArrayList<ShowFoodListVO>();
-        
-        // for (FoodDetailOptionEntity data : foodDetailOptionRepository.findAll()) {
-        //     ShowFoodListVO vo = new ShowFoodListVO();
-        //     List<Map<Long, String>> optionList = new ArrayList<Map<Long, String>>();
-        //     vo.setSiName(data.getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFoodCategoryEntity().getStoreInfoEntity().getSiName());
-        //     vo.setCateName(data.getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFoodCategoryEntity().getFcName());
-        //     vo.setMenuName(data.getFoodMenuOptionEntity().getFoodMenuInfoEntity().getFmiName());
-        //     vo.setOptionCateName(data.getFoodMenuOptionEntity().getFmoName());
-        //     if (returnList.size()>0 && returnList.get(returnList.size()-1).getOptionCateName().equals(vo.getOptionCateName())) {
-        //         continue;
-        //     }
-        //     optionList = getOptionList(data.getFoodMenuOptionEntity().getFmoSeq());
-        //     vo.setOptionList(optionList);
-        //     returnList.add(vo);
-        // }
-        for (FoodOptionConnectEntity data : foodOptionConnectRepository.findAll()) {
-            ShowFoodListVO vo = new ShowFoodListVO(data.getFoodMenuInfoEntity(), data.getFoodMenuOptionEntity());
-            returnList.add(vo);
+        String storeName = "";
+                
+        if (storeInfoRepository.findById(siSeq).isEmpty()) {
+            resultMap.put("status", false);
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            resultMap.put("message", "존재하지 않는 가게입니다.");
         }
-        resultMap.put("status", true);
-        resultMap.put("code", HttpStatus.OK);
-        resultMap.put("message", "메뉴 조회 완료");
-        resultMap.put("list", returnList);
+        else if (foodCategoryRepository.findAllBySiSeq(siSeq).size()==0) {
+            resultMap.put("status", true);
+            resultMap.put("code", HttpStatus.OK);
+            resultMap.put("message", "조회 완료(가게에 등록된 메뉴가 없습니다)");
+            resultMap.put("store", storeInfoRepository.findBySiSeq(siSeq).getSiName());
+            return resultMap;
+        }
+        else {
+            // 대표메뉴
+            ShowFoodListVO bestVO = new ShowFoodListVO();
+            Integer count = 0;
+            if (foodMenuInfoRepository.findAllByFmiBest(1).size()!=0) {
+                List<ShowMenuInfoVO> bestMenuList = new ArrayList<ShowMenuInfoVO>();
+                for (FoodMenuInfoEntity data : foodMenuInfoRepository.findAllByFmiBest(1)) {
+                    if (data.getFoodCategoryEntity().getStoreInfoEntity().getSiSeq()==siSeq) {
+                        count++;
+                        ShowMenuInfoVO vo2 = new ShowMenuInfoVO(data);
+                        bestMenuList.add(vo2);
+                    }
+                }
+                if (count!=0) {
+                    bestVO.setCateName("대표메뉴 "+count+"개");
+                    bestVO.setMenuList(bestMenuList);
+                    returnList.add(bestVO);
+                }
+            }
+            for (FoodCategoryEntity data2 : foodCategoryRepository.findAllBySiSeq(siSeq)) {
+                ShowFoodListVO vo = new ShowFoodListVO();
+                List<ShowMenuInfoVO> menuList = new ArrayList<ShowMenuInfoVO>();
+                if (data2.getStoreInfoEntity().getSiSeq()==siSeq) {
+                    storeName = data2.getStoreInfoEntity().getSiName();
+                    vo.setCateName(data2.getFcName()+" "+foodMenuInfoRepository.findAllByFmiFcSeq(data2.getFcSeq()).size()+"개");
+                    for (FoodMenuInfoEntity data : foodMenuInfoRepository.findAllByFmiFcSeq(data2.getFcSeq())) {
+                        ShowMenuInfoVO vo2 = new ShowMenuInfoVO(data);
+                        menuList.add(vo2);
+                    }
+                    vo.setMenuList(menuList);
+                }
+                returnList.add(vo);
+            }
+            resultMap.put("status", true);
+            resultMap.put("code", HttpStatus.OK);
+            resultMap.put("message", "조회 완료");
+            resultMap.put("store", storeName);
+            resultMap.put("list", returnList);
+        }
+        
         return resultMap;
     }
-
-    // public List<Map<Long, String>> getOptionList(Long seq) {
-    //     List<Map<Long, String>> optionList = new ArrayList<Map<Long, String>>();
-    //     Map<Long, String> map = new LinkedHashMap<Long, String>();
-    //     for (FoodDetailOptionEntity entity : foodDetailOptionRepository.findByFdoFmoSeq(seq)) {
-    //         map.put(entity.getFdoSeq(), entity.getFdoName());
-    //     }
-    //     optionList.add(map);
-    //     return optionList;
-    // }
 }
