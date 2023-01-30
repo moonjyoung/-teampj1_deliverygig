@@ -61,6 +61,12 @@ public class VOController {
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
 
+    @GetMapping("/dcstore")
+    public ResponseEntity<Object> getDCStoreList(@RequestParam Long utiSeq) {
+        Map<String, Object> resultMap = voService.getDCStoreList(utiSeq);
+        return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+    }
+
 
 
     @GetMapping("/univ/search")
@@ -74,7 +80,7 @@ public class VOController {
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
     
-     @GetMapping("/store/sort")
+    @GetMapping("/store/sort")
     public ResponseEntity<Object> getStoreListOrderByDiscount(@RequestParam Long utiSeq) {
         Map<String, Object> resultMap = voService.getOrderByStoreList(utiSeq);
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));

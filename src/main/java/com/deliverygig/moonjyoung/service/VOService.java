@@ -173,7 +173,7 @@ public class VOService {
             vo.setUtiPickupTime(data.getUnivTimeInfoEntity().getUtiPickupTime1());
             vo.setSiCloseTime(data.getStdCloseTime());
             vo.setSiDiscount(data.getStoreInfoEntity().getSiDiscount());
-           
+            
             returnList.add(vo);
         }
         resultMap.put("status", true);
@@ -353,6 +353,43 @@ public class VOService {
         resultMap.put("list", returnList);
         return resultMap;
     }
+
+
+    // 할인하는 모든 가게 조회
+    public Map<String, Object> getDCStoreList(Long utiSeq) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        List<ShowStoreListVO> returnList = new ArrayList<ShowStoreListVO>();
+
+        for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAll()) {
+            if (data.getUnivTimeInfoEntity().getUtiSeq() == utiSeq) {
+                ShowStoreListVO vo = new ShowStoreListVO(data);
+                if(vo.getdiscount() > 0) {
+                    returnList.add(vo);
+                }
+            }
+        } 
+        resultMap.put("status", true);
+
+        if (univTimeInfoRepository.countByUtiSeq(utiSeq) == 0) {
+            resultMap.put("status", false);
+            resultMap.put("message", "존재하지 않는 시간정보 입니다.");
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            return resultMap;
+        } 
+        else if (returnList.size() == 0) {
+            resultMap.put("message", "조회 완료(배달하는 가게가 없습니다.)");
+            resultMap.put("code", HttpStatus.OK);
+        } 
+        else {
+            resultMap.put("message", "할인가게 조회 완료");
+            resultMap.put("code", HttpStatus.OK);
+        }
+        resultMap.put("timeName", univTimeInfoRepository.findByUtiSeq(utiSeq).getUtiName());
+        resultMap.put("list", returnList);
+        return resultMap;
+    }
+
+
     //  할인율에 따라 가게 조회 정렬하기
     public Map<String, Object> getOrderByStoreList(Long utiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();

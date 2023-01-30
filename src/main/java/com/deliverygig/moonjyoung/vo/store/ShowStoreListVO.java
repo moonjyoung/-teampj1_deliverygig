@@ -11,7 +11,7 @@ public class ShowStoreListVO {
     private Long storeSeq;
     private String storeName;
     private LocalTime storeCloseTime;
-    private Double discount;
+    private Integer discount;
     private Integer status;
     // private List<StoreClosedDayInfoVO> storeClosedDay ; 
     private Long simgSiSeq;
@@ -25,7 +25,7 @@ public class ShowStoreListVO {
 
     }
 
-    public Double getdiscount() {
+    public Integer getdiscount() {
         return discount;
     }
 
