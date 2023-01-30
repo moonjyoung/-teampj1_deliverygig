@@ -331,7 +331,7 @@ public class VOService {
         for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAll()) {
             if (data.getUnivTimeInfoEntity().getUtiSeq() == utiSeq) {
                 ShowStoreListVO vo = new ShowStoreListVO(data);
-                System.out.println(vo);
+                // System.out.println(vo);
                 returnList.add(vo);
             }
         }
@@ -353,6 +353,9 @@ public class VOService {
         resultMap.put("list", returnList);
         return resultMap;
     }
+
+    
+
     //  할인율에 따라 가게 조회 정렬하기
     public Map<String, Object> getOrderByStoreList(Long utiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();

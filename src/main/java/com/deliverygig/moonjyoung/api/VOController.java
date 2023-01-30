@@ -17,8 +17,6 @@ import com.deliverygig.moonjyoung.service.VOService;
 @RequestMapping("/list")
 public class VOController {
     @Autowired VOService voService;
-
-
     // 배달 장소 & 시간대 정보 목록
     // @GetMapping("/location/list")
     // public ResponseEntity<Object> getUnivPickUpAreaTime() {
@@ -75,10 +73,12 @@ public class VOController {
     }
     
      @GetMapping("/store/sort")
-    public ResponseEntity<Object> getStoreListOrderByDiscount(@RequestParam Long utiSeq) {
-        Map<String, Object> resultMap = voService.getOrderByStoreList(utiSeq);
-        return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
-    }
+     public ResponseEntity<Object> getStoreListOrderByDiscount(@RequestParam Long utiSeq) {
+         Map<String, Object> resultMap = voService.getOrderByStoreList(utiSeq);
+         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
+     }
+    
+     
 
 }
 

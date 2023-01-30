@@ -32,7 +32,7 @@ public class StoreInfoEntity {
     private String siName;
     @Column(name = "si_discount")
     @ColumnDefault("0")
-    private Double siDiscount;
+    private Integer siDiscount;
     @Column(name = "si_regdt")
     @ColumnDefault("now()")
     private LocalDateTime siRegdt;
@@ -41,8 +41,6 @@ public class StoreInfoEntity {
     @Column(name = "si_status")
     @ColumnDefault("9")
     private Integer siStatus;
-<<<<<<< HEAD
-=======
 
     // @OneToOne(mappedBy = "store_info")
     // private StoreDetailInfoEntity storeDetailInfoEntity;
@@ -50,7 +48,6 @@ public class StoreInfoEntity {
     // public void setSiSeqq(Long num) {
     //     this.siSeq = num;
 
->>>>>>> asako10
 }
 
 

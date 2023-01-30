@@ -1,6 +1,4 @@
 package com.deliverygig.moonjyoung.api;
-
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,17 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
-import com.deliverygig.moonjyoung.entity.image.FoodImageEntity;
 import com.deliverygig.moonjyoung.service.FoodMenuOptionService;
 import com.deliverygig.moonjyoung.service.ShowFoodService;
 import com.deliverygig.moonjyoung.service.VOService;
-import com.deliverygig.moonjyoung.vo.food.FoodMenuOptionVO;
 
 import jakarta.annotation.Nullable;
 
@@ -65,6 +58,14 @@ public class MenuController {
         Map<String, Object> resultMap = MenuOptionService.addFoodMenuOptionDetail(fmo_seq, name, price, order);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
+
+    // @PostMapping("/cateOption/detail/update")
+    //   public ResponseEntity<Object> MenuCateOptionUpdate(@RequestParam Long fdo_seq,
+    //         @RequestParam Integer price, @RequestParam @Nullable Integer order, @RequestParam String name) {
+    //     // Map<String, Object> resultMap = MenuOptionService.
+    //     // return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
+    // }
+
 
     // 옵션 연결 테이블 등록 
     @PostMapping("/option/connect")
