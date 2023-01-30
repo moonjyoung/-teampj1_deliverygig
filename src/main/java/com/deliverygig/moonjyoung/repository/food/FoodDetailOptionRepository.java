@@ -13,4 +13,6 @@ import com.deliverygig.moonjyoung.entity.food.FoodDetailOptionEntity;
 public interface FoodDetailOptionRepository extends JpaRepository<FoodDetailOptionEntity, Long> {
     @Query(value = "select * from food_detail_option where fdo_fmo_seq = :fmoSeq", nativeQuery = true)
     public List<FoodDetailOptionEntity> findAllByFdoFmoSeq(@Param("fmoSeq") Long fdoFmoSeq);
+
+    public Integer countByFdoSeq(Long fdoSeq);
 }
