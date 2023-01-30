@@ -76,7 +76,7 @@ public class MasterService {
             resultMap.put("message", "이미 존재하는 수령장소입니다.");
             return resultMap;
         }
-         else {
+        else {
             UnivInfoEntity entity = univInfoRepository.findByUiName(univ);
             pickUpAreaRepository
                     .save(pickUpAreaEntity.builder().puaSeq(null).puaName(pickUpArea).univInfoEntity(entity).build());
