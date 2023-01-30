@@ -30,7 +30,7 @@ public class StoreController {
     AddstoreInfoService aService;
     @Autowired
     AddStoreDetailInfoService dService;
-     
+    
     // 배달 장소/시간대별 가게 목록
     @GetMapping("/list")
     public ResponseEntity<Object> getDeliveryStoreList() {

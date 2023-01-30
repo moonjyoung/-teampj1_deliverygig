@@ -2,6 +2,8 @@ package com.deliverygig.moonjyoung.repository.delivery;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,5 +20,6 @@ public interface PickUpAreaRepository extends JpaRepository<PickUpAreaEntity, Lo
 
     @Query(value = "select * from pick_up_area where pua_ui_seq = :puaUiSeq and pua_name = :puaName", nativeQuery = true)
     public PickUpAreaEntity findByPuaSeqAndPuaName(@Param("puaUiSeq") Long puaUiSeq, @Param("puaName") String puaName);
-    
+
+    public Page<PickUpAreaEntity> findByPuaNameContains(String puaName, Pageable pageable);
 }

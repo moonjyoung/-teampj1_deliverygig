@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script th:inline="javascript">
+      const user = [[${session.loginUser}]]
+      if(user == null) { 
+        alert("관리자 전용페이지 입니다. 로그인 해 주세요"); 
+        location.href="/master";
+      }
+    </script>
+    <script th:inline="javascript">
+      const status = [[${session.loginUser.status}]];
+        if(status != 1) {
+          alert("승인된 관리자만 접근 가능한 메뉴입니다.");
+          location.href = "/master/index";
+        }
+    </script>
+</head>
+<body>
+    <h1>수령장소 추가</h1>
+    <form action="/univ/list"></form>
+    <tr>
+      <tr th:each="univ : ${result.list}">
+        <td th:text="${univ.uiName}"></td>
+      </tr>
+    <form action="/pickup/add" method="post">
+        <span>수령 장소명</span>
+        <input type="text" name="pickupArea" th:value="${pickupArea}">
+        <th:block th:if="${result != null}">
+            <p th:text="${result.message}" style="color: red"></p>
+        </th:block>
+        <button>등록</button>
+        <a href="/pickup/list">목록으로</a>
+    </form>
+</body>
+</html>

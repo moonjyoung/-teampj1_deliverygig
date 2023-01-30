@@ -24,7 +24,6 @@ public class PickUpAreaEntity {
     @Column(name = "pua_seq") private Long puaSeq;
     // @Column(name = "pua_ui_seq") private Long puaUiSeq;
     @Column(name = "pua_name") private String puaName;
-
     @ManyToOne @JoinColumn(name = "pua_ui_seq") private UnivInfoEntity univInfoEntity;
 
     public void setUnivInfoEntity(UnivInfoEntity univInfoEntity) {

@@ -11,5 +11,5 @@ public class StoreListInfoVO {
     private LocalTime utiCloseTime;
     private LocalTime utiPickupTime;
     private LocalTime siCloseTime;
-    private Double siDiscount;
+    private Integer siDiscount;
 }

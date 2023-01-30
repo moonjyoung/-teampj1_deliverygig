@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 public class UpdateStoreVO {
     private String updatesiName;
-    private Double updatesiDiscount;
+    private Integer updatesiDiscount;
     private LocalTime siRegTime;
 }

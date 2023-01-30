@@ -34,7 +34,7 @@ public class StoreInfoEntity {
     private String siName;
     @Column(name = "si_discount")
     @ColumnDefault("0")
-    private Double siDiscount;
+    private Integer siDiscount;
     @Column(name = "si_regdt")
     @ColumnDefault("now()")
     private LocalDateTime siRegdt;
