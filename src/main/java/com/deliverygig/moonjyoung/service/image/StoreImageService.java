@@ -1,6 +1,7 @@
 package com.deliverygig.moonjyoung.service.image;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,19 +28,31 @@ public Map<String, Object> addStoreImage (StoreImageEntity data) {
 }
  @Transactional
     public Map<String, Object> deleteImage(@RequestBody StoreImageEntity data) {
-        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        //PickUpAreaEntity puaidelete = (PickUpAreaEntity)session.getAttribute("puaidelete");
-           // PiRepo.deleteByPuaiSeq(puaidelete.getPuaSeq());
-          if(StRepo.countBySimgSeq(data.getSimgSeq()) == 1) {
-            StRepo.deleteBySimgSeq(data.getSimgSeq());
-            resultMap.put("status", true);
-            resultMap.put("message", "삭제되었습니다.");
-            resultMap.put("code", HttpStatus.OK);
-            return resultMap;
-          }
-          resultMap.put("status", false);
-          resultMap.put("message", "메뉴이름 Seq 오류입니다.");
-          resultMap.put("code", HttpStatus.BAD_REQUEST);
+      Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+      //PickUpAreaEntity puaidelete = (PickUpAreaEntity)session.getAttribute("puaidelete");
+          // PiRepo.deleteByPuaiSeq(puaidelete.getPuaSeq());
+        if(StRepo.countBySimgSeq(data.getSimgSeq()) == 1) {
+          StRepo.deleteBySimgSeq(data.getSimgSeq());
+          resultMap.put("status", true);
+          resultMap.put("message", "삭제되었습니다.");
+          resultMap.put("code", HttpStatus.OK);
           return resultMap;
         }
+        resultMap.put("status", false);
+        resultMap.put("message", "메뉴이름 Seq 오류입니다.");
+        resultMap.put("code", HttpStatus.BAD_REQUEST);
+        return resultMap;
+      }
+
+        //  public Map<String, Object> getFilenameByUri(@RequestBody StoreImageEntity data) {
+        //   Map<String,Object> resultMap = new LinkedHashMap<String,Object>();
+        //     StRepo.findBySimgUri(data.getSimgUri()) {
+        //     }
+             
+         //     return data.get(0).getSimgImage();
+        
+      public String getFilenameByUri(String uri){
+        StoreImageEntity data = StRepo.findTopBySimgUri(uri);
+        return data.getSimgImage();
+      }
 }

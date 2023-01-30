@@ -25,6 +25,7 @@ import com.deliverygig.moonjyoung.entity.food.FoodDetailOptionEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodMenuOptionEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodOptionConnectEntity;
+import com.deliverygig.moonjyoung.entity.image.StoreImageEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreClosedDayEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreDetailInfoEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreInfoEntity;
@@ -80,6 +81,7 @@ public class VOService {
     @Autowired FoodOptionConnectRepository foodOptionConnectRepository;
     @Autowired FoodMenuOptionRepository foodMenuOptionRepository;
     @Autowired FoodDetailOptionRepository foodDetailOptionRepository;
+    //@Autowired StoreImageRepository
 
     public Map<String, Object> getLocationList() {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
@@ -298,6 +300,11 @@ public class VOService {
     public Map<String, Object> getUnivTimeList(Long uiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<ShowUnivTimeVO> returnList = new ArrayList<ShowUnivTimeVO>();
+        // for(StoreImageEntity data : storeImageRepository.find()); {
+        //     ShowStoreListVO vo = new ShowStoreListVO();
+        //     vo.setStoreName();
+
+        // } 민경이가 만들다가 만 거 
 
         for (UnivTimeInfoEntity data : univTimeInfoRepository.findAll(Sort.by(Sort.Direction.ASC, "utiCloseTime"))) {
             if (data.getUnivInfoEntity().getUiSeq() == uiSeq) {
@@ -327,6 +334,7 @@ public class VOService {
     public Map<String, Object> getStoreList(Long utiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<ShowStoreListVO> returnList = new ArrayList<ShowStoreListVO>();
+
 
         for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAll()) {
             if (data.getUnivTimeInfoEntity().getUtiSeq() == utiSeq) {

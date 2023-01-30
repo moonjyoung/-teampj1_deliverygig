@@ -20,6 +20,7 @@ import jakarta.transaction.Transactional;
 public class PickUpAreaImageService {
     @Autowired PickUpAreaImageRepository PiRepo;
     
+    
 
 public Map<String, Object> addPickUpAreaImage(PickUpAreaImageEntity data) {
     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
@@ -46,5 +47,11 @@ public Map<String, Object> addPickUpAreaImage(PickUpAreaImageEntity data) {
           resultMap.put("code", HttpStatus.BAD_REQUEST);
           return resultMap;
         }
+        public String getFilenameByUri(String uri){
+      PickUpAreaImageEntity data = PiRepo.findTopByPuaiUri(uri);
+      return data.getPuaiImage();
+  }
+}
 
-        }
+
+        

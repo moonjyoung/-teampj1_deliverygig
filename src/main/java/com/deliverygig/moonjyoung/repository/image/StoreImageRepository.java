@@ -12,11 +12,18 @@ import com.deliverygig.moonjyoung.entity.image.StoreImageEntity;
     
 @Repository
 public interface StoreImageRepository extends JpaRepository<StoreImageEntity, Long> {
-  public List<StoreImageEntity> findBysimgUri(String simgUri);
+  //public List<StoreImageEntity> findBysimgUri(String simgUri);
    public void deleteBySimgSeq (Long simgSeq);
     public Integer countBySimgSeq(Long simgSeq );
 
+    public StoreImageEntity findTopBySimgUri(String simgUri);
+
     // @Query(value = "select * from store_info_image where simg_si_seq =:simg_si_seq", nativeQuery = true)
     // public StoreImageEntity findBySimgSiSeq(@Param("simg_si_seq") Long simgSiSeq);
+
+    @Query(value = "select * from store_image where where simg_si_seq=:simg_si_seq", nativeQuery = true)
+    public StoreImageEntity findBySimgSiSeq(@Param("simg_si_seq") Long simgSiSeq);
+
+   // public List<StoreImageEntity> i
   
 }
