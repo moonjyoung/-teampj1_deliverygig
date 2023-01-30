@@ -1,15 +1,12 @@
 package com.deliverygig.moonjyoung.entity.mycart;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.DynamicInsert;
 
 import com.deliverygig.moonjyoung.entity.account.CustomerInfoEntity;
-import com.deliverygig.moonjyoung.entity.store.StoreInfoEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,14 +37,10 @@ public class BasketInfoEntity {
     @Column(name = "bi_number") private String biNumber;
     @Column(name = "bi_reg_dt") private LocalDateTime biRegDt;
     @Column(name = "bi_pua_name") private String biPuaName;
-    // @Column(name = "bi_pickup_time") private LocalTime biPickupTime;
-    // @Column(name = "bi_si_seq") private Long biSiSeq;
-    // @Column(name = "bi_menu_option") private String biMenuOption;
-    // @Column(name = "bi_price") private Integer biPrice;
+    @Column(name = "bi_price") private Integer biPrice;
     @Column(name = "bi_status") private Integer biStatus;
 
     @ManyToOne @JoinColumn(name = "bi_ci_seq", insertable=false, updatable=false) private CustomerInfoEntity customerInfoEntity;
-    // @ManyToOne @JoinColumn(name = "bi_si_seq") private StoreInfoEntity storeInfoEntity;
 
     @OneToMany(mappedBy = "basketInfoEntity") private List<BasketMenuOptionsCombineEntity> bmocEntityList = new ArrayList<BasketMenuOptionsCombineEntity>();
 
