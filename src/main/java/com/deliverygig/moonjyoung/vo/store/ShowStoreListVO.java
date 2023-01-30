@@ -25,6 +25,10 @@ public class ShowStoreListVO {
 
     }
 
+    public Double getdiscount() {
+        return discount;
+    }
+
     public ShowStoreListVO() {
     }
 

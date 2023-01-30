@@ -12,10 +12,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,7 +32,10 @@ public class FoodDetailOptionEntity {
     @Column(name="fdo_order") private Integer fdoOrder;
     // @Column(name="fdo_check") private Integer fdoCheck;
 
-    @ManyToOne @JoinColumn(name = "fdo_fmo_seq") private FoodMenuOptionEntity foodMenuOptionEntity;
+    @ManyToOne
+    @JoinColumn(name = "fdo_fmo_seq")
+    private FoodMenuOptionEntity foodMenuOptionEntity;
+    
     public void setFoodMenuOptionEntity(FoodMenuOptionEntity foodMenuOptionEntity) {
         this.foodMenuOptionEntity = foodMenuOptionEntity;
         if (!foodMenuOptionEntity.getFdoEntityList().contains(this)) {
