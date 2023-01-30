@@ -17,4 +17,6 @@ public interface FoodOptionConnectRepository extends JpaRepository<FoodOptionCon
     // public FoodOptionConnectEntity findByFocFmiSeq(Long FocFmiSeq);
     @Query(value = "select count(*) from food_option_connect where foc_fmi_seq = :focFmiSeq and foc_fmo_seq =:focFmoSeq", nativeQuery = true)
     public Integer countByFocFmiSeqAndFocFmoSeq(@Param("focFmiSeq") Long focFmiSeq,@Param("focFmoSeq") Long focFmoSeq);
+
+    public Integer countByFocSeq(Long focSeq);
 }
