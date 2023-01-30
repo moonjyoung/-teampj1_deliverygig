@@ -12,10 +12,7 @@ import com.deliverygig.moonjyoung.entity.store.StoreClosedDayEntity;
 @Repository
 public interface StoreClosedDayRepository extends JpaRepository<StoreClosedDayEntity, Long> {
     public StoreClosedDayEntity findByScdiSeqAndScdiDay(Long scdiSeq, String scdiDay);
-
     public Long findByScdiDayNo(Integer scdiDayNo);
-
-
      @Query(value = "select * from store_closed_day_info where scdi_si_seq = :scdiSiSeq", nativeQuery = true)
     public List<StoreClosedDayEntity> findByScdiSiSeq(@Param("scdiSiSeq") Long scdiSiSeq);
 }       

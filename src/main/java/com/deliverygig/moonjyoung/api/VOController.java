@@ -71,7 +71,14 @@ public class VOController {
     @GetMapping("/store/search")
     public ResponseEntity<Object> getStoreSearch(@RequestParam @Nullable String keyword) {
         Map<String, Object> resultMap = voService.searchStore(keyword);
+        return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
+    }
+    
+     @GetMapping("/store/sort")
+    public ResponseEntity<Object> getStoreListOrderByDiscount(@RequestParam Long utiSeq) {
+        Map<String, Object> resultMap = voService.getOrderByStoreList(utiSeq);
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
+
 }
 

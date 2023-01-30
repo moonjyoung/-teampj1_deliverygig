@@ -17,4 +17,6 @@ public interface StoreTimeDetailRepository extends JpaRepository<StoreTimeDetail
     public StoreTimeDetailEntity findByStdSiSeqAndStdUtiSeq(@Param("stdSiSeq") Long stdSiSeq, @Param("stdUtiSeq") Long stdUtiSeq);
     @Query(value = "select * from store_time_detail where std_si_seq = :stdSiSeq", nativeQuery = true)
     public List<StoreTimeDetailEntity> findAllByStdSiSeq(@Param("stdSiSeq") Long stdSiSeq);
+    @Query(value = "select * from store_time_detail where std_uti_seq = :stdUtiSeq", nativeQuery = true)
+    public List<StoreTimeDetailEntity> findAllByStdUtiSeq(@Param("stdUtiSeq") Long stdUtiSeq);
 }

@@ -4,10 +4,12 @@ import java.sql.Date;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -330,8 +332,37 @@ public class VOService {
             if (data.getUnivTimeInfoEntity().getUtiSeq() == utiSeq) {
                 ShowStoreListVO vo = new ShowStoreListVO(data);
                 System.out.println(vo);
-                returnList.add(vo); 
+                returnList.add(vo);
             }
+        }
+
+        resultMap.put("status", true);
+        if (univTimeInfoRepository.countByUtiSeq(utiSeq) == 0) {
+            resultMap.put("status", false);
+            resultMap.put("message", "존재하지 않는 시간정보 입니다.");
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            return resultMap;
+        } else if (returnList.size() == 0) {
+            resultMap.put("message", "조회 완료(배달하는 가게가 없습니다.)");
+            resultMap.put("code", HttpStatus.OK);
+        } else {
+            resultMap.put("message", "조회 완료");
+            resultMap.put("code", HttpStatus.OK);
+        }
+        resultMap.put("timeName", univTimeInfoRepository.findByUtiSeq(utiSeq).getUtiName());
+        resultMap.put("list", returnList);
+        return resultMap;
+    }
+    //  할인율에 따라 가게 조회 정렬하기
+    public Map<String, Object> getOrderByStoreList(Long utiSeq) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        List<ShowStoreListVO> returnList = new ArrayList<ShowStoreListVO>();
+
+        for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAllByStdUtiSeq(utiSeq)) {
+            // List<StoreInfoEntity> list =  storeInfoRepository.findAllByOrderBySiDiscount();
+            ShowStoreListVO vo = new ShowStoreListVO(data);
+            returnList.add(vo);
+            returnList = returnList.stream().sorted(Comparator.comparing(ShowStoreListVO::getdiscount).reversed()).collect(Collectors.toList());
         }
 
         resultMap.put("status", true);

@@ -104,7 +104,7 @@ public class FoodCategoryService {
     @Transactional
     public Map<String, Object> dCate(@RequestBody FoodCategoryEntity data) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        if(fcRepo.countByFcSeq(data.getFcSeq()) == 1) {
+        if (fcRepo.countByFcSeq(data.getFcSeq()) == 1) {
             fcRepo.deleteByFcSeq(data.getFcSeq());
             resultMap.put("status", true);
             resultMap.put("message", "삭제 되었습니다.");
@@ -116,5 +116,7 @@ public class FoodCategoryService {
         resultMap.put("code", HttpStatus.BAD_REQUEST);
         return resultMap;
     }
+    
 
+    
 }

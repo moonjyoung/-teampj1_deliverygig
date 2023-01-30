@@ -7,5 +7,6 @@ import com.deliverygig.moonjyoung.entity.food.FoodMenuOptionEntity;
 
 @Repository
 public interface FoodMenuOptionRepository extends JpaRepository<FoodMenuOptionEntity, Long> {
+    public Integer countByFmoSeq(Long fmoSeq);
     
 }

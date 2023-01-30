@@ -38,7 +38,7 @@ public class AddstoreInfoService {
             resultMap.put("code", HttpStatus.BAD_REQUEST);
             return resultMap;
         }
-        else if (0 > data.getSiDiscount() || data.getSiDiscount() > 1) {
+        else if (0 > data.getSiDiscount() || data.getSiDiscount() > 100) {
             resultMap.put("status", false);
             resultMap.put("message", "알맞지 않은 할인율입니다.");
             resultMap.put("code", HttpStatus.BAD_REQUEST);
