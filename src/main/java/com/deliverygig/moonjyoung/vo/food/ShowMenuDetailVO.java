@@ -20,6 +20,6 @@ public class ShowMenuDetailVO {
         this.name = entity.getFmiName();
         this.explain = entity.getFmiExplanation();
         this.price = entity.getFmiPrice();
-        this.discountPrice = (int)(entity.getFmiPrice()*(1-entity.getFoodCategoryEntity().getStoreInfoEntity().getSiDiscount()));
+        this.discountPrice = (int)(entity.getFmiPrice()*(1-entity.getFoodCategoryEntity().getStoreInfoEntity().getSiDiscount()/100.0));
     }
 }

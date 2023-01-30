@@ -45,11 +45,19 @@ public class BasketMenuOptionsCombineEntity {
     @ManyToOne @JoinColumn(name = "bmoc_uti_seq", insertable=false, updatable=false) private UnivTimeInfoEntity univTimeInfoEntity;
     @ManyToOne @JoinColumn(name = "fmoc_fmi_seq", insertable=false, updatable=false) private FoodMenuInfoEntity foodMenuInfoEntity;
 
-    public BasketMenuOptionsCombineEntity(Long biSeq, Long utiSeq, Long fmiSeq, String optionAll, Integer price) {
+    public void setBasketInfoEntity(BasketInfoEntity basketInfoEntity) {
+        this.basketInfoEntity = basketInfoEntity;
+        if (!basketInfoEntity.getBmocEntityList().contains(this)) {
+            basketInfoEntity.getBmocEntityList().add(this);
+        }
+    }
+
+    public BasketMenuOptionsCombineEntity(Long biSeq, Long utiSeq, Long fmiSeq, String optionAll, Integer price, Integer count) {
         this.bmocBiSeq = biSeq;
         this.bmocUtiSeq = utiSeq;
         this.bmocFmiSeq = fmiSeq;
         this.bmocOptionAll = optionAll;
         this.bmocPrice = price;
+        this.bmocCount = count;
     }
 }
