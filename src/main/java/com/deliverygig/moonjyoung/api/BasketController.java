@@ -13,10 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deliverygig.moonjyoung.service.BasketService;
 import com.deliverygig.moonjyoung.vo.mycart.AddBasketMenuOptionVO;
+import com.deliverygig.moonjyoung.vo.mycart.PutBasketInfoVO;
 
 @RestController
 public class BasketController {
     @Autowired BasketService basketService;
+
+    @GetMapping("/order/history")
+    public ResponseEntity<Object> getOrderHistory(@RequestParam Long ciSeq) {
+        Map<String, Object> resultMap = basketService.getOrderHistory(ciSeq);
+        return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+    }
 
     @GetMapping("/basket")
     public ResponseEntity<Object> getBasket(@RequestParam Long ciSeq) {
@@ -25,8 +32,8 @@ public class BasketController {
     }
 
     @PostMapping("/basket")
-    public ResponseEntity<Object> postBasket(@RequestParam Long ciSeq, @RequestParam Long puaSeq) {
-        Map<String, Object> resultMap = basketService.postBasketInfo(ciSeq, puaSeq);
+    public ResponseEntity<Object> postBasket(@RequestBody PutBasketInfoVO data) {
+        Map<String, Object> resultMap = basketService.postBasketInfo(data.getCiSeq(), data.getPuaSeq());
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
 

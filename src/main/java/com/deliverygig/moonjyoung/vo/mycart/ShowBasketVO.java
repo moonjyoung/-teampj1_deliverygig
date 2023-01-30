@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.deliverygig.moonjyoung.entity.mycart.BasketInfoEntity;
-import com.deliverygig.moonjyoung.entity.mycart.BasketMenuOptionsCombineEntity;
 
 import lombok.Data;
 
@@ -14,17 +13,16 @@ public class ShowBasketVO {
     private String biNumber;
     private LocalDateTime biRegDt;
     private String puaName;
-    private List<BasketMenuOptionsCombineEntity> menuList;
+    private List<ShowBasketMenuVO> menuList;
     // private LocalTime pickupTime;
     // private String menuOptions;
-    // private Integer price;
+    private Integer totalPrice;
 
     public ShowBasketVO (BasketInfoEntity entity) {
         this.ciName = entity.getCustomerInfoEntity().getCiName();
         this.biNumber = entity.getBiNumber();
         this.biRegDt = entity.getBiRegDt();
         this.puaName = entity.getBiPuaName();
-        this.menuList = entity.getBmocEntityList();
     }
     public ShowBasketVO () {}
 }

@@ -34,7 +34,7 @@ public class BasketMenuOptionsCombineEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bmoc_seq") private Long bmocSeq;
     @Column(name = "bmoc_bi_seq") private Long bmocBiSeq;
-    @Column(name = "bmoc_uti_seq") private Long bmocUtiSeq;
+    @Column(name = "bmoc_std_seq") private Long bmocStdSeq;
     @Column(name = "bmoc_fmi_seq") private Long bmocFmiSeq;
     @Column(name = "bmoc_option_all") private String bmocOptionAll;
     @Column(name = "bmoc_count") private Integer bmocCount;
@@ -42,8 +42,8 @@ public class BasketMenuOptionsCombineEntity {
     @Column(name = "bmoc_reg_dt") private LocalDateTime bmocRegDt;
 
     @ManyToOne @JoinColumn(name = "bmoc_bi_seq", insertable=false, updatable=false) private BasketInfoEntity basketInfoEntity;
-    @ManyToOne @JoinColumn(name = "bmoc_uti_seq", insertable=false, updatable=false) private UnivTimeInfoEntity univTimeInfoEntity;
-    @ManyToOne @JoinColumn(name = "fmoc_fmi_seq", insertable=false, updatable=false) private FoodMenuInfoEntity foodMenuInfoEntity;
+    @ManyToOne @JoinColumn(name = "bmoc_std_seq", insertable=false, updatable=false) private StoreTimeDetailEntity storeTimeDetailEntity;
+    @ManyToOne @JoinColumn(name = "bmoc_fmi_seq", insertable=false, updatable=false) private FoodMenuInfoEntity foodMenuInfoEntity;
 
     public void setBasketInfoEntity(BasketInfoEntity basketInfoEntity) {
         this.basketInfoEntity = basketInfoEntity;
@@ -52,9 +52,9 @@ public class BasketMenuOptionsCombineEntity {
         }
     }
 
-    public BasketMenuOptionsCombineEntity(Long biSeq, Long utiSeq, Long fmiSeq, String optionAll, Integer price, Integer count) {
+    public BasketMenuOptionsCombineEntity(Long biSeq, Long stdSeq, Long fmiSeq, String optionAll, Integer price, Integer count) {
         this.bmocBiSeq = biSeq;
-        this.bmocUtiSeq = utiSeq;
+        this.bmocStdSeq = stdSeq;
         this.bmocFmiSeq = fmiSeq;
         this.bmocOptionAll = optionAll;
         this.bmocPrice = price;

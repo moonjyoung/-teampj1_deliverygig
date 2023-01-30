@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class AddBasketMenuOptionVO {
     private Long ciSeq;
-    private Long utiSeq;
+    private Long stdSeq;
     private Long fmiSeq;
     private List<Long> fdoSeqList;
     private Integer count;
