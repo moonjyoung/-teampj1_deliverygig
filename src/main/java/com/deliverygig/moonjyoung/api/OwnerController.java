@@ -21,10 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.deliverygig.moonjyoung.service.OwnerInfoService;
 import com.deliverygig.moonjyoung.vo.account.JoinOwnerVO;
 import com.deliverygig.moonjyoung.vo.account.LoginOwnerVO;
+
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/oowner")
+@RequestMapping("/ceo")
 public class OwnerController {
     @Autowired OwnerInfoService oService;
 
@@ -32,6 +33,11 @@ public class OwnerController {
   public ResponseEntity<Object> ownerJoin(@RequestBody JoinOwnerVO data) {
     Map<String, Object> resultMap = oService.addOwner(data);
     return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
+  }
+
+  @GetMapping("/main")
+  public String getMain() {
+    return "/store/main";
   }
 
   @GetMapping("/login") 
@@ -43,7 +49,7 @@ public class OwnerController {
     Map<String, Object> resultMap = oService.loginOwner(data);
     if((Boolean)resultMap.get("status")) {
       session.setAttribute("loginUser", resultMap.get("login"));
-      return "redirect:/store/main";
+      return "redirect:/ceo/main";
     }
     else {
       model.addAttribute("message", resultMap.get("message"));

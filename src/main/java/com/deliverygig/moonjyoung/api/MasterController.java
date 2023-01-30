@@ -19,11 +19,11 @@ public class MasterController {
     @Autowired
     MasterService mService;
 
-    @PostMapping("/univ/add")
-    public ResponseEntity<Object> postUnivAdd(@RequestParam("univ") String univ, Model model) {
-        Map<String, Object> resultMap = mService.addUniv(univ);
-        return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
-    }
+    // @PostMapping("/univ/add")
+    // public ResponseEntity<Object> postUnivAdd(@RequestParam("univ") String univ, Model model) {
+    //     Map<String, Object> resultMap = mService.addUniv(univ);
+    //     return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+    // }
 
     @PostMapping("/location/add")
     public ResponseEntity<Object> postLocationAdd(@RequestParam("univ") String univ, @RequestParam("pua") String pua,

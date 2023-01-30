@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script th:inline="javascript">
+        const user = [[${session.loginUser}]]
+        if(user == null) { 
+          alert("관리자 전용페이지 입니다. 로그인 해 주세요"); 
+          location.href="/master";
+        }
+      </script>
+      <script th:inline="javascript">
+        const status = [[${session.loginUser.status}]];
+          if(status != 1) {
+            alert("승인된 관리자만 접근 가능한 메뉴입니다.");
+            location.href = "/master/index";
+          }
+      </script>
+</head>
+<body>
+    <h1>대학교 상세 정보</h1>
+    <tr>
+        <td colspan="2">
+          <a href="/customer/list" style="color: black;"><button>일반회원 관리페이지</button></a>
+        </td>
+        <td colspan="2">
+          <a href="/owner/list" style="color: black;"><button>사장회원 관리페이지</button></a>
+        </td>
+        <td colspan="2">  
+            <a href="/master/logout" style="color: black;"><button>로그아웃</button></a>
+          </td>
+      </tr>
+    </tr>
+    <h3>배달 수령장소 리스트</h3>
+    <table>
+    <thead>
+      <tr>
+        <th>번호</th>
+        <th>수령장소</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr th:each="pickup : ${univ.pickupAreas}">
+      <td th:text="${pickup.puaSeq}"></td>  
+      <td th:text="${pickup.puaName}"></td>
+        <td>
+          <a th:href="@{/pickup/delete(pickup_no=${pickup.puaSeq})}">삭제</a>
+        </td>
+        <td>
+          
+        </td>
+    </tr>
+    </tbody>
+    <th:block th:if="${univ.status == false}">
+        <p>잘못된 접근입니다.</p>
+    </th:block>
+  </table>
+    <th:block th:if="${univ.status == true}">
+        <form action="/univ/update" method="post">
+            <p>학교 이름 변경</p>
+            <input type="number" name="no" th:value="${univ.no}" hidden>
+            <input type="text" name="univ" th:value="${univ.univ}">
+            <button>수정</button>
+        </form>
+    </th:block>
+    <tr>
+      <td>
+        <a href="/pickup/add">수령장소 추가</a>
+        </td>
+        <td>
+            <a th:href="@{/univ/list(page=${page}, keyword=${keyword})}">목록으로</a>
+        </td>
+</body>
+</html>

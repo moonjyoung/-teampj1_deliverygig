@@ -17,98 +17,92 @@ import com.deliverygig.moonjyoung.vo.account.LoginOwnerVO;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
-// import jakarta.transaction.Transactional;
 import lombok.Builder;
 
 @Builder
 @Service
 public class OwnerInfoService {
-    @Autowired
-    OwnerRepository oRepo;
-public Map<String, Object> addOwner (JoinOwnerVO data) {
-    Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-    
-    if (oRepo.countByOiId(data.getOiId())  == 1) {
-        resultMap.put("status" , false);
-        resultMap.put("message", data.getOiId() + "은/는 이미 존재하는 ID 입니다.");
-        resultMap.put("code", HttpStatus.BAD_REQUEST);
-    }
-    else if(oRepo.countByOiNickName(data.getOiNickName()) == 1) {    
-        resultMap.put("status" , false);
-        resultMap.put("message", data.getOiNickName() + "은/는 이미 존재하는 nickname 입니다.");
-        resultMap.put("code", HttpStatus.BAD_REQUEST);
-    }
-    else if(oRepo.countByOiEmail(data.getOiEmail())==1) {
-        resultMap.put("status" , false);
-        resultMap.put("message", data.getOiEmail() + "은/는 이미 존재하는 E-mail 입니다.");
-        resultMap.put("code", HttpStatus.BAD_REQUEST);
-    }
-    else if(oRepo.countByOiPhone(data.getOiPhone())==1) {
-        resultMap.put("status" , false);
-        resultMap.put("message", data.getOiPhone()  + "은/는 이미 존재하는 phone number 입니다.");
-        resultMap.put("code", HttpStatus.BAD_REQUEST);
-    }
-    else {
-        OwnerEntity entity = OwnerEntity.builder()
-            .oiEmail(data.getOiEmail())
-            .oiId(data.getOiId())
-            .oiPwd(data.getOiPwd())
-            .oiNickName(data.getOiNickName())
-            .oiPhone(data.getOiPhone())
-            .oiJoinDt(LocalDate.now())
-            .oiStatus(1)
-            .build();
-            
-        oRepo.save(entity);
-        resultMap.put("status", true);
-        resultMap.put("message", "회원이 등록되었습니다.");
-        resultMap.put("code", HttpStatus.CREATED);
-    }
-    return resultMap; 
-}
+    @Autowired OwnerRepository oRepo;
 
-
-
-
-//로그인
-public Map<String, Object> loginOwner (LoginOwnerVO data) {
-    Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-    OwnerEntity Ownerlogin = oRepo.findByOiIdAndOiPwd(data.getOwner_id(), data.getOwner_pwd()); 
-    if(Ownerlogin == null) {
-        resultMap.put("status" , false);
-        resultMap.put("message", "아이디 또는 비밀번호의 오류입니다");
+    public Map<String, Object> addOwner (JoinOwnerVO data) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        if (oRepo.countByOiId(data.getOiId())  == 1) {
+            resultMap.put("status" , false);
+            resultMap.put("message", data.getOiId() + "은/는 이미 존재하는 ID 입니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+        }
+        else if(oRepo.countByOiNickName(data.getOiNickName()) == 1) {    
+            resultMap.put("status" , false);
+            resultMap.put("message", data.getOiNickName() + "은/는 이미 존재하는 nickname 입니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+        }
+        else if(oRepo.countByOiEmail(data.getOiEmail())==1) {
+            resultMap.put("status" , false);
+            resultMap.put("message", data.getOiEmail() + "은/는 이미 존재하는 E-mail 입니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+        }
+        else if(oRepo.countByOiPhone(data.getOiPhone())==1) {
+            resultMap.put("status" , false);
+            resultMap.put("message", data.getOiPhone()  + "은/는 이미 존재하는 phone number 입니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+        }
+        else {
+            OwnerEntity entity = OwnerEntity.builder()
+                .oiEmail(data.getOiEmail())
+                .oiId(data.getOiId())
+                .oiPwd(data.getOiPwd())
+                .oiNickName(data.getOiNickName())
+                .oiPhone(data.getOiPhone())
+                .oiJoinDt(LocalDate.now())
+                .oiStatus(1)
+                .build();
+            oRepo.save(entity);
+            resultMap.put("status", true);
+            resultMap.put("message", "회원이 등록되었습니다.");
+            resultMap.put("code", HttpStatus.CREATED);
+        }
+        return resultMap; 
     }
-    else if(Ownerlogin.getOiStatus() == 2 ) { // (1.정상 2 블라인드 3. 가입대기)
-        resultMap.put("status", false);
-        resultMap.put("message", "블라인드 처리된 계정입니다.");
-    }
-    else if(Ownerlogin.getOiStatus() == 3 ) {
-        resultMap.put("status", false);
-        resultMap.put("message", "가입대기중 입니다.");
-    }
-    else {
-        resultMap.put("status" , true);
-        resultMap.put("message", "로그인이 완료되었습니다");
-        resultMap.put("login", new LoginOwnerInfoVO(Ownerlogin));
-    }
-    return resultMap;
-}
 
-// 로그아웃
-public Map<String, Object> logoutOwner (HttpSession session) {
-    Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-    if (session.getAttribute("loginOwner") == null) {
-        resultMap.put("status" , false);
-        resultMap.put("message", "로그인 먼저 해주세요.");
-        resultMap.put("code", HttpStatus.BAD_REQUEST);
+    //로그인
+    public Map<String, Object> loginOwner (LoginOwnerVO data) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        OwnerEntity Ownerlogin = oRepo.findByOiIdAndOiPwd(data.getOwner_id(), data.getOwner_pwd()); 
+        if(Ownerlogin == null) {
+            resultMap.put("status" , false);
+            resultMap.put("message", "아이디 또는 비밀번호의 오류입니다");
+        }
+        else if(Ownerlogin.getOiStatus() == 2 ) { // (1.정상 2 블라인드 3. 가입대기)
+            resultMap.put("status", false);
+            resultMap.put("message", "블라인드 처리된 계정입니다.");
+        }
+        else if(Ownerlogin.getOiStatus() == 3 ) {
+            resultMap.put("status", false);
+            resultMap.put("message", "가입대기중 입니다.");
+        }
+        else {
+            resultMap.put("status" , true);
+            resultMap.put("message", "로그인이 완료되었습니다");
+            resultMap.put("login", new LoginOwnerInfoVO(Ownerlogin));
+        }
         return resultMap;
     }
-        session.invalidate();
-        resultMap.put("status", true);
-        resultMap.put("message", "로그아웃 되었습니다.");
-        resultMap.put("code", HttpStatus.ACCEPTED);
-        return resultMap;
-}
+
+    // 로그아웃
+    public Map<String, Object> logoutOwner (HttpSession session) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        if (session.getAttribute("loginOwner") == null) {
+            resultMap.put("status" , false);
+            resultMap.put("message", "로그인 먼저 해주세요.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            return resultMap;
+        }
+            session.invalidate();
+            resultMap.put("status", true);
+            resultMap.put("message", "로그아웃 되었습니다.");
+            resultMap.put("code", HttpStatus.ACCEPTED);
+            return resultMap;
+    }
     
 //    // 로그아웃
 // public Map<String, Object> logoutOwner(OwnerLoginVO data) {
