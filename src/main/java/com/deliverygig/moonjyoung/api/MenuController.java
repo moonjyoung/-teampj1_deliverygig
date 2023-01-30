@@ -91,8 +91,8 @@ public class MenuController {
     @PostMapping("/option/connect/update")
     public ResponseEntity<Object> OptionConnectUpdate(@RequestParam Long foc_seq, @RequestParam @Nullable Long foc_fmi_seq,
             @RequestParam @Nullable Long foc_fmo_seq, @RequestParam @Nullable Integer foc_fmo_order) {
-        Map<String, Object> resultMap = MenuOptionService.addFoodOptionTableConnect(foc_fmi_seq, foc_fmo_seq,
-                foc_fmo_order);
+        Map<String, Object> resultMap = MenuOptionService.UpdateFoodOptionTableConnect(foc_seq, foc_fmi_seq,
+                foc_fmo_seq, foc_fmo_order);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
     // 옵션 연결 테이블 삭제

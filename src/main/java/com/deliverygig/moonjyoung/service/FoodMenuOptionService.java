@@ -4,8 +4,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import com.deliverygig.moonjyoung.entity.food.FoodCategoryEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodDetailOptionEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodMenuOptionEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodOptionConnectEntity;
@@ -117,6 +115,12 @@ public class FoodMenuOptionService {
     // 메뉴 카테 디테일 옵션 수정 
     public Map<String, Object> updateMenuOptionDetail(Long fdo_seq, String name, Integer price, Integer order) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        if (optionDetailRepo.countByFdoSeq(fdo_seq) == 0) {
+            resultMap.put("status", false);
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            resultMap.put("message", "해당하는 카테고리 디테일 옵션 seq가 없습니다.");
+            return resultMap;   
+        }
         FoodDetailOptionEntity entity = optionDetailRepo.findById(fdo_seq).get();
         if (name == null) {
             entity.setFdoName(entity.getFdoName());
@@ -207,11 +211,13 @@ public class FoodMenuOptionService {
         }
         if (!status) {
             resultMap.put("status", false);
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
             return resultMap;
         }
         FoodOptionConnectEntity entity = optConnectRepo.findById(foc_seq).get();
         if (optConnectRepo.countByFocFmiSeqAndFocFmoSeq(foc_fmi_seq, foc_fmo_seq) == 1) {
             resultMap.put("message", "해당메뉴에 해당 옵션이 이미 있습니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
             return resultMap;
         }
         if (foc_fmi_seq == null) {
@@ -229,7 +235,7 @@ public class FoodMenuOptionService {
         } else {
             entity.setFocFmoOrder(foc_fmo_order);
         }
-
+        optConnectRepo.save(entity);
         resultMap.put("status", true);
         resultMap.put("code", HttpStatus.CREATED);
         resultMap.put("message", "메뉴카테옵션연결 정보가 수정되었습니다.");
