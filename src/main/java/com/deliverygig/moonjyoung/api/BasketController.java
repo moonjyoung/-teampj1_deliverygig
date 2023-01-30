@@ -23,8 +23,15 @@ public class BasketController {
         Map<String, Object> resultMap = basketService.getBasketInfo(ciSeq);
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
+
+    @PostMapping("/basket")
+    public ResponseEntity<Object> postBasket(@RequestParam Long ciSeq, @RequestParam Long puaSeq) {
+        Map<String, Object> resultMap = basketService.postBasketInfo(ciSeq, puaSeq);
+        return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+    }
+
     @PostMapping("/order/basket")
-    public ResponseEntity<Object> postBasket(@RequestBody AddBasketMenuOptionVO data) {
+    public ResponseEntity<Object> postBasketMenu(@RequestBody AddBasketMenuOptionVO data) {
         Map<String, Object> resultMap = basketService.getMenuOptions(data);
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
