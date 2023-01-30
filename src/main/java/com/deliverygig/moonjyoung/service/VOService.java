@@ -331,7 +331,7 @@ public class VOService {
         for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAll()) {
             if (data.getUnivTimeInfoEntity().getUtiSeq() == utiSeq) {
                 ShowStoreListVO vo = new ShowStoreListVO(data);
-                System.out.println(vo);
+                // System.out.println(vo);
                 returnList.add(vo);
             }
         }

@@ -83,6 +83,7 @@ public class FoodMenuOptionService {
             resultMap.put("message", "해당 메뉴 카테고리 정보가 없습니다.");
             return resultMap;
         }
+
         entity.setFoodMenuOptionEntity(menuOptionRepo.findById(fmo_seq).get());
         entity.setFdoName(name);
         entity.setFdoPrice(price);
@@ -93,7 +94,12 @@ public class FoodMenuOptionService {
         resultMap.put("message", "메뉴카테옵션디테일 정보가 등록되었습니다.");
         return resultMap;
     }
+    
+    // 메뉴 카테 디테일 옵션 수정 
+    // public Map(String, Object) updateMenuOptionDetail(Long fdo_seq, String name, Integer price, Integer order){
 
+    // }
+    
     // 옵션 연결 테이블 등록 
     public Map<String, Object> addFoodOptionTableConnet(Long foc_fmi_seq, Long foc_fmo_seq, Integer foc_fmo_order) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
