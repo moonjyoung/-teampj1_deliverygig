@@ -12,9 +12,13 @@ import com.deliverygig.moonjyoung.entity.image.PickUpAreaImageEntity;
 
 @Repository
 public interface PickUpAreaImageRepository extends JpaRepository <PickUpAreaImageEntity , Long>{
-    public List<PickUpAreaEntity> findByPuaiUri (String puaiUri);
+    // public List<PickUpAreaEntity> findByPuaiUri (String puaiUri);
     public void deleteByPuaiSeq (Long puaiSeq);
     public Integer countByPuaiSeq(Long puaiSeq );
+    
+    public PickUpAreaImageEntity findTopByPuaiUri (String puaiUri);
+
+    
 
 
     @Query(value = "select * from pick_up_area_image where puai_pua_seq = :puai_pua_seq", nativeQuery = true)

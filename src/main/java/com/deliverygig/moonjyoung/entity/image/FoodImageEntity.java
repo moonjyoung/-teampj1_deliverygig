@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,16 +21,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicInsert
+@Builder
 @Entity 
 @Table(name="food_image")
 public class FoodImageEntity {
      @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "fi_seq")  private Long fiSeq; // 음식이미지번호
     @Column(name = "fi_file") private String fiFile; // 음식 이미자 파일
-    //@Column(name = "fi_fmi_seq") private Long fiFmiSeq; // 음식기본정보랑 ! 
+    @Column(name = "fi_fmi_seq") private Long fiFmiSeq; // 음식기본정보랑 ! 
     @Column(name = "fi_uri") private String fiUri; // URL
 
-    @ManyToOne @JoinColumn(name = "fi_fmi_seq") private FoodMenuInfoEntity foodMenuInfoEntity;
+    // @ManyToOne @JoinColumn(name = "fi_fmi_seq") private FoodMenuInfoEntity foodMenuInfoEntity;
 
 
     

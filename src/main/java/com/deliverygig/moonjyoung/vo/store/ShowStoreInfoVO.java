@@ -25,6 +25,9 @@ public class ShowStoreInfoVO {
     private String businessNumber;
     private String origin;
     private List<ClosePickupTimeVO> closePickUpTimeList;
+    private String simgUriCover;
+
+
 
     public ShowStoreInfoVO(StoreDetailInfoEntity entity1, StoreTimeDetailEntity entity2) {
         this.siSeq = entity1.getStoreInfoEntity().getSiSeq();

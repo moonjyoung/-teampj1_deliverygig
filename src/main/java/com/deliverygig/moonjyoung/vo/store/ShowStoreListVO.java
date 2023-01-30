@@ -14,7 +14,8 @@ public class ShowStoreListVO {
     private Integer discount;
     private Integer status;
     // private List<StoreClosedDayInfoVO> storeClosedDay ; 
-    private Long simgSiSeq;
+    //private Long simgSiSeq; 이것은 seq로 받은 join임
+    private String simgUriLogo;
 
     public ShowStoreListVO(StoreTimeDetailEntity entity) {
         this.storeSeq = entity.getStoreInfoEntity().getSiSeq();

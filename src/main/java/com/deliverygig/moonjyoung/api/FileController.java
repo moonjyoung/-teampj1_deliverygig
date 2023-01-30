@@ -1,13 +1,17 @@
 package com.deliverygig.moonjyoung.api;
 
 
-    
+import java.net.URLEncoder;
+import org.springframework.http.MediaType;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
+
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -172,7 +177,78 @@ public class FileController {
 //        map.put("message", "잘못된 사진번호 :" + fiSeq);
 //     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
 
+@GetMapping("/download/{type}/{uri}")
+  public ResponseEntity<Resource> getImage(@PathVariable String type, @PathVariable String uri,
+      HttpServletRequest request) throws Exception {
+    Map<String, Object> map = new LinkedHashMap<String, Object>();
+    Path folderLocation = null;
+    if (type.equals("pickuparea")) {
+      folderLocation = Paths.get(pickuparea_img_path);
     }
+    else if (type.equals("store")) {
+      folderLocation = Paths.get(store_img_path);
+    }
+    else if (type.equals("food")) {
+      folderLocation = Paths.get(food_img_path);
+    }
+    
+    
+    String filename = null;
+    if (type.equals("pickuparea")) {
+      filename = pService.getFilenameByUri(uri);
+    }
+    else if (type.equals("store")) {
+      System.out.println("================================="+uri);
+      filename = sService.getFilenameByUri(uri);
+      System.out.println("================================="+filename);
+    }
+     else if (type.equals("food")) {
+      filename = fService.getFilenameByUri(uri);
+    }
+
+    // .을 기준으로 나누어서
+    String[] split = filename.split("\\.");
+    // 마지막 배열을 가져옴 (= 확장자)
+    String ext = split[split.length - 1];
+    // 가져오는 파일의 이름 : 파일이름.확장자
+    String exportName = uri + "." + ext;
+
+    // 폴더 경로와 파일의 이름을 합쳐서 target 파일의 경로를 만듬
+    Path targetFile = folderLocation.resolve(filename);
+    // 다운로드 가능한 형태로 변환하기 위한 Resource객체 생성
+
+    Resource r = null;
+    try {
+      // 일반파일 -> url로 첨부가능한 형태로 변환
+      r = new UrlResource(targetFile.toUri());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    // 첨부된 파일의 타입을 저장하기 위한 변수 생성
+    String contentType = null;
+    try {
+      // 파일의 종류에 따라 (이미지, pdf 등) 처리를 달리 하기위해 파일의 종류를 가져와서 변수에 저장함
+      contentType = request.getServletContext().getMimeType(r.getFile().getAbsolutePath());
+      // 산출한 파일의 타입이 null이라면
+      if (contentType == null) { // 파일의 종류가 파악되지 않으면
+        // 일반 파일로 처리 ,그냥 다운로드 처리함
+        contentType = "application/octet-stream"; // octet-stream - 일반파일
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return ResponseEntity.ok(). // 응답의 코드를 200 ok로 설정하고
+        // 산출한 타입을 응답에 맞는 형태로 변환
+        contentType(MediaType.parseMediaType(contentType)). // contentType 입력된 값을 MediaType으로 변환
+        // 내보낼 내용의 타입을 설정 (파일),
+        // attachment; filename*=\"" + r.getFilename() + "\" 요청한 쪽에서 다운로드 한 파일의 이름을 결정
+        header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename*=\"" + URLEncoder.encode(exportName, "UTF-8") + "\"").
+        // 변환된 파일을 ResponseEntity에 추가, 실제로 우리가 파일을 받아가는 소스
+        body(r);
+  }
+}
+
+    
    
   
 

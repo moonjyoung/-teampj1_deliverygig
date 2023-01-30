@@ -1,7 +1,7 @@
 package com.deliverygig.moonjyoung.service.image;
 
 import java.util.LinkedHashMap;
-
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public Map<String, Object> addFoodImage(FoodImageEntity data) {
         //PickUpAreaEntity puaidelete = (PickUpAreaEntity)session.getAttribute("puaidelete");
            // PiRepo.deleteByPuaiSeq(puaidelete.getPuaSeq());
           if(FoRepo.countByFiSeq(data.getFiSeq()) == 1) {
-            FoRepo.countByFiSeq(data.getFiSeq());
+            FoRepo.deleteByFiSeq(data.getFiSeq());
             resultMap.put("status", true);
             resultMap.put("message", "삭제되었습니다.");
             resultMap.put("code", HttpStatus.OK);
@@ -46,5 +46,11 @@ public Map<String, Object> addFoodImage(FoodImageEntity data) {
           return resultMap;
         }
 
-        }
+       public String getFilenameByUri(String uri){
+        FoodImageEntity data = FoRepo.findTopByFiUri(uri);
+        return data.getFiFile();
+      }
+  }
+
+        
 
