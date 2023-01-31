@@ -8,6 +8,7 @@ import com.deliverygig.moonjyoung.entity.delivery.StoreTimeDetailEntity;
 import com.deliverygig.moonjyoung.entity.delivery.UnivTimeInfoEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +36,9 @@ public class BasketMenuOptionsCombineEntity {
     @Column(name = "bmoc_seq") private Long bmocSeq;
     @Column(name = "bmoc_bi_seq") private Long bmocBiSeq;
     @Column(name = "bmoc_std_seq") private Long bmocStdSeq;
+    @Column(name = "bmoc_si_name") private String bmocSiName;
     @Column(name = "bmoc_fmi_seq") private Long bmocFmiSeq;
+    @Column(name = "bmoc_fmi_name") private String bmocFmiName;
     @Column(name = "bmoc_option_all") private String bmocOptionAll;
     @Column(name = "bmoc_count") private Integer bmocCount;
     @Column(name = "bmoc_price") private Integer bmocPrice;

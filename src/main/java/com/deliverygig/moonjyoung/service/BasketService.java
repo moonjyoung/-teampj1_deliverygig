@@ -1,6 +1,7 @@
 package com.deliverygig.moonjyoung.service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.deliverygig.moonjyoung.entity.food.FoodMenuOptionEntity;
 import com.deliverygig.moonjyoung.entity.mycart.BasketInfoEntity;
 import com.deliverygig.moonjyoung.entity.mycart.BasketMenuOptionsCombineEntity;
 import com.deliverygig.moonjyoung.repository.account.CustomerRepository;
@@ -25,7 +25,6 @@ import com.deliverygig.moonjyoung.repository.food.FoodOptionConnectRepository;
 import com.deliverygig.moonjyoung.repository.mycart.BasketInfoRepository;
 import com.deliverygig.moonjyoung.repository.mycart.BasketMenuOptionsCombineRepository;
 import com.deliverygig.moonjyoung.vo.food.ShowFoodDetailOptionVO;
-import com.deliverygig.moonjyoung.vo.food.ShowMenuDetailVO;
 import com.deliverygig.moonjyoung.vo.mycart.AddBasketMenuOptionVO;
 import com.deliverygig.moonjyoung.vo.mycart.ShowBasketMenuOptionVO;
 import com.deliverygig.moonjyoung.vo.mycart.ShowBasketMenuVO;
@@ -47,6 +46,7 @@ public class BasketService {
     // 장바구니 조회
     public Map<String, Object> getBasketInfo(Long ciSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        autoDeleteMenu(); // 조회 시작하면서 주문시간이 지난 메뉴는 자동 삭제
         
         if (basketInfoRepository.findByBiCiSeqAndBiStatus(ciSeq, 1)==null) {
             resultMap.put("status", false);
@@ -97,6 +97,7 @@ public class BasketService {
                 for (BasketMenuOptionsCombineEntity entity : data.getBmocEntityList()) {
                     list.add(new ShowBasketMenuVO(entity));
                 }
+                if (list.size()==0) continue;
                 vo.setMenuList(list);
                 vo.setTotalPrice(data.getBiPrice());
                 orderHistory.add(vo);
@@ -206,6 +207,8 @@ public class BasketService {
         biSeq = basketInfoRepository.findByBiCiSeqAndBiStatus(data.getCiSeq(), 1).getBiSeq();
         
         BasketMenuOptionsCombineEntity entity = new BasketMenuOptionsCombineEntity(biSeq, data.getStdSeq(), data.getFmiSeq(), vo.getOptionAll(), vo.getPrice(), vo.getCount());
+        entity.setBmocSiName(vo.getSiName());
+        entity.setBmocFmiName(vo.getMenuName());
 
         basketMenuOptionsCombineRepository.save(entity);
 
@@ -213,6 +216,42 @@ public class BasketService {
         resultMap.put("message", "추가 완료");
         resultMap.put("code", HttpStatus.ACCEPTED);
         resultMap.put("data", vo);
+        return resultMap;
+    }
+
+    // 미결제 장바구니메뉴 자동삭제 (std_closetime이 now()에서 지나면)
+    public void autoDeleteMenu() {
+        for (BasketMenuOptionsCombineEntity data : basketMenuOptionsCombineRepository.findAll()) {
+            LocalTime closeTime = data.getStoreTimeDetailEntity().getStdCloseTime();
+            LocalTime currentTime =  LocalTime.now();
+            if (data.getBasketInfoEntity().getBiStatus()==1 && closeTime.isBefore(currentTime)) {
+                basketMenuOptionsCombineRepository.delete(data);
+            }
+        }
+    }
+
+    // 메뉴 삭제
+    public Map<String, Object> deleteMenuOptions(Long bmocSeq) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        
+        BasketMenuOptionsCombineEntity entity = basketMenuOptionsCombineRepository.findById(bmocSeq).get();
+        if (entity==null) {
+            resultMap.put("status", false);
+            resultMap.put("message", "존재하지 않는 주문메뉴 번호");
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else if (entity.getBasketInfoEntity().getBiStatus()==2) {
+            resultMap.put("status", false);
+            resultMap.put("message", "결제완료 된 주문메뉴 번호");
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else {
+            basketMenuOptionsCombineRepository.delete(entity);
+            resultMap.put("status", true);
+            resultMap.put("message", "삭제 완료");
+            resultMap.put("code", HttpStatus.CREATED);
+        }
+
         return resultMap;
     }
 
