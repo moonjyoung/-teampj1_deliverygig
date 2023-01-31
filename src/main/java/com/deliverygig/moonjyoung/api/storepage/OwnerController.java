@@ -1,4 +1,4 @@
-package com.deliverygig.moonjyoung.api;
+package com.deliverygig.moonjyoung.api.storepage;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.deliverygig.moonjyoung.entity.account.OwnerEntity;
+import com.deliverygig.moonjyoung.repository.account.OwnerRepository;
 import com.deliverygig.moonjyoung.service.OwnerInfoService;
 import com.deliverygig.moonjyoung.vo.account.JoinOwnerVO;
 import com.deliverygig.moonjyoung.vo.account.LoginOwnerVO;

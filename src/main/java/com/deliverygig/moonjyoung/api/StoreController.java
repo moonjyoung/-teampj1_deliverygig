@@ -1,5 +1,8 @@
 package com.deliverygig.moonjyoung.api;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.deliverygig.moonjyoung.entity.account.OwnerEntity;
+import com.deliverygig.moonjyoung.entity.store.StoreInfoEntity;
+import com.deliverygig.moonjyoung.repository.store.StoreInfoRepository;
 import com.deliverygig.moonjyoung.service.AddStoreDetailInfoService;
 import com.deliverygig.moonjyoung.service.AddstoreInfoService;
 import com.deliverygig.moonjyoung.service.VOService;
@@ -19,6 +25,8 @@ import com.deliverygig.moonjyoung.vo.store.AddstoreInfoVo;
 import com.deliverygig.moonjyoung.vo.store.StoreDetailInfoVO;
 import com.deliverygig.moonjyoung.vo.store.UpdateStoreDetailVO;
 import com.deliverygig.moonjyoung.vo.store.UpdateStoreVO;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/store")
@@ -29,6 +37,8 @@ public class StoreController {
     AddstoreInfoService aService;
     @Autowired
     AddStoreDetailInfoService dService;
+    @Autowired
+    StoreInfoRepository sRepo;
 
     // VOController에 기능 구현함. 주석처리 1/25 by 문주영
         // 배달 장소/시간대별 가게 목록
@@ -86,6 +96,28 @@ public class StoreController {
          return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
 
- 
+    @GetMapping("/list/mystore")
+    public ResponseEntity<Object> getMystoreList(HttpSession session) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        OwnerEntity loginOwner = (OwnerEntity)session.getAttribute("loginOwner");
+        List<StoreInfoEntity> list = new ArrayList<StoreInfoEntity>();
+        if (loginOwner == null) {
+            resultMap.put("status", false);
+            resultMap.put("message", "로그인정보가 없습니다.");
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+        }
+        else {
+            for (StoreInfoEntity data : sRepo.findAll()) {
+                if (data.getSiOiSeq() == loginOwner.getOiSeq())
+                    list.add(data);
+            }
+            resultMap.put("status", true);
+            resultMap.put("message", "조회되었습니다.");
+            resultMap.put("code", HttpStatus.ACCEPTED);
+            resultMap.put("list", list);
+        }
+        return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
+    }
+
     
 }

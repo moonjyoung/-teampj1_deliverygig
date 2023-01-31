@@ -5,40 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <h1>가게 기본정보 등록</h1>
-    <form action="/store/add" method="post" id="add_form">
-        <table>
-            <tbody>
-                <tr>
-                    <td>가게 이름</td>
-                    <td>
-                        <th:block th:if="${inputdata != null}">
-                            <input type="text" name="name" id="name" th:value="${inputdata.siName}">
-                        </th:block>
-                        <th:block th:if="${inputdata == null}">
-                            <input type="text" name="name" id="name">
-                    </th:block>
-                </td>
-                    <td><button type="button" id="dup_chk">중복체크</button></td>
-                </tr>
-                <th:block th:if="${message != null}">
-                    <tr>
-                        <td colspan="3" th:text="${message}" style="color: red;"></td>
-                    </tr>
-                </th:block>
-                <tr>
-                    <td>할인율</td>`
-                    <td><input type="number" name="discount" min="0" max="100">%</td>
-                </tr>
-                <tr>
-                    <td colspan="6">
-                        <button>저장</button>
-                        <a href="/store/main">돌아가기</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    
 </body>
 </html>

@@ -10,11 +10,16 @@ public class ShowMenuInfoVO {
     private String name;
     private Integer price;
     private Integer discountPrice;
+    private String fiUri;
+
+
 
     public ShowMenuInfoVO(FoodMenuInfoEntity entity) {
         this.menuSeq = entity.getFmiSeq();
         this.name = entity.getFmiName();
         this.price = entity.getFmiPrice();
-        this.discountPrice = (int)(entity.getFmiPrice()*(1-entity.getFoodCategoryEntity().getStoreInfoEntity().getSiDiscount()/100.0));
+        this.discountPrice = (int) (entity.getFmiPrice()
+                * (1 - entity.getFoodCategoryEntity().getStoreInfoEntity().getSiDiscount() / 100.0));
     }
+    
 }
