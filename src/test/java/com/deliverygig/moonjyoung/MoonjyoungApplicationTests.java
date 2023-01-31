@@ -99,4 +99,13 @@ class MoonjyoungApplicationTests {
 		System.out.println(closeTime.isBefore(currentTime));
 		System.out.println(closeTime.isAfter(currentTime));
 	}
+
+	// @Test // 레코드 테스트
+	// public record TestVO(String a, String b {}
+	// public void recordTest() {
+	// 	TestVO testVO = new TestVO("fsefse", "fsefse");
+	// 	testVO.a();
+	// 	testVO.b();
+	// }
+
 }

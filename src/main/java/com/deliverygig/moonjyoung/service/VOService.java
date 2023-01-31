@@ -250,20 +250,23 @@ public class VOService {
     //localhost:8888/list/univ/search?keyword=대학
     public Map<String, Object> searchUniv(String keyword) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        List<ShowUnivListVO> resultList = new ArrayList<ShowUnivListVO>();
         if (keyword==null || keyword.equals("")) {
             resultMap.put("status", false);
             resultMap.put("code", HttpStatus.BAD_REQUEST);
             resultMap.put("message", "검색어를 입력하세요.");
-            return resultMap;
         }
-        for (UnivInfoEntity data : univInfoRepository.findAllByUiNameContaining(keyword)) {
-            resultList.add(new ShowUnivListVO(data));
+        else if (univInfoRepository.findByUiNameEquals(keyword)==null) {
+            resultMap.put("status", false);
+            resultMap.put("code", HttpStatus.BAD_REQUEST);
+            resultMap.put("message", "해당하는 대학이 없습니다.");
         }
-        resultMap.put("status", true);
-        resultMap.put("code", HttpStatus.OK);
-        resultMap.put("message", "성공");
-        resultMap.put("list", resultList);
+        else {
+            ShowUnivListVO data = new ShowUnivListVO(univInfoRepository.findByUiNameEquals(keyword));
+            resultMap.put("status", true);
+            resultMap.put("code", HttpStatus.OK);
+            resultMap.put("message", "성공");
+            resultMap.put("data", data);
+        }
         return resultMap;
     }
 

@@ -23,5 +23,6 @@ public interface UnivInfoRepository extends JpaRepository<UnivInfoEntity, Long> 
 
 
     public List<UnivInfoEntity> findAllByUiNameContaining (String uiName);
+    public UnivInfoEntity findByUiNameEquals (String uiName);
 }
     // List<BookEntity> searchBookTitle(@Param("keyword") String keyword, @Param("offset") Integer offset);
