@@ -42,4 +42,10 @@ public class BasketController {
         Map<String, Object> resultMap = basketService.getMenuOptions(data);
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
+
+    @PostMapping("/basket/delete")
+    public ResponseEntity<Object> deleteBasketMenu(@RequestBody Long bmocSeq) {
+        Map<String, Object> resultMap = basketService.deleteMenuOptions(bmocSeq);
+        return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+    }
 }

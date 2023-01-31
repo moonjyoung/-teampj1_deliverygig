@@ -3,6 +3,9 @@ package com.deliverygig.moonjyoung;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,7 +17,9 @@ import com.deliverygig.moonjyoung.repository.account.CustomerRepository;
 import com.deliverygig.moonjyoung.repository.delivery.PickUpAreaRepository;
 import com.deliverygig.moonjyoung.repository.delivery.UnivInfoRepository;
 import com.deliverygig.moonjyoung.repository.image.PickUpAreaImageRepository;
+import com.deliverygig.moonjyoung.service.BasketService;
 import com.deliverygig.moonjyoung.vo.delivery.PickUpAreaVO;
+import com.deliverygig.moonjyoung.vo.mycart.AddBasketMenuOptionVO;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
@@ -68,4 +73,30 @@ class MoonjyoungApplicationTests {
 		
 	}
 
+	// 구매내역 정보 변동여부 테스트
+	@Autowired BasketService basketService;
+	@Test
+	public void checkBasketInfoUpdate() {
+		AddBasketMenuOptionVO vo = new AddBasketMenuOptionVO();
+		vo.setCiSeq(62L);
+		vo.setStdSeq(3L);
+		vo.setFmiSeq(83L);
+		List<Long> list = new ArrayList<Long>();
+		list.add(2L);
+		list.add(8L);
+		list.add(22L);
+		list.add(24L);
+		vo.setFdoSeqList(list);
+		vo.setCount(5);
+		basketService.getMenuOptions(vo);
+	}
+
+	@Test // 시간비교 테스트
+	public void isAfterLocalTime() {
+        LocalTime closeTime = LocalTime.of(16, 50, 00);
+        LocalTime currentTime =  LocalTime.now();
+
+		System.out.println(closeTime.isBefore(currentTime));
+		System.out.println(closeTime.isAfter(currentTime));
+	}
 }
