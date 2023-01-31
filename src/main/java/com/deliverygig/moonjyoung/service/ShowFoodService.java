@@ -24,8 +24,6 @@ import lombok.Data;
 
 @Data
 @Service
-
-
 public class ShowFoodService {
     @Autowired StoreInfoRepository storeInfoRepository;
     @Autowired FoodCategoryRepository foodCategoryRepository;
@@ -74,6 +72,7 @@ public class ShowFoodService {
                 ShowFoodListVO vo = new ShowFoodListVO();
                 //vo.setFiFmiSeq(foodImageRepository.findByFiFmiSeq(data2.getFmiSeq().getFmiSeq()));
                 List<ShowMenuInfoVO> menuList = new ArrayList<ShowMenuInfoVO>();
+                
                 if (data2.getStoreInfoEntity().getSiSeq()==siSeq) {
                     storeName = data2.getStoreInfoEntity().getSiName();
                     vo.setCateName(data2.getFcName()+" "+foodMenuInfoRepository.findAllByFmiFcSeq(data2.getFcSeq()).size()+"개");
@@ -81,6 +80,7 @@ public class ShowFoodService {
                         ShowMenuInfoVO vo2 = new ShowMenuInfoVO(data);
                         menuList.add(vo2);
                     }
+                    
                     vo.setMenuList(menuList);
                 }
                 returnList.add(vo);

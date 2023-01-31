@@ -7,5 +7,5 @@ import com.deliverygig.moonjyoung.entity.mycart.BasketMenuOptionsCombineEntity;
 
 @Repository
 public interface BasketMenuOptionsCombineRepository extends JpaRepository<BasketMenuOptionsCombineEntity, Long> {
-    
+    public Integer countByBmocSeq(Long bmocSeq);
 }
