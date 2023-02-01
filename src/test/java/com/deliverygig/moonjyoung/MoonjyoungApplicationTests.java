@@ -3,6 +3,7 @@ package com.deliverygig.moonjyoung;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +99,23 @@ class MoonjyoungApplicationTests {
 
 		System.out.println(closeTime.isBefore(currentTime));
 		System.out.println(closeTime.isAfter(currentTime));
+	}
+
+	@Test // localdatetime 변수 뽑기 테스트
+	public void ldtTest() {
+		LocalDate now = LocalDate.now();
+		LocalDate lastDay = LocalDate.of(2022, 12, 31);
+		System.out.println("===================================");
+		System.out.println(now);
+		System.out.println(now.getDayOfYear());
+		System.out.println(now.getDayOfMonth());
+		System.out.println(now.getYear());
+		System.out.println(lastDay.isBefore(now));
+		System.out.println("=========================");
+		LocalDateTime nowTime = LocalDateTime.now();
+		LocalDate nowDate = LocalDate.of(nowTime.getYear(), nowTime.getMonthValue(), nowTime.getDayOfMonth());
+		System.out.println(lastDay.isBefore(nowDate));
+		System.out.println(lastDay.isBefore(nowTime.toLocalDate()));
 	}
 
 	// @Test // 레코드 테스트

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,8 +44,8 @@ public class BasketController {
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
 
-    @PostMapping("/basket/delete")
-    public ResponseEntity<Object> deleteBasketMenu(@RequestBody Long bmocSeq) {
+    @DeleteMapping("/basket/delete")
+    public ResponseEntity<Object> deleteBasketMenu(@RequestParam Long bmocSeq) {
         Map<String, Object> resultMap = basketService.deleteMenuOptions(bmocSeq);
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
