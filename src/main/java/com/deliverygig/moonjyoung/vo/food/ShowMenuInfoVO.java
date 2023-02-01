@@ -10,6 +10,7 @@ public class ShowMenuInfoVO {
     private String name;
     private Integer price;
     private Integer discountPrice;
+    private String fiUri;
 
     public ShowMenuInfoVO(FoodMenuInfoEntity entity) {
         this.menuSeq = entity.getFmiSeq();

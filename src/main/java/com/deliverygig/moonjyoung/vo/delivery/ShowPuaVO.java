@@ -8,7 +8,7 @@ import lombok.Data;
 public class ShowPuaVO {
     private Long puaSeq;
     private String puaName;
-    private Long puaiPuaSeq;
+    private String puaiUri;
 
     public ShowPuaVO(PickUpAreaEntity entity) {
         this.puaSeq = entity.getPuaSeq();

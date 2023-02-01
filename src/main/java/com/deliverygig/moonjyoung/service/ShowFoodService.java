@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.deliverygig.moonjyoung.entity.food.FoodCategoryEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
+import com.deliverygig.moonjyoung.entity.image.FoodImageEntity;
 import com.deliverygig.moonjyoung.repository.food.FoodCategoryRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodDetailOptionRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodMenuInfoRepository;
@@ -20,12 +21,7 @@ import com.deliverygig.moonjyoung.repository.store.StoreInfoRepository;
 import com.deliverygig.moonjyoung.vo.food.ShowFoodListVO;
 import com.deliverygig.moonjyoung.vo.food.ShowMenuInfoVO;
 
-import lombok.Data;
-
-@Data
 @Service
-
-
 public class ShowFoodService {
     @Autowired StoreInfoRepository storeInfoRepository;
     @Autowired FoodCategoryRepository foodCategoryRepository;
@@ -61,7 +57,16 @@ public class ShowFoodService {
                     if (data.getFoodCategoryEntity().getStoreInfoEntity().getSiSeq()==siSeq) {
                         count++;
                         ShowMenuInfoVO vo2 = new ShowMenuInfoVO(data);
+                        
+                        FoodImageEntity imgEntity = foodImageRepository.findByFiFmiSeq(data.getFmiSeq());
+                        String img = "";
+                        if(imgEntity != null) {
+                            img = imgEntity.getFiUri();
+                        }
+                        vo2.setFiUri(img);
+                    
                         bestMenuList.add(vo2);
+                        
                     }
                 }
                 if (count!=0) {
@@ -79,6 +84,13 @@ public class ShowFoodService {
                     vo.setCateName(data2.getFcName()+" "+foodMenuInfoRepository.findAllByFmiFcSeq(data2.getFcSeq()).size()+"개");
                     for (FoodMenuInfoEntity data : foodMenuInfoRepository.findAllByFmiFcSeq(data2.getFcSeq())) {
                         ShowMenuInfoVO vo2 = new ShowMenuInfoVO(data);
+
+                        FoodImageEntity imgEntity = foodImageRepository.findByFiFmiSeq(data.getFmiSeq());
+                        String img = "";
+                        if(imgEntity != null) {
+                            img = imgEntity.getFiUri();
+                        }
+                        vo2.setFiUri(img);
                         menuList.add(vo2);
                     }
                     vo.setMenuList(menuList);
@@ -91,7 +103,6 @@ public class ShowFoodService {
             resultMap.put("store", storeName);
             resultMap.put("list", returnList);
         }
-        
         return resultMap;
     }
 }

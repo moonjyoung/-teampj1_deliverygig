@@ -13,6 +13,4 @@ import lombok.Data;
 public class ShowFoodListVO {
     private String cateName;
     private List<ShowMenuInfoVO> menuList;
-    private Long fiFmiSeq;
-    // 이미지정보 나중에 추가
 }

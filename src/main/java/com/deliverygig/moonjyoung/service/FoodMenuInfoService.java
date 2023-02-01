@@ -17,6 +17,7 @@ import com.deliverygig.moonjyoung.repository.image.FoodImageRepository;
 import com.deliverygig.moonjyoung.vo.food.FoodAddVO;
 import com.deliverygig.moonjyoung.vo.food.FoodListVO;
 import com.deliverygig.moonjyoung.vo.food.FoodUpdateVO;
+import com.deliverygig.moonjyoung.vo.food.ShowFoodListVO;
 
 import jakarta.transaction.Transactional;
 import lombok.Builder;
@@ -67,9 +68,11 @@ public class FoodMenuInfoService {
             flVO.setFmiPrice(data.getFmiPrice());
             flVO.setFmiFcSeq(data.getFoodCategoryEntity().getFcSeq());
             flVO.setFmiBest(data.getFmiBest());
-    
+
+            
 
             returnList.add(flVO);
+
         }
 
         // data = fRepo.count();
