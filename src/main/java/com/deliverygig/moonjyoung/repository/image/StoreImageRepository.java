@@ -21,8 +21,8 @@ public interface StoreImageRepository extends JpaRepository<StoreImageEntity, Lo
     // @Query(value = "select * from store_info_image where simg_si_seq =:simg_si_seq", nativeQuery = true)
     // public StoreImageEntity findBySimgSiSeq(@Param("simg_si_seq") Long simgSiSeq);
 
-    @Query(value = "select * from store_image where where simg_si_seq=:simg_si_seq", nativeQuery = true)
-    public StoreImageEntity findBySimgSiSeq(@Param("simg_si_seq") Long simgSiSeq);
+    @Query(value = "select * from store_image where simg_si_seq = :simgSiSeq and simg_division = :simgDivision", nativeQuery = true)
+    public StoreImageEntity findBySimgSiSeqAndSimgDivision(@Param("simgSiSeq") Long simgSiSeq, @Param("simgDivision") Integer simgDivision);
 
    // public List<StoreImageEntity> i
   

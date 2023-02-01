@@ -25,6 +25,7 @@ import com.deliverygig.moonjyoung.entity.food.FoodDetailOptionEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodMenuOptionEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodOptionConnectEntity;
+import com.deliverygig.moonjyoung.entity.image.PickUpAreaImageEntity;
 import com.deliverygig.moonjyoung.entity.image.StoreImageEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreClosedDayEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreDetailInfoEntity;
@@ -81,144 +82,8 @@ public class VOService {
     @Autowired FoodOptionConnectRepository foodOptionConnectRepository;
     @Autowired FoodMenuOptionRepository foodMenuOptionRepository;
     @Autowired FoodDetailOptionRepository foodDetailOptionRepository;
-    //@Autowired StoreImageRepository
-
-    public Map<String, Object> getLocationList() {
-        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        List<LocationListVO> returnList = new ArrayList<LocationListVO>();
-        for (PickUpAreaEntity puaData : pickUpAreaRepository.findAll()) {
-            LocationListVO vo = new LocationListVO();
-            for (UnivTimeInfoEntity data : univTimeInfoRepository.findAll()) {
-                if (data.getUnivInfoEntity().getUiSeq() == puaData.getUnivInfoEntity().getUiSeq()) {
-                    vo.setUiSeq(data.getUnivInfoEntity().getUiSeq());
-                    vo.setUiName(data.getUnivInfoEntity().getUiName());
-                    vo.setPuaSeq(puaData.getPuaSeq());
-                    vo.setPuaName(puaData.getPuaName());
-                } else {
-                    continue;
-                }
-                List<UnivTimeVO> timeVOList = getUnivTimeVOList(data.getUnivInfoEntity().getUiSeq());
-                vo.setUnivTimeVOList(timeVOList);
-            }
-            returnList.add(vo);
-        }
-        resultMap.put("status", true);
-        resultMap.put("code", HttpStatus.OK);
-        resultMap.put("message", "조회 완료");
-        resultMap.put("list", returnList);
-        return resultMap;
-    }
-
-    public List<UnivTimeVO> getUnivTimeVOList(Long uiSeq) {
-        List<UnivTimeVO> list = new ArrayList<UnivTimeVO>();
-        for (UnivTimeInfoEntity data : univTimeInfoRepository.findAll()) {
-            UnivTimeVO timeVO = new UnivTimeVO();
-            if (uiSeq == data.getUnivInfoEntity().getUiSeq()) {
-                timeVO.setUiSeq(data.getUnivInfoEntity().getUiSeq());
-                timeVO.setTimeName(data.getUtiName());
-                timeVO.setDeliTime1(data.getUtiPickupTime1());
-                timeVO.setDeliTime2(data.getUtiPickupTime2());
-            } else {
-                continue;
-            }
-            list.add(timeVO);
-        }
-        return list;
-    }
-
-    public Map<String, Object> getStoreUnivTime() {
-        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        List<StoreUnivTimeVO> returnList = new ArrayList<StoreUnivTimeVO>();
-
-        for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAll()) {
-            StoreUnivTimeVO vo = new StoreUnivTimeVO();
-            vo.setUiName(data.getUnivTimeInfoEntity().getUnivInfoEntity().getUiName());
-            vo.setPuaCloseTime(data.getUnivTimeInfoEntity().getUtiCloseTime());
-            vo.setPuaDeliTime1(data.getUnivTimeInfoEntity().getUtiPickupTime1());
-            vo.setPuaDeliTime2(data.getUnivTimeInfoEntity().getUtiPickupTime2());
-            vo.setSiName(data.getStoreInfoEntity().getSiName());
-            vo.setStdCloseTime(data.getStdCloseTime());
-            returnList.add(vo);
-        }
-
-        resultMap.put("status", true);
-        resultMap.put("code", HttpStatus.OK);
-        resultMap.put("message", "배달지역 내 가게 주문시간 조회 완료");
-        resultMap.put("list", returnList);
-        return resultMap;
-    }
-
-    public Map<String, Object> getPickUpArea() {
-        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        List<PickUpAreaVO> returnList = new ArrayList<PickUpAreaVO>();
-        for (PickUpAreaEntity data : pickUpAreaRepository.findAll()) {
-            PickUpAreaVO vo = new PickUpAreaVO();
-            vo.setUiName(data.getUnivInfoEntity().getUiName());
-            vo.setPuaName(data.getPuaName());
-            returnList.add(vo);
-        }
-        resultMap.put("status", true);
-        resultMap.put("code", HttpStatus.OK);
-        resultMap.put("message", "조회 완료");
-        resultMap.put("list", returnList);
-        return resultMap;
-    }
-
-    public Map<String, Object> getDeliveryStore() {
-        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        List<StoreListInfoVO> returnList = new ArrayList<StoreListInfoVO>();
-        for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAll()) {
-            StoreListInfoVO vo = new StoreListInfoVO();
-            vo.setSiName(data.getStoreInfoEntity().getSiName());
-            vo.setUnivTimeName(data.getUnivTimeInfoEntity().getUtiName());
-            vo.setUtiCloseTime(data.getUnivTimeInfoEntity().getUtiCloseTime());
-            vo.setUtiPickupTime(data.getUnivTimeInfoEntity().getUtiPickupTime1());
-            vo.setSiCloseTime(data.getStdCloseTime());
-            vo.setSiDiscount(data.getStoreInfoEntity().getSiDiscount());
-            
-            returnList.add(vo);
-        }
-        resultMap.put("status", true);
-        resultMap.put("code", HttpStatus.OK);
-        resultMap.put("message", "조회 완료");
-        resultMap.put("list", returnList);
-        return resultMap;
-    }
-
-    // public Map<String, Object> getDeliveryStoreDetail() {
-    //     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-    //     List<StoreDetailInfoVO> returnList = new ArrayList<StoreDetailInfoVO>();
-    //     for (StoreDetailInfoEntity data : storeDetailInfoRepository.findAll()) {
-    //         StoreDetailInfoVO vo = new StoreDetailInfoVO();
-    //         vo.setSdiOwnerWord(data.getSdiOwnerWord());
-    //         vo.setSdiPhoneNumber(data.getSdiPhoneNumber());
-    //         vo.setSdiAddress(data.getSdiAddress());
-    //         vo.setSdiOwnerName(data.getSdiOwnerName());
-    //         vo.setSdiStoreName(data.getSdiStoreName());
-    //         vo.setSdiBusinessNumber(data.getSdiBusinessNumber());
-    //         vo.setSdiOrigin(data.getSdiOrigin());
-    //         List<ClosePickupTimeVO> list = new ArrayList<ClosePickupTimeVO>();
-    //         for (StoreTimeDetailEntity data2 : storeTimeDetailRepository.findAll()) {
-    //             if (data2.getStoreInfoEntity().getSiSeq()==data.getStoreInfoEntity().getSiSeq()) {
-    //                 ClosePickupTimeVO vo2 = new ClosePickupTimeVO();
-    //                 vo2.setName(data2.getUnivTimeInfoEntity().getUtiName());
-    //                 vo2.setCloseTime(data2.getStdCloseTime());
-    //                 vo2.setPickupTime(data2.getUnivTimeInfoEntity().getUtiPickupTime1());
-    //                 list.add(vo2);
-    //             }
-    //         }
-    //         vo.setClosePickupTimeVoList(list);
-    //         vo.setSdiMinOrderPrice(data.getSdiDeliveryPrice());
-    //         vo.setSdiDeliveryPrice(data.getSdiDeliveryPrice());
-    //         returnList.add(vo);
-    //     }
-    //     resultMap.put("status", true);
-    //     resultMap.put("code", HttpStatus.OK);
-    //     resultMap.put("message", "조회 완료");
-    //     resultMap.put("list", returnList);
-    //     return resultMap;
-    // }
-
+   
+//@Autowired StoreImageRepository
     // 이하 코드는 20230120 이후 코드.
     // 각 페이지별로 띄워줄 리스트 정보를 다를 예정
 
@@ -230,8 +95,7 @@ public class VOService {
         for (UnivInfoEntity data : univInfoRepository.findAll(Sort.by(Sort.Direction.ASC, "uiName"))) {
             ShowUnivListVO vo = new ShowUnivListVO(data);
             returnList.add(vo);
-        }
-
+    }
         
         resultMap.put("status", true);
         if (returnList.size() == 0) {
@@ -273,11 +137,18 @@ public class VOService {
     // 수령장소 조회에 사용
     public Map<String, Object> getpuaList(Long uiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        List<ShowPuaVO> returnList = new ArrayList<>();
+        List<ShowPuaVO> returnList = new ArrayList<ShowPuaVO>();
 
         for (PickUpAreaEntity data : pickUpAreaRepository.findAllByPuaUiSeq(uiSeq)) {
             ShowPuaVO vo = new ShowPuaVO(data);
-            vo.setPuaiPuaSeq(pickUpAreaImageRepository.findByPuaiPuaSeq(data.getPuaSeq()).getPuaiSeq());
+            
+            PickUpAreaImageEntity imgEntity = pickUpAreaImageRepository.findByPuaiPuaSeq(data.getPuaSeq());
+            String img = "";
+            if(imgEntity != null) {
+                img = imgEntity.getPuaiUri();
+            }
+            vo.setPuaiUri(img);
+
             returnList.add(vo);
         }
 
@@ -303,11 +174,6 @@ public class VOService {
     public Map<String, Object> getUnivTimeList(Long uiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<ShowUnivTimeVO> returnList = new ArrayList<ShowUnivTimeVO>();
-        // for(StoreImageEntity data : storeImageRepository.find()); {
-        //     ShowStoreListVO vo = new ShowStoreListVO();
-        //     vo.setStoreName();
-
-        // } 민경이가 만들다가 만 거 
 
         for (UnivTimeInfoEntity data : univTimeInfoRepository.findAll(Sort.by(Sort.Direction.ASC, "utiCloseTime"))) {
             if (data.getUnivInfoEntity().getUiSeq() == uiSeq) {
@@ -342,7 +208,14 @@ public class VOService {
         for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAll()) {
             if (data.getUnivTimeInfoEntity().getUtiSeq() == utiSeq) {
                 ShowStoreListVO vo = new ShowStoreListVO(data);
-                // System.out.println(vo);
+
+                StoreImageEntity imgEntity = storeImageRepository.findBySimgSiSeqAndSimgDivision(data.getStoreInfoEntity().getSiSeq(), 99);
+                 String img = "";
+                if(imgEntity != null) {
+                    img = imgEntity.getSimgUri();
+                    }
+                        vo.setSimgUriLogo(img);
+                
                 returnList.add(vo);
             }
         }
@@ -366,15 +239,23 @@ public class VOService {
     }
 
 
-    // 할인하는 모든 가게 조회
+    // 할인하는 모든 가게 조회 // 할인전
     public Map<String, Object> getDCStoreList(Long utiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<ShowStoreListVO> returnList = new ArrayList<ShowStoreListVO>();
-
+       
+        
         for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAll()) {
+            ShowStoreListVO vo = new ShowStoreListVO(data);
             if (data.getUnivTimeInfoEntity().getUtiSeq() == utiSeq) {
-                ShowStoreListVO vo = new ShowStoreListVO(data);
+                //ShowStoreListVO vo = new ShowStoreListVO(data);
                 if(vo.getdiscount() > 0) {
+                    StoreImageEntity imgEntity = storeImageRepository.findBySimgSiSeqAndSimgDivision(utiSeq,99);
+                        String img = "";
+                        if(imgEntity != null) {
+                            img = imgEntity.getSimgUri();
+                        }
+                            vo.setSimgUriLogo(img);
                     returnList.add(vo);
                 }
             }
@@ -451,6 +332,14 @@ public class VOService {
             ShowStoreInfoVO returnData = new ShowStoreInfoVO(storeDetailInfoRepository.findBySdiSeq(siSeq),
                     storeTimeDetailRepository.findByStdSiSeqAndStdUtiSeq(siSeq, utiSeq));
             List<ClosePickupTimeVO> timeList = new ArrayList<ClosePickupTimeVO>();
+
+            StoreImageEntity imgEntity = storeImageRepository.findBySimgSiSeqAndSimgDivision(siSeq,1);
+            String img = "";
+            if(imgEntity != null) {
+                img = imgEntity.getSimgUri();
+            }
+                returnData.setSimgUriCover(img);
+
             for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAllByStdSiSeq(siSeq)) {
                 if (data.getUnivTimeInfoEntity().getUnivInfoEntity() == univTimeInfoRepository.findByUtiSeq(utiSeq)
                         .getUnivInfoEntity()) {

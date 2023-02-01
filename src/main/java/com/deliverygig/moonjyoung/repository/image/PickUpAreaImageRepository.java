@@ -18,11 +18,13 @@ public interface PickUpAreaImageRepository extends JpaRepository <PickUpAreaImag
     
     public PickUpAreaImageEntity findTopByPuaiUri (String puaiUri);
 
+    public String findByPuaiUri(String puaiUri);
+
     
 
 
-    @Query(value = "select * from pick_up_area_image where puai_pua_seq = :puai_pua_seq", nativeQuery = true)
-    public PickUpAreaImageEntity findByPuaiPuaSeq(@Param("puai_pua_seq") Long puaiPuaSeq);
+    //@Query(value = "select * from pick_up_area_image where puai_pua_seq = :puai_pua_seq", nativeQuery = true)
+    public PickUpAreaImageEntity findByPuaiPuaSeq(Long puaiPuaSeq);
      //void findAll(Long puaiSeq);
     
 }

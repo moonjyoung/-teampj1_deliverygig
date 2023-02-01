@@ -13,6 +13,7 @@ import lombok.Data;
 public class ShowStoreInfoVO {
     private Long siSeq;
     private String siName;
+    private String simgUriCover;
     private Integer minOrderPrice;
     private Integer deliveryPrice;
     private LocalTime storeCloseTime;
@@ -25,7 +26,6 @@ public class ShowStoreInfoVO {
     private String businessNumber;
     private String origin;
     private List<ClosePickupTimeVO> closePickUpTimeList;
-    private String simgUriCover;
 
 
 

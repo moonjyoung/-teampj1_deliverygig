@@ -12,8 +12,6 @@ public class ShowMenuInfoVO {
     private Integer discountPrice;
     private String fiUri;
 
-
-
     public ShowMenuInfoVO(FoodMenuInfoEntity entity) {
         this.menuSeq = entity.getFmiSeq();
         this.name = entity.getFmiName();
