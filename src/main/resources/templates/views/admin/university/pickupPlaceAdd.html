@@ -21,20 +21,21 @@
     </script>
 </head>
 <body>
-    <h1>수령장소 추가</h1>
-    <form action="/univ/list"></form>
-    <tr>
-      <tr th:each="univ : ${result.list}">
-        <td th:text="${univ.uiName}"></td>
-      </tr>
+  <div>
+    <h1>
+      <a href="/master/main" style="text-decoration: none; color: crimson">배달대</a>
+    </h1>
+  </div>
+    <h3>수령장소 추가</h3>
     <form action="/pickup/add" method="post">
         <span>수령 장소명</span>
-        <input type="text" name="pickupArea" th:value="${pickupArea}">
+        <input type="number" name="univ_no" th:value="${univ_no}" hidden>
+        <input type="text" name="name" th:value="${name}">
         <th:block th:if="${result != null}">
             <p th:text="${result.message}" style="color: red"></p>
         </th:block>
         <button>등록</button>
-        <a href="/pickup/list">목록으로</a>
+        <a th:href="@{/univ/list(page=${page}, keyword=${keyword})}">이전으로</a>
     </form>
 </body>
 </html>

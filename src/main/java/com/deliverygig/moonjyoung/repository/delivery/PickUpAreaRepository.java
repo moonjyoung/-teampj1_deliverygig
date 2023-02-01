@@ -22,4 +22,6 @@ public interface PickUpAreaRepository extends JpaRepository<PickUpAreaEntity, Lo
     public PickUpAreaEntity findByPuaSeqAndPuaName(@Param("puaUiSeq") Long puaUiSeq, @Param("puaName") String puaName);
 
     public Page<PickUpAreaEntity> findByPuaNameContains(String puaName, Pageable pageable);
+
+    public Integer countByPuaName(String puaName);
 }

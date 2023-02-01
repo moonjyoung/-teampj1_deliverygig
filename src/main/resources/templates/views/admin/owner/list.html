@@ -21,13 +21,21 @@
   </script>
 </head>
 <body>
-  <h1>사장회원 리스트</h1>
+  <div>
+    <h1>
+      <a href="/master/main" style="text-decoration: none; color: crimson">배달대</a>
+    </h1>
+  </div>
+  <h3>사장회원 리스트</h3>
   <tr>
     <td colspan="2">
       <a href="/customer/list" style="color: black;"><button>일반회원 관리페이지</button></a>
     </td>
     <td colspan="2">
       <a href="/univ/list" style="color: black;"><button>배달장소 관리페이지</button></a>
+    </td>
+    <td colspan="2">
+      <a href="/store/list" style="color: black;"><button>가게정보 관리페이지</button></a>
     </td>
     <td colspan="2">  
       <a href="/master/logout" style="color: black;"><button>로그아웃</button></a>
@@ -46,41 +54,53 @@
       </tr>
     </thead>
     <tbody>
-      <tr th:each="owner, i : ${ownerList}">
-      <td th:text="${owner.seq}"></td>
-      <td th:text="${owner.id}"></td>
-      <td th:text="${owner.nickname}"></td>
-      <td th:text="${owner.email}"></td>
-      <td th:text="${owner.phone}"></td>
-      <td th:text="${owner.joinDt}"></td>
+      <tr th:each="owner, i : ${result.list}">
+      <td th:text="${owner.oiSeq}"></td>
+      <td th:text="${owner.oiId}"></td>
+      <td th:text="${owner.oiNickName}"></td>
+      <td th:text="${owner.oiEmail}"></td>
+      <td th:text="${owner.oiPhone}"></td>
+      <td th:text="${owner.oiJoinDt}"></td>
       <td>
-        <th:block th:switch="${owner.status}">
+        <th:block th:switch="${owner.oiStatus}">
         <span th:case="1">정상</span>
         <span th:case="2">정지</span>
         <span th:case="3">승인대기</span>
         </th:block>
       </td>
       <td>
-        <th:block th:if="${owner.status == 1}">
-          <a th:href="@{ /owner/status (seq=${owner.seq}, status=2) }">블라인드</a>
+        <th:block th:if="${owner.oiStatus == 1}">
+          <a th:href="@{ /owner/status (seq=${owner.oiSeq}, status=2) }" onclick="return confirm('블라인드 처리 하시겠습니까?')">블라인드</a>
         </th:block>
-        <th:block th:if="${owner.status == 2}">
-          <a th:href="@{ /owner/status (seq=${owner.seq}, status=1) }">정지해제</a>
+        <th:block th:if="${owner.oiStatus == 2}">
+          <a th:href="@{ /owner/status (seq=${owner.oiSeq}, status=1) }" onclick="return confirm('정지를 해제 하시겠습니까?')">정지해제</a>
         </th:block>
-        <th:block th:if="${owner.status == 3}">
-          <a th:href="@{ /owner/status (seq=${owner.seq}, status=1) }">가입승인</a>
+        <th:block th:if="${owner.oiStatus == 3}">
+          <a th:href="@{ /owner/status (seq=${owner.oiSeq}, status=1) }" onclick="return confirm('사용승인 하시겠습니까?')">가입승인</a>
         </th:block>
       </td>
       <td>
-          <a th:href="@{ /owner/delete (seq=${owner.seq}) }">계정삭제</a>
+          <a th:href="@{ /owner/delete (oiSeq=${owner.oiSeq}) }"><button onclick="return confirm('계정을 삭제 하시겠습니까?')">계정삭제</button></a>
       </td>
       </tr>
     </tbody>
   </table>
-  <div>
-    <span th:each="num : ${#numbers.sequence(1, totalPage)}">
-      <a th:href="@{/owner/list(page=${num-1}, size=10, sort=oiSeq,desc)}" th:text="${num}"></a>
-    </span>
-  </div>
+  <div class="search_area">
+    <form action="/owner/list" method="get" id="search_form">
+        <input type="text" name="keyword" placeholder="아이디로 검색" th:value="${keyword}"><button>검색</button>
+    </form>
+</div>
+<div class="pager_area">
+    <th:block th:each="i : ${#numbers.sequence(0, result.totalpage - 1)}">
+        <th:block th:if="${result.totalpage >0}">
+        <th:block th:if="${keyword == null || keyword == ''}">
+            <a th:href="@{/owner/list(page=${i})}" th:text="${i+1}"></a>
+        </th:block>
+        <th:block th:if="${keyword != null && keyword != ''}">
+            <a th:href="@{/owner/list(page=${i}, keyword=${keyword})}" th:text="${i+1}"></a>
+        </th:block>
+        </th:block>
+    </th:block>
+</div>
 </body>
 </html>

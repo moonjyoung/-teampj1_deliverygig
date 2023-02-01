@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,8 +28,11 @@
         <input type="password" name="master_pwd" id="master_pwd">
         <div>
         <button id="admin_login">로그인</button>
-        </div>
+      </div>
       </form>
+    </div>
+    <div>
+      <a href="/master/add"><strong style="color: #fff;">관리자 등록신청 페이지</strong></a>
     </div>
   </table>
   <div2 th:if="${loginStatus == 'failed'}">

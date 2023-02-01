@@ -21,7 +21,12 @@
       </script>
 </head>
 <body>
-    <h1>대학교 상세 정보</h1>
+  <div>
+    <h1>
+      <a href="/master/main" style="text-decoration: none; color: crimson">배달대</a>
+    </h1>
+  </div>
+    <h3>대학교 상세 정보</h3>
     <tr>
         <td colspan="2">
           <a href="/customer/list" style="color: black;"><button>일반회원 관리페이지</button></a>
@@ -49,29 +54,19 @@
         <td>
           <a th:href="@{/pickup/delete(pickup_no=${pickup.puaSeq})}">삭제</a>
         </td>
-        <td>
-          
-        </td>
     </tr>
     </tbody>
     <th:block th:if="${univ.status == false}">
         <p>잘못된 접근입니다.</p>
     </th:block>
   </table>
-    <th:block th:if="${univ.status == true}">
-        <form action="/univ/update" method="post">
-            <p>학교 이름 변경</p>
-            <input type="number" name="no" th:value="${univ.no}" hidden>
-            <input type="text" name="univ" th:value="${univ.univ}">
-            <button>수정</button>
-        </form>
-    </th:block>
     <tr>
       <td>
-        <a href="/pickup/add">수령장소 추가</a>
+        <a th:href="@{/pickup/add(univ_no=${univ_no})}"><button>수령장소 추가</button></a>
         </td>
         <td>
-            <a th:href="@{/univ/list(page=${page}, keyword=${keyword})}">목록으로</a>
+            <a th:href="@{/univ/list(page=${page}, keyword=${keyword})}">이전으로</a>
         </td>
+    </tr>
 </body>
 </html>
