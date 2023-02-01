@@ -1,4 +1,4 @@
-package com.deliverygig.moonjyoung.api.adminpage;
+package com.deliverygig.moonjyoung.api.adminpage.service;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.deliverygig.moonjyoung.entity.delivery.PickUpAreaEntity;
 import com.deliverygig.moonjyoung.entity.delivery.UnivInfoEntity;
 import com.deliverygig.moonjyoung.entity.delivery.UnivTimeInfoEntity;
 import com.deliverygig.moonjyoung.repository.delivery.PickUpAreaRepository;
@@ -59,40 +58,40 @@ public class UniversityListService {
     return resultMap;
   }
 
-  public Map<String, Object> updateUnivInfo(Long no, String univ) {
-    Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-    Optional<UnivInfoEntity> entityOpt = univInfoRepository.findById(no);
-    if(entityOpt.isEmpty()) {
-      resultMap.put("updated", false);
-      resultMap.put("no", no);
-      resultMap.put("univ", univ);
-      resultMap.put("message", "잘못된 대학교 정보입니다.");
-    }
-    else if(entityOpt.get().getUiName().equalsIgnoreCase(univ)) {
-      resultMap.put("updated", false);
-      resultMap.put("no", no);
-      resultMap.put("univ", univ);
-      resultMap.put("message", "기존 설정된 이름으로 변경 불가능합니다.");
-    }
-    // else if(entityOpt.get().getUiName().equals("")) {
-    //   resultMap.put("updated", false);
-    //   resultMap.put("no", no);
-    //   resultMap.put("univ", univ);
-    //   resultMap.put("message", "공백으로는 변경 불가능합니다.");
+  // public Map<String, Object> updateUnivInfo(Long no, String univ) {
+    // Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+    // Optional<UnivInfoEntity> entityOpt = univInfoRepository.findById(no);
+    // if(entityOpt.isEmpty()) {
+      // resultMap.put("updated", false);
+      // resultMap.put("no", no);
+      // resultMap.put("univ", univ);
+      // resultMap.put("message", "잘못된 대학교 정보입니다.");
     // }
-    else if(univInfoRepository.countByUiName(univ) != 0) {
-      resultMap.put("updated", false);
-      resultMap.put("no", no);
-      resultMap.put("univ", univ);
-      resultMap.put("message", univ+"학교는 이미 등록된 학교입니다.");
-    }
-    else {
-      UnivInfoEntity entity = UnivInfoEntity.builder().uiSeq(no).uiName(univ).build();
-      univInfoRepository.save(entity);
-      resultMap.put("updated", true);
-    }
-    return resultMap;
-  }
+    // else if(entityOpt.get().getUiName().equalsIgnoreCase(univ)) {
+      // resultMap.put("updated", false);
+      // resultMap.put("no", no);
+      // resultMap.put("univ", univ);
+      // resultMap.put("message", "기존 설정된 이름으로 변경 불가능합니다.");
+    // }
+    // else if(entityOpt.get().getUiName().equals("")) {
+      // resultMap.put("updated", false);
+      // resultMap.put("no", no);
+      // resultMap.put("univ", univ);
+      // resultMap.put("message", "공백으로는 변경 불가능합니다.");
+    // }
+    // else if(univInfoRepository.countByUiName(univ) != 0) {
+      // resultMap.put("updated", false);
+      // resultMap.put("no", no);
+      // resultMap.put("univ", univ);
+      // resultMap.put("message", univ+"학교는 이미 등록된 학교입니다.");
+    // }
+    // else {
+      // UnivInfoEntity entity = UnivInfoEntity.builder().uiSeq(no).uiName(univ).build();
+      // univInfoRepository.save(entity);
+      // resultMap.put("updated", true);
+    // }
+    // return resultMap;
+  // }
 
   public Map<String, Object> selectUnivInfo(Long univ_no) {
     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
@@ -111,7 +110,7 @@ public class UniversityListService {
   }
 
   @Transactional
-  public void deleteGenre(Long univ_no) {
+  public void deleteUniv(Long univ_no) {
     univInfoRepository.deleteById(univ_no);
   }
   

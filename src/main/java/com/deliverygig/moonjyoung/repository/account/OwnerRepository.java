@@ -23,4 +23,5 @@ public interface OwnerRepository extends JpaRepository<OwnerEntity, Long> {
 
     public Page<OwnerEntity> findAll(Pageable page);
     public OwnerEntity findByOiSeq(Long oiSeq);
+    public Page<OwnerEntity> findByOiIdContains(String oiId, Pageable pageable);
 }

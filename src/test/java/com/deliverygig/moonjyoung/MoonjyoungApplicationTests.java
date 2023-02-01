@@ -14,6 +14,7 @@ import com.deliverygig.moonjyoung.repository.account.CustomerRepository;
 import com.deliverygig.moonjyoung.repository.delivery.PickUpAreaRepository;
 import com.deliverygig.moonjyoung.repository.delivery.UnivInfoRepository;
 import com.deliverygig.moonjyoung.repository.image.PickUpAreaImageRepository;
+import com.deliverygig.moonjyoung.service.MasterService;
 import com.deliverygig.moonjyoung.vo.delivery.PickUpAreaVO;
 
 import jakarta.servlet.http.HttpSession;
@@ -55,6 +56,11 @@ class MoonjyoungApplicationTests {
 		PickUpAreaVO vo = new PickUpAreaVO();
 		vo.setUiName("testname");
 		univInfoRepository.save(vo.toUnivInfoEntity());
+	}
+	@Autowired MasterService masterService;
+	@Test
+	public void addPickUpArea() { // 새로운 수령장소 추가 test
+		masterService.addPickUpArea("연세대학교", "testpickupareaname");
 	}
 	@Test
 	public void checkClosedDay() {

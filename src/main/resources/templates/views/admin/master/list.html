@@ -21,7 +21,12 @@
   </script>
 </head>
 <body>
-  <h1>관리자 계정 리스트</h1>
+  <div>
+    <h1>
+      <a href="/master/main" style="text-decoration: none; color: crimson">배달대</a>
+    </h1>
+  </div>
+  <h3>관리자 계정 리스트</h3>
   <tr>
     <td colspan="2">
       <a href="/customer/list" style="color: black;"><button>일반회원 관리페이지</button></a>
@@ -31,6 +36,9 @@
     </td>
     <td colspan="2">
       <a href="/univ/list" style="color: black;"><button>배달장소 관리페이지</button></a>
+    </td>
+    <td colspan="2">
+      <a href="/store/list" style="color: black;"><button>가게정보 관리페이지</button></a>
     </td>
   </tr>
   <tr>
@@ -49,43 +57,55 @@
       </tr>
     </thead>
     <tbody>
-      <tr th:each="master, i : ${accountList}">
-      <td th:text="${master.seq}"></td>
-      <td th:text="${master.id}"></td>
-      <td th:text="${master.nickname}"></td>
+      <tr th:each="master, i : ${result.list}">
+      <td th:text="${master.miSeq}"></td>
+      <td th:text="${master.miId}"></td>
+      <td th:text="${master.miNickName}"></td>
       <td>
-        <th:block th:switch="${master.grade}">
+        <th:block th:switch="${master.miGrade}">
         <span th:case="2">일반관리자</span>
         </th:block>
       </td>
       <td>
-        <th:block th:switch="${master.status}">
+        <th:block th:switch="${master.miStatus}">
         <span th:case="1">사용가능</span>
         <span th:case="2">등록대기</span>
         <span th:case="3">사용정지</span>
         </th:block>
       </td>
       <td>
-        <th:block th:if="${master.status == 1}">
-          <a th:href="@{ /master/status (seq=${master.seq}, status=3) }">사용정지</a>
+        <th:block th:if="${master.miStatus == 1}">
+          <a th:href="@{ /master/status (seq=${master.miSeq}, status=3) }" onclick="return confirm('정지처리 하시겠습니까?')">사용정지</a>
         </th:block>
-        <th:block th:if="${master.status == 2}">
-          <a th:href="@{ /master/status (seq=${master.seq}, status=1) }">사용가능</a>
+        <th:block th:if="${master.miStatus == 2}">
+          <a th:href="@{ /master/status (seq=${master.miSeq}, status=1) }" onclick="return confirm('사용승인 하시겠습니까?')">사용가능</a>
         </th:block>
-        <th:block th:if="${master.status == 3}">
-          <a th:href="@{ /master/status (seq=${master.seq}, status=1) }">사용가능</a>
+        <th:block th:if="${master.miStatus == 3}">
+          <a th:href="@{ /master/status (seq=${master.miSeq}, status=1) }" onclick="return confirm('정지를 해제 하시겠습니까?')">정지해제</a>
         </th:block>
       </td>
       <td>
-          <a th:href="@{ /master/delete (seq=${master.seq}) }">계정삭제</a>
+          <a th:href="@{ /master/delete (miSeq=${master.miSeq}) }"><button onclick="return confirm('계정을 삭제 하시겠습니까?')">계정삭제</button></a>
       </td>
       </tr>
     </tbody>
   </table>
-  <div>
-    <span th:each="num : ${#numbers.sequence(1, totalPage)}">
-      <a th:href="@{/master/list(page=${num-1}, size=10, sort=miSeq,desc)}" th:text="${num}"></a>
-    </span>
-  </div>
+  <div class="search_area">
+    <form action="/master/list" method="get" id="search_form">
+        <input type="text" name="keyword" placeholder="아이디로 검색" th:value="${keyword}"><button>검색</button>
+    </form>
+</div>
+<div class="pager_area">
+    <th:block th:each="i : ${#numbers.sequence(0, result.totalpage - 1)}">
+        <th:block th:if="${result.totalpage >0}">
+        <th:block th:if="${keyword == null || keyword == ''}">
+            <a th:href="@{/master/list(page=${i})}" th:text="${i+1}"></a>
+        </th:block>
+        <th:block th:if="${keyword != null && keyword != ''}">
+            <a th:href="@{/master/list(page=${i}, keyword=${keyword})}" th:text="${i+1}"></a>
+        </th:block>
+        </th:block>
+    </th:block>
+</div>
 </body>
 </html>

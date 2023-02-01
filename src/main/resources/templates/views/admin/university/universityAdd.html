@@ -21,7 +21,12 @@
     </script>
 </head>
 <body>
-    <h1>대학교 정보 추가</h1>
+  <div>
+    <h1>
+      <a href="/master/main" style="text-decoration: none; color: crimson">배달대</a>
+    </h1>
+  </div>
+    <h3>대학교 정보 추가</h3>
     <form action="/univ/add" method="post">
         <span>학교명</span>
         <input type="text" name="univ" th:value="${univ}">

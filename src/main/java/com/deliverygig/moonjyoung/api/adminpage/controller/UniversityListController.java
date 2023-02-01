@@ -1,4 +1,4 @@
-package com.deliverygig.moonjyoung.api.adminpage;
+package com.deliverygig.moonjyoung.api.adminpage.controller;
 
 import java.util.Map;
 
@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.deliverygig.moonjyoung.api.adminpage.service.UniversityListService;
 
 import org.springframework.data.domain.Sort;
 
@@ -59,25 +61,32 @@ public class UniversityListController {
       model.addAttribute("univ", map);
       model.addAttribute("page", page);
       model.addAttribute("keyword", keyword);
+      model.addAttribute("univ_no", univ_no);
       return "/admin/university/universityDetail";
   }
 
-  @PostMapping("/update")
-  public String postGenreUpdate(Long no, String univ, Model model) {
-    Map<String, Object> resultMap = uService.updateUnivInfo(no, univ);
-    if((Boolean)resultMap.get("updated")) {
-      return "redirect:/univ/list";
-    }
-    else {
-      resultMap.put("status", true);
-      model.addAttribute("univ", resultMap);
-      return "/admin/university/universityDetail";
-    }
-  }
+
+  // @GetMapping("/update")
+  // public String postUnivNameUpdate(@RequestParam Long no, Model model) {
+    // model.addAttribute("no", no);
+    // return "/admin/university/universityEdit";
+  // }
+  // @PostMapping("/update")
+  // public String postUnivNameUpdate(Long no, String univ, Model model) {
+    // Map<String, Object> resultMap = uService.updateUnivInfo(no, univ);
+    // if((Boolean)resultMap.get("updated")) {
+      // return "redirect:/univ/list";
+    // }
+    // else {
+      // model.addAttribute("univ", univ);
+      // model.addAttribute("result", resultMap);
+      // return "/admin/university/universityEdit";
+    // }
+  // }
 
   @GetMapping("/delete")
-  public String getGenreDelete(@RequestParam Long univ_no) {
-      uService.deleteGenre(univ_no);
+  public String getUnivDelete(@RequestParam Long univ_no) {
+      uService.deleteUniv(univ_no);
       return "redirect:/univ/list";
   }
 

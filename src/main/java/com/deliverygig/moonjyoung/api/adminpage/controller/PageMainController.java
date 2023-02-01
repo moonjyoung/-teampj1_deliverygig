@@ -1,4 +1,4 @@
-package com.deliverygig.moonjyoung.api.adminpage;
+package com.deliverygig.moonjyoung.api.adminpage.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,11 +8,11 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/master")
-public class ListController {
+public class PageMainController {
     @GetMapping("")
     public String getIndex(HttpSession session) {
         if(session.getAttribute("loginUser") != null) {
-            return "redirect:/admin/main" ;
+            return "redirect:/master/main" ;
         }
         return "/admin/index"; 
     }

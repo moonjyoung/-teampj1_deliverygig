@@ -14,4 +14,5 @@ public interface CustomerRepository extends JpaRepository<CustomerInfoEntity, Lo
     public CustomerInfoEntity findByCiIdAndCiPwd(String ciId, String ciPwd);
     public Page<CustomerInfoEntity> findAll(Pageable page);
     public CustomerInfoEntity findByCiSeq(Long ciSeq);
+    public Page<CustomerInfoEntity> findByCiIdContains(String ciId, Pageable pageable);
 }

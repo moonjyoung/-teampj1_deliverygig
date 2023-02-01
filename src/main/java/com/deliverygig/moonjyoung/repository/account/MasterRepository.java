@@ -9,8 +9,9 @@ import com.deliverygig.moonjyoung.entity.account.MasterEntity;
 
 @Repository
 public interface MasterRepository extends JpaRepository<MasterEntity, Long> {
-    Page<MasterEntity> findAll(Pageable page);
-    Integer countByMiId(String miId);
-    MasterEntity findByMiIdAndMiPwd(String miId, String miPwd);
-    MasterEntity findByMiSeq(Long miSeq);
+    public Page<MasterEntity> findAll(Pageable page);
+    public Integer countByMiId(String miId);
+    public MasterEntity findByMiIdAndMiPwd(String miId, String miPwd);
+    public MasterEntity findByMiSeq(Long miSeq);
+    public Page<MasterEntity> findByMiIdContains(String miId, Pageable pageable);
 }

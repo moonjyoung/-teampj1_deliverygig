@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script th:inline="javascript">
+    const user = [[${session.loginUser}]]
+    if(user == null) { 
+      alert("관리자 전용페이지 입니다. 로그인 해 주세요"); 
+      location.href="/master";
+    }
+  </script>
+  <script th:inline="javascript">
+    const status = [[${session.loginUser.status}]];
+      if(status != 1) {
+        alert("승인된 관리자만 접근 가능한 메뉴입니다.");
+        location.href = "/master/index";
+      }
+  </script>
+</head>
+<body>
+  <div>
+    <h1>
+      <a href="/master/main" style="text-decoration: none; color: crimson">배달대</a>
+    </h1>
+  </div>
+  <h3>가게 리스트</h3>
+    <tr>
+        <td colspan="2">
+          <a href="/customer/list" style="color: black;"><button>일반회원 관리페이지</button></a>
+        </td>
+        <td colspan="2">
+          <a href="/owner/list" style="color: black;"><button>사장회원 관리페이지</button></a>
+        </td>
+        <td colspan="2">
+          <a href="/univ/list" style="color: black;"><button>배달장소 관리페이지</button></a>
+        </td>
+        <td colspan="2">  
+            <a href="/master/logout" style="color: black;"><button>로그아웃</button></a>
+        </td>
+    </tr>
+<table>
+    <thead>
+        <tr>
+            <th>번호</th>
+            <th>가게명</th>
+            <th>가게상태</th>
+        </tr>
+    </thead>
+    <tbody>
+      <tr th:each="store, i : ${result.list}">
+        <td th:text="${store.siSeq}"></td>
+        <td th:text="${store.siName}"></td>
+        <td>
+          <th:block th:switch="${store.siStatus}">
+          <span th:case="1">정상</span>
+          <span th:case="2">휴무</span>
+          <span th:case="9">가입대기</span>
+          </th:block>
+        </td>
+        <td>
+          <th:block th:if="${store.siStatus == 9}">
+            <a th:href="@{ /store/status (seq=${store.siSeq}, status=1) }" onclick="return confirm('사용승인 하시겠습니까?')">사용승인</a>
+          </th:block>
+          <th:block th:if="${store.siStatus == 1}">
+            <a th:href="@{ /store/status (seq=${store.siSeq}, status=9) }" onclick="return confirm('가입대기로 변경하시겠습니까?')">가입대기</a>
+          </th:block>
+        </td>
+        <td>
+          <a th:href="@{ /store/delete (seq=${store.siSeq}) }"> <button onclick="return confirm('정말로 삭제하시겠습니까?')">가게삭제</button></a>
+        </td>
+      </tr>
+    </tbody>
+</table>
+<div class="search_area">
+    <form action="/store/list" method="get" id="search_form">
+        <input type="text" name="keyword" placeholder="가게 검색" th:value="${keyword}"><button>검색</button>
+    </form>
+</div>
+<div class="pager_area">
+    <th:block th:each="i : ${#numbers.sequence(0, result.totalpage - 1)}">
+        <th:block th:if="${result.totalpage >0}">
+        <th:block th:if="${keyword == null || keyword == ''}">
+            <a th:href="@{/store/list(page=${i})}" th:text="${i+1}"></a>
+        </th:block>
+        <th:block th:if="${keyword != null && keyword != ''}">
+            <a th:href="@{/store/list(page=${i}, keyword=${keyword})}" th:text="${i+1}"></a>
+        </th:block>
+        </th:block>
+    </th:block>
+</div>
+</body>
+</html>
+</body>
+</html>
