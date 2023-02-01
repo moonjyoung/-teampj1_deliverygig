@@ -1,5 +1,6 @@
 package com.deliverygig.moonjyoung.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -130,10 +131,9 @@ public class BasketService {
             }
             vo.setMenuList(menuList);
             if (menuList.size()==0) {
-                resultMap.put("status", true);
-                resultMap.put("message", "조회 완료(비어있는 장바구니)");
-                resultMap.put("code", HttpStatus.OK);
-                resultMap.put("data", vo);
+                resultMap.put("status", false);
+                resultMap.put("message", "결제 실패(장바구니에 담긴 상품이 없습니다)");
+                resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
             }
             else {
                 // 랜덤 주문번호(10자리) 생성
@@ -146,7 +146,7 @@ public class BasketService {
                 for (int i=0; i<8; i++) {
                     // rnd.nextBoolean() 는 랜덤으로 true, false 를 리턴. true일 시 랜덤 한 소문자를, false 일 시 랜덤 한 숫자를 StringBuffer 에 append 한다.
                     if (rnd.nextBoolean()) {
-                        buf.append((char)((int)(rnd.nextInt(26))+97));
+                        buf.append((char)((int)(rnd.nextInt(26))+65));
                     }
                     else{
                         buf.append((rnd.nextInt(10)));
@@ -169,8 +169,8 @@ public class BasketService {
                 basketInfoRepository.save(entity);
 
                 resultMap.put("status", true);
-                resultMap.put("message", "조회 완료");
-                resultMap.put("code", HttpStatus.OK);
+                resultMap.put("message", "결제 완료");
+                resultMap.put("code", HttpStatus.ACCEPTED);
                 resultMap.put("data", vo);
             }
         }
@@ -219,13 +219,27 @@ public class BasketService {
         return resultMap;
     }
 
-    // 미결제 장바구니메뉴 자동삭제 (std_closetime이 now()에서 지나면)
+    // 자동삭제 
+    // 기본전제 : 미결제 장바구니 메뉴
+    // 조건1 : 탈퇴한 회원
+    // 조건2 : 메뉴등록일이 어제가 되면(밤 24시가 지나면)
+    // 조건3 : std_closetime이 now()에서 지나면
     public void autoDeleteMenu() {
         for (BasketMenuOptionsCombineEntity data : basketMenuOptionsCombineRepository.findAll()) {
             LocalTime closeTime = data.getStoreTimeDetailEntity().getStdCloseTime();
-            LocalTime currentTime =  LocalTime.now();
-            if (data.getBasketInfoEntity().getBiStatus()==1 && closeTime.isBefore(currentTime)) {
+                LocalTime currentTime = LocalTime.now();
+                LocalDate currentDate = LocalDate.now();
+            if (data.getBasketInfoEntity().getBiStatus()==1 && customerRepository.findByCiSeq(data.getBasketInfoEntity().getBiCiSeq())==null) {
+                basketInfoRepository.delete(data.getBasketInfoEntity());
                 basketMenuOptionsCombineRepository.delete(data);
+            }
+            if (data.getBasketInfoEntity().getBiStatus()==1 && (data.getBmocRegDt().toLocalDate().isBefore(currentDate) || closeTime.isBefore(currentTime))) {
+                basketMenuOptionsCombineRepository.delete(data);
+            }
+        }
+        for (BasketInfoEntity data : basketInfoRepository.findAll()) {
+            if (data.getBiStatus()==1 && customerRepository.findByCiSeq(data.getBiCiSeq())==null) {
+                basketInfoRepository.delete(data);
             }
         }
     }
@@ -234,22 +248,24 @@ public class BasketService {
     public Map<String, Object> deleteMenuOptions(Long bmocSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         
-        BasketMenuOptionsCombineEntity entity = basketMenuOptionsCombineRepository.findById(bmocSeq).get();
-        if (entity==null) {
+        if (basketMenuOptionsCombineRepository.findById(bmocSeq).isEmpty()) {
             resultMap.put("status", false);
             resultMap.put("message", "존재하지 않는 주문메뉴 번호");
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
         }
-        else if (entity.getBasketInfoEntity().getBiStatus()==2) {
-            resultMap.put("status", false);
-            resultMap.put("message", "결제완료 된 주문메뉴 번호");
-            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
-        }
         else {
-            basketMenuOptionsCombineRepository.delete(entity);
-            resultMap.put("status", true);
-            resultMap.put("message", "삭제 완료");
-            resultMap.put("code", HttpStatus.CREATED);
+            BasketMenuOptionsCombineEntity entity = basketMenuOptionsCombineRepository.findById(bmocSeq).get();
+            if (entity.getBasketInfoEntity().getBiStatus()==2) {
+                resultMap.put("status", false);
+                resultMap.put("message", "결제완료 된 주문메뉴 번호");
+                resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            }
+            else {
+                basketMenuOptionsCombineRepository.delete(entity);
+                resultMap.put("status", true);
+                resultMap.put("message", "삭제 완료");
+                resultMap.put("code", HttpStatus.ACCEPTED);
+            }
         }
 
         return resultMap;
