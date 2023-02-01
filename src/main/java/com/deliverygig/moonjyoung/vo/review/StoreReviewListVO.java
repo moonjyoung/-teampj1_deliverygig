@@ -11,7 +11,7 @@ public class StoreReviewListVO {
     private String menuOption;
     private Integer reviewScore;
     private String reviewContent;
-    private LocalDateTime reviewDt;
+    private LocalDateTime reviewRegDt;
 }
 
 
