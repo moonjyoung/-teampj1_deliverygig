@@ -354,17 +354,15 @@ public class CustomerInfoService {
     }
 
     // 회원수정
-    public Map<String, Object> UpdateMember(UpdateCustomerInfoVO data2, String type, HttpSession session) throws Exception{
+    public Map<String, Object> UpdateMember(UpdateCustomerInfoVO data2, String type, Long ciSeq) throws Exception{
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        LoginUserVO data = (LoginUserVO) session.getAttribute("loginUser");
-        
-        if (session.getAttribute("loginUser") == null) {
+        if(cRepo.countByCiSeq(ciSeq) == 0){
             resultMap.put("status", false);
-            resultMap.put("message", "회원정보가 없습니다. 로그인 먼저해주세요.");
+            resultMap.put("message", "잘못된 회원번호입니다.");
             resultMap.put("code", HttpStatus.BAD_REQUEST);
             return resultMap;
         }
-        CustomerInfoEntity entity = cRepo.findById(data.getCiSeq()).get();
+        CustomerInfoEntity entity =  cRepo.findById(ciSeq).get();
         if (type.equals("phone")) {
             String phone_pattern = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$";
             String replacephone = data2.getCiPhone().replaceAll(" ", "");
@@ -375,7 +373,7 @@ public class CustomerInfoService {
                 resultMap.put("code", HttpStatus.BAD_REQUEST);
                 return resultMap;
             }
-            else if (replacephone.equals(data.getCiPhone())) {
+            else if (replacephone.equals(entity.getCiPhone())) {
                 resultMap.put("message", "기존 폰번호로 변경할 수 없습니다.");
                 resultMap.put("code", HttpStatus.BAD_REQUEST);
                 return resultMap;
@@ -392,7 +390,7 @@ public class CustomerInfoService {
                 return resultMap;  
             }
             data2.setCiPhone(replacephone);
-            entity.setCiPhone(replacephone);
+            entity.setCiPhone(data2.getCiPhone());
             cRepo.save(entity);
             resultMap.put("status", "true");
             resultMap.put("message","변경되었습니다.");
@@ -411,7 +409,7 @@ public class CustomerInfoService {
                 resultMap.put("code", HttpStatus.BAD_REQUEST);
                 return resultMap;
             }
-            else if (replaceemail.equals(data.getCiEmail())) {
+            else if (replaceemail.equals(entity.getCiEmail())) {
                 resultMap.put("message", "기존 이메일로 변경할 수 없습니다.");
                 resultMap.put("code", HttpStatus.BAD_REQUEST);
                 return resultMap;
@@ -427,8 +425,8 @@ public class CustomerInfoService {
                 resultMap.put("code", HttpStatus.BAD_REQUEST);
                 return resultMap;
             }
-            data.setCiEmail(replaceemail);
-            entity.setCiEmail(data.getCiEmail());
+            data2.setCiEmail(replaceemail);
+            entity.setCiEmail(data2.getCiEmail());
             cRepo.save(entity);
             resultMap.put("status", "true");
             resultMap.put("message","변경되었습니다.");
@@ -446,7 +444,7 @@ public class CustomerInfoService {
                 resultMap.put("code", HttpStatus.BAD_REQUEST);
                 return resultMap;
             }
-            else if (replacenickname.equals(data.getCiNickName())) {
+            else if (replacenickname.equals(entity.getCiNickName())) {
                 resultMap.put("status", "false");
                 resultMap.put("message", "기존 닉네임으로 변경할 수 없습니다.");
                 resultMap.put("code", HttpStatus.BAD_REQUEST);
@@ -477,7 +475,7 @@ public class CustomerInfoService {
             String pwd_pattern = "^[a-zA-Z0-9`~!@#$%^&*()-_=+]{6,20}$";
             String replacepwd = data2.getCiUpdatePwd().replaceAll(" ", "");
             Pattern d = Pattern.compile(pwd_pattern);
-            String decPwd = AESAlgorithm.Decrypt(data.getCiPwd());
+            String decPwd = AESAlgorithm.Decrypt(entity.getCiPwd());
             if (!data2.getCiPwd().equals(decPwd)) {
                 resultMap.put("message", "기존 비밀번호가 틀렸습니다. 다시 입력해주세요.");
                 resultMap.put("code", HttpStatus.BAD_REQUEST);
@@ -526,7 +524,7 @@ public class CustomerInfoService {
                 resultMap.put("code", HttpStatus.BAD_REQUEST);
                 return resultMap;
             } 
-            else if (replacename.equals(data.getCiName())) {
+            else if (replacename.equals(entity.getCiName())) {
                 resultMap.put("message", "기존 이름으로 변경할 수 없습니다.");
                 resultMap.put("code", HttpStatus.BAD_REQUEST);
                 return resultMap;

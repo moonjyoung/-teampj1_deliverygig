@@ -32,5 +32,5 @@ public class ReviewEntity {
     @Column(name = "ri_contents") private String riContents;
     @Column(name = "ri_score") private Integer riScore;
     @Column(name = "ri_status") private Integer riStatus;
-    @Column(name = "ri_dt") private LocalDateTime riDt;
+    @Column(name = "ri_reg_dt") private LocalDateTime riRegDt;
 }

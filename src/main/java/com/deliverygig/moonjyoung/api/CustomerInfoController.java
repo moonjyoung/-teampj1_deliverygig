@@ -46,7 +46,7 @@ public class CustomerInfoController {
         Map<String, Object> resultMap = cService.LogOutMember(session);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<Object> memberDelete(/*@RequestBody LoginUserVO data2,*/@RequestParam Long ciSeq, HttpSession session) throws Exception {
         Map<String, Object> resultMap = cService.DeleteMember(ciSeq, session);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
@@ -62,8 +62,8 @@ public class CustomerInfoController {
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
     @PostMapping("/update/{type}")
-    public ResponseEntity<Object> memberUpdate(@RequestBody UpdateCustomerInfoVO data2, @PathVariable String type, HttpSession session) throws Exception{
-        Map<String, Object> resultMap = cService.UpdateMember(data2, type, session);
+    public ResponseEntity<Object> memberUpdate(@RequestBody UpdateCustomerInfoVO data2, @RequestParam Long ciSeq, @PathVariable String type) throws Exception{
+        Map<String, Object> resultMap = cService.UpdateMember(data2, type, ciSeq);
         return new ResponseEntity<Object>(resultMap, (HttpStatus) resultMap.get("code"));
     }
     

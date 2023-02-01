@@ -62,7 +62,7 @@ public class ReviewService {
                     vo.setMenuOption(data.getBasketMenuOptionsCombineEntity().getBmocOptionAll());
                     vo.setReviewScore(data.getRiScore());
                     vo.setReviewContent(data.getRiContents());
-                    vo.setReviewDt(data.getRiDt());
+                    vo.setReviewRegDt(data.getRiRegDt());
                 }
             } else {
                 continue;
@@ -88,7 +88,7 @@ public class ReviewService {
                 vo.setMenuOption(data.getBasketMenuOptionsCombineEntity().getBmocOptionAll());
                 vo.setReviewScore(data.getRiScore());
                 vo.setReviewContent(data.getRiContents());
-                vo.setReviewDt(data.getRiDt());
+                vo.setReviewRegDt(data.getRiRegDt());
             } else {
                 continue;
             }
