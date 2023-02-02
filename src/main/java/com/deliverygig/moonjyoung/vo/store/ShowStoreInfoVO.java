@@ -16,6 +16,7 @@ public class ShowStoreInfoVO {
     private String simgUriCover;
     private Integer minOrderPrice;
     private Integer deliveryPrice;
+    private Long stdSeq;
     private LocalTime storeCloseTime;
     private LocalTime utiDeliveryTime;
     private String ownerWord;
@@ -34,6 +35,7 @@ public class ShowStoreInfoVO {
         this.siName = entity1.getStoreInfoEntity().getSiName();
         this.minOrderPrice = entity1.getSdiMinOrderPrice();
         this.deliveryPrice = entity1.getSdiDeliveryPrice();
+        this.stdSeq = entity2.getStdSeq();
         this.storeCloseTime = entity2.getStdCloseTime();
         this.utiDeliveryTime = entity2.getUnivTimeInfoEntity().getUtiPickupTime1();
         this.ownerWord = entity1.getSdiOwnerWord();
