@@ -5,6 +5,7 @@ import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
 import lombok.Data;
 
 @Data
+
 public class ShowMenuInfoVO {
     private Long menuSeq;
     private String name;

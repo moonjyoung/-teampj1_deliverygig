@@ -39,7 +39,7 @@ public Map<String, Object> addStoreImage (StoreImageEntity data) {
           return resultMap;
         }
         resultMap.put("status", false);
-        resultMap.put("message", "메뉴이름 Seq 오류입니다.");
+        resultMap.put("message", "매장 Seq 오류입니다.");
         resultMap.put("code", HttpStatus.BAD_REQUEST);
         return resultMap;
       }

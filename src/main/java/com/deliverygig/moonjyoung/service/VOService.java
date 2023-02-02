@@ -209,7 +209,7 @@ public class VOService {
             if (data.getUnivTimeInfoEntity().getUtiSeq() == utiSeq) {
                 ShowStoreListVO vo = new ShowStoreListVO(data);
 
-                StoreImageEntity imgEntity = storeImageRepository.findBySimgSiSeqAndSimgDivision(data.getStoreInfoEntity().getSiSeq(), 99);
+                StoreImageEntity imgEntity = storeImageRepository.findBySimgSiSeqAndSimgDivision(data.getStoreInfoEntity().getSiSeq(), 9);
                  String img = "";
                 if(imgEntity != null) {
                     img = imgEntity.getSimgUri();
@@ -250,7 +250,7 @@ public class VOService {
             if (data.getUnivTimeInfoEntity().getUtiSeq() == utiSeq) {
                 //ShowStoreListVO vo = new ShowStoreListVO(data);
                 if(vo.getdiscount() > 0) {
-                    StoreImageEntity imgEntity = storeImageRepository.findBySimgSiSeqAndSimgDivision(utiSeq,99);
+                    StoreImageEntity imgEntity = storeImageRepository.findBySimgSiSeqAndSimgDivision(data.getStoreInfoEntity().getSiSeq(),9);
                         String img = "";
                         if(imgEntity != null) {
                             img = imgEntity.getSimgUri();

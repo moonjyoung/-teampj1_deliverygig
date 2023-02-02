@@ -30,6 +30,7 @@ public class StoreImageEntity {
     @Column(name = "simg_image") private String simgImage; // 가게이미지파이ㅏㄹ
     @Column(name = "simg_si_seq") private Long simgSiSeq; // 기본정보와연결
     @Column(name = "simg_uri") private String simgUri; // url
+    @Column(name = "simg_division") private Integer simgDivision;
     // @ManyToOne @JoinColumn(name = "simg_si_seq") private StoreInfoEntity storeInfoEntity;
 
 
