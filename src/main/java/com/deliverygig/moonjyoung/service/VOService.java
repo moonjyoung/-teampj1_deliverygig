@@ -203,6 +203,8 @@ public class VOService {
                     vo.setScoreAvg(((int)(reviewRepository.findAvgRiScoreBySiSeq(data.getStoreInfoEntity().getSiSeq())*10))/10.0);
                 }
 
+                StoreImageEntity imgEntity = storeImageRepository.findBySimgSiSeqAndSimgDivision(data.getStoreInfoEntity().getSiSeq(), 9);
+                 String img = "";
                 StoreImageEntity imgEntity = storeImageRepository.findBySimgSiSeqAndSimgDivision(data.getStoreInfoEntity().getSiSeq(), 99);
                 String img = "";
                 if(imgEntity != null) {
@@ -244,7 +246,7 @@ public class VOService {
             if (data.getUnivTimeInfoEntity().getUtiSeq() == utiSeq) {
                 //ShowStoreListVO vo = new ShowStoreListVO(data);
                 if(vo.getdiscount() > 0) {
-                    StoreImageEntity imgEntity = storeImageRepository.findBySimgSiSeqAndSimgDivision(utiSeq,99);
+                    StoreImageEntity imgEntity = storeImageRepository.findBySimgSiSeqAndSimgDivision(data.getStoreInfoEntity().getSiSeq(),9);
                         String img = "";
                         if(imgEntity != null) {
                             img = imgEntity.getSimgUri();
