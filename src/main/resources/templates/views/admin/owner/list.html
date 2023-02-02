@@ -101,19 +101,19 @@
       <td>
         <th:block th:switch="${owner.oiStatus}">
         <span th:case="1" class="normal">정상</span>
-        <span th:case="2" class="banned">정지</span>
-        <span th:case="3" class="wait">승인대기</span>
+        <span th:case="2" class="wait">승인대기</span>
+        <span th:case="3" class="banned">정지</span>
         </th:block>
       </td>
       <td>
         <th:block th:if="${owner.oiStatus == 1}">
-          <a th:href="@{ /owner/status (seq=${owner.oiSeq}, status=2) }" onclick="return confirm('블라인드 처리 하시겠습니까?')">블라인드</a>
+          <a th:href="@{ /owner/status (seq=${owner.oiSeq}, status=3) }" onclick="return confirm('블라인드 처리 하시겠습니까?')">블라인드</a>
         </th:block>
         <th:block th:if="${owner.oiStatus == 2}">
-          <a th:href="@{ /owner/status (seq=${owner.oiSeq}, status=1) }" onclick="return confirm('정지를 해제 하시겠습니까?')">정지해제</a>
+          <a th:href="@{ /owner/status (seq=${owner.oiSeq}, status=1) }" onclick="return confirm('정지를 해제 하시겠습니까?')">가입승인</a>
         </th:block>
         <th:block th:if="${owner.oiStatus == 3}">
-          <a th:href="@{ /owner/status (seq=${owner.oiSeq}, status=1) }" onclick="return confirm('사용승인 하시겠습니까?')">가입승인</a>
+          <a th:href="@{ /owner/status (seq=${owner.oiSeq}, status=1) }" onclick="return confirm('사용승인 하시겠습니까?')">정지해제</a>
         </th:block>
       </td>
       <td>
