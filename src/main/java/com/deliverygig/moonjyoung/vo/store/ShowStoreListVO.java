@@ -12,9 +12,9 @@ public class ShowStoreListVO {
     private String storeName;
     private LocalTime storeCloseTime;
     private Integer discount;
+    private Double scoreAvg;
+    private Integer reviewCount;
     private Integer storeStatus;
-    // private List<StoreClosedDayInfoVO> storeClosedDay ; 
-    //private Long simgSiSeq; 이것은 seq로 받은 join임
     private String simgUriLogo;
 
     public ShowStoreListVO(StoreTimeDetailEntity entity) {
@@ -23,7 +23,6 @@ public class ShowStoreListVO {
         this.storeCloseTime = entity.getStdCloseTime();
         this.discount = entity.getStoreInfoEntity().getSiDiscount();
         this.storeStatus = entity.getStoreInfoEntity().getSiStatus();
-
     }
 
     public Integer getdiscount() {

@@ -18,6 +18,7 @@ import com.deliverygig.moonjyoung.repository.account.CustomerRepository;
 import com.deliverygig.moonjyoung.repository.delivery.PickUpAreaRepository;
 import com.deliverygig.moonjyoung.repository.delivery.UnivInfoRepository;
 import com.deliverygig.moonjyoung.repository.image.PickUpAreaImageRepository;
+import com.deliverygig.moonjyoung.repository.review.ReviewRepository;
 import com.deliverygig.moonjyoung.service.BasketService;
 import com.deliverygig.moonjyoung.vo.delivery.PickUpAreaVO;
 import com.deliverygig.moonjyoung.vo.mycart.AddBasketMenuOptionVO;
@@ -116,6 +117,13 @@ class MoonjyoungApplicationTests {
 		LocalDate nowDate = LocalDate.of(nowTime.getYear(), nowTime.getMonthValue(), nowTime.getDayOfMonth());
 		System.out.println(lastDay.isBefore(nowDate));
 		System.out.println(lastDay.isBefore(nowTime.toLocalDate()));
+	}
+	
+	@Autowired ReviewRepository rRepo;
+	@Test // reviewcount 테스트
+	public void reviewCountTest() {
+		System.out.println(rRepo.countBySiSeq(2L));
+		System.out.println(rRepo.findAvgRiScoreBySiSeq(2L));
 	}
 
 	// @Test // 레코드 테스트
