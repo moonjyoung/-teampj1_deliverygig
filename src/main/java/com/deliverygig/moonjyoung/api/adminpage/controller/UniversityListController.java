@@ -65,6 +65,11 @@ public class UniversityListController {
       return "/admin/university/universityDetail";
   }
 
+  @GetMapping("/delete")
+  public String getUnivDelete(@RequestParam Long univ_no) {
+      uService.deleteUniv(univ_no);
+      return "redirect:/univ/list";
+  }
 
   // @GetMapping("/update")
   // public String postUnivNameUpdate(@RequestParam Long no, Model model) {
@@ -83,12 +88,6 @@ public class UniversityListController {
       // return "/admin/university/universityEdit";
     // }
   // }
-
-  @GetMapping("/delete")
-  public String getUnivDelete(@RequestParam Long univ_no) {
-      uService.deleteUniv(univ_no);
-      return "redirect:/univ/list";
-  }
 
   // @PostMapping("/location/add")
   // public String postLocationAdd(@RequestParam("univ") String univ, @RequestParam("pua") String pua,

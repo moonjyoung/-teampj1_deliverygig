@@ -31,7 +31,7 @@ public class MasterListController {
 
     @GetMapping("/list")
     public String getMasterList(Model model, @RequestParam @Nullable String keyword, @PageableDefault
-    (size = 30, sort = "miSeq", direction = Sort.Direction.DESC) Pageable pageable, HttpSession session) {
+    (size = 10, sort = "miSeq", direction = Sort.Direction.DESC) Pageable pageable, HttpSession session) {
         if (keyword == null) keyword = "";
         model.addAttribute("result", masterListService.getMasterList(keyword, pageable));
         model.addAttribute("keyword", keyword);

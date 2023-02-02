@@ -25,7 +25,7 @@ public class OwnerListController {
 
     @GetMapping("/list")
     public String getOwnerList(Model model, @RequestParam @Nullable String keyword, @PageableDefault
-    (size = 30, sort = "oiSeq", direction = Sort.Direction.DESC) Pageable pageable, HttpSession session) {
+    (size = 10, sort = "oiSeq", direction = Sort.Direction.DESC) Pageable pageable, HttpSession session) {
         if (keyword == null) keyword = "";
         model.addAttribute("result", ownerListService.getOwnerList(keyword, pageable));
         model.addAttribute("keyword", keyword);
