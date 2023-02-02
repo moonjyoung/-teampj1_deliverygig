@@ -1,6 +1,7 @@
 package com.deliverygig.moonjyoung.vo.delivery;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import com.deliverygig.moonjyoung.entity.delivery.StoreTimeDetailEntity;
 
@@ -11,15 +12,15 @@ import lombok.Data;
 public class ClosePickupTimeVO {
     private Long utiSeq;
     private String name;
-    private LocalTime closeTime;
-    private LocalTime pickupTime;
+    private String closeTime;
+    private String pickupTime;
     private Boolean thisTime;
 
     public ClosePickupTimeVO(StoreTimeDetailEntity entity) {
         this.utiSeq = entity.getUnivTimeInfoEntity().getUtiSeq();
         this.name = entity.getUnivTimeInfoEntity().getUtiName();
-        this.closeTime = entity.getStdCloseTime();
-        this.pickupTime = entity.getUnivTimeInfoEntity().getUtiPickupTime1();
+        this.closeTime = entity.getStdCloseTime().format(DateTimeFormatter.ofPattern("HH:mm"));
+        this.pickupTime = entity.getUnivTimeInfoEntity().getUtiPickupTime1().format(DateTimeFormatter.ofPattern("HH:mm"));
         this.thisTime = false;
     }
 }

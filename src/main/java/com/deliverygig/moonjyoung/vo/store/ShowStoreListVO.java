@@ -1,6 +1,7 @@
 package com.deliverygig.moonjyoung.vo.store;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import com.deliverygig.moonjyoung.entity.delivery.StoreTimeDetailEntity;
 
@@ -10,7 +11,7 @@ import lombok.Data;
 public class ShowStoreListVO {
     private Long storeSeq;
     private String storeName;
-    private LocalTime storeCloseTime;
+    private String storeCloseTime;
     private Integer discount;
     private Integer storeStatus;
     // private List<StoreClosedDayInfoVO> storeClosedDay ; 
@@ -20,7 +21,7 @@ public class ShowStoreListVO {
     public ShowStoreListVO(StoreTimeDetailEntity entity) {
         this.storeSeq = entity.getStoreInfoEntity().getSiSeq();
         this.storeName = entity.getStoreInfoEntity().getSiName();
-        this.storeCloseTime = entity.getStdCloseTime();
+        this.storeCloseTime = entity.getStdCloseTime().format(DateTimeFormatter.ofPattern("HH:mm"));
         this.discount = entity.getStoreInfoEntity().getSiDiscount();
         this.storeStatus = entity.getStoreInfoEntity().getSiStatus();
 
