@@ -1,6 +1,5 @@
 package com.deliverygig.moonjyoung.vo.store;
 
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -17,6 +16,7 @@ public class ShowStoreInfoVO {
     private String simgUriCover;
     private Integer minOrderPrice;
     private Integer deliveryPrice;
+    private Long stdSeq;
     private String storeCloseTime;
     private String utiDeliveryTime;
     private String ownerWord;
@@ -35,6 +35,7 @@ public class ShowStoreInfoVO {
         this.siName = entity1.getStoreInfoEntity().getSiName();
         this.minOrderPrice = entity1.getSdiMinOrderPrice();
         this.deliveryPrice = entity1.getSdiDeliveryPrice();
+        this.stdSeq = entity2.getStdSeq();
         this.storeCloseTime = entity2.getStdCloseTime().format(DateTimeFormatter.ofPattern("HH:mm"));
         this.utiDeliveryTime = entity2.getUnivTimeInfoEntity().getUtiPickupTime1().format(DateTimeFormatter.ofPattern("HH:mm"));
         this.ownerWord = entity1.getSdiOwnerWord();
