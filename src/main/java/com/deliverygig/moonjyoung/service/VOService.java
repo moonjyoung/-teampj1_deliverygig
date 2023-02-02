@@ -1,8 +1,5 @@
 package com.deliverygig.moonjyoung.service;
 
-import java.sql.Date;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -15,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deliverygig.moonjyoung.entity.delivery.PickUpAreaEntity;
 import com.deliverygig.moonjyoung.entity.delivery.StoreTimeDetailEntity;
@@ -23,12 +19,9 @@ import com.deliverygig.moonjyoung.entity.delivery.UnivInfoEntity;
 import com.deliverygig.moonjyoung.entity.delivery.UnivTimeInfoEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodDetailOptionEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
-import com.deliverygig.moonjyoung.entity.food.FoodMenuOptionEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodOptionConnectEntity;
 import com.deliverygig.moonjyoung.entity.image.PickUpAreaImageEntity;
 import com.deliverygig.moonjyoung.entity.image.StoreImageEntity;
-import com.deliverygig.moonjyoung.entity.store.StoreClosedDayEntity;
-import com.deliverygig.moonjyoung.entity.store.StoreDetailInfoEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreInfoEntity;
 import com.deliverygig.moonjyoung.repository.delivery.PickUpAreaRepository;
 import com.deliverygig.moonjyoung.repository.delivery.StoreTimeDetailRepository;
@@ -40,28 +33,20 @@ import com.deliverygig.moonjyoung.repository.food.FoodMenuOptionRepository;
 import com.deliverygig.moonjyoung.repository.food.FoodOptionConnectRepository;
 import com.deliverygig.moonjyoung.repository.image.PickUpAreaImageRepository;
 import com.deliverygig.moonjyoung.repository.image.StoreImageRepository;
+import com.deliverygig.moonjyoung.repository.review.ReviewRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreDetailInfoRepository;
 import com.deliverygig.moonjyoung.repository.store.StoreInfoRepository;
 import com.deliverygig.moonjyoung.vo.delivery.ClosePickupTimeVO;
-import com.deliverygig.moonjyoung.vo.delivery.LocationListVO;
-import com.deliverygig.moonjyoung.vo.delivery.PickUpAreaVO;
 import com.deliverygig.moonjyoung.vo.delivery.ShowPuaVO;
-import com.deliverygig.moonjyoung.vo.delivery.StoreUnivTimeVO;
 import com.deliverygig.moonjyoung.vo.delivery.ShowUnivListVO;
 import com.deliverygig.moonjyoung.vo.delivery.ShowUnivTimeVO;
-import com.deliverygig.moonjyoung.vo.delivery.UnivTimeVO;
 import com.deliverygig.moonjyoung.vo.food.ShowFoodDetailOptionVO;
 import com.deliverygig.moonjyoung.vo.food.ShowFoodOptionVO;
 import com.deliverygig.moonjyoung.vo.food.ShowMenuDetailVO;
 import com.deliverygig.moonjyoung.vo.store.ShowStoreInfoVO;
 import com.deliverygig.moonjyoung.vo.store.ShowStoreListVO;
-import com.deliverygig.moonjyoung.vo.store.StoreClosedDayInfoVO;
-import com.deliverygig.moonjyoung.vo.store.StoreDetailInfoVO;
-import com.deliverygig.moonjyoung.vo.store.StoreListInfoVO;
 
-import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -82,7 +67,8 @@ public class VOService {
     @Autowired FoodOptionConnectRepository foodOptionConnectRepository;
     @Autowired FoodMenuOptionRepository foodMenuOptionRepository;
     @Autowired FoodDetailOptionRepository foodDetailOptionRepository;
-   
+    @Autowired ReviewRepository reviewRepository;
+
 //@Autowired StoreImageRepository
     // 이하 코드는 20230120 이후 코드.
     // 각 페이지별로 띄워줄 리스트 정보를 다를 예정
@@ -200,17 +186,25 @@ public class VOService {
         return resultMap;
     }
 
+    // 배달시간별 가게 조회
     public Map<String, Object> getStoreList(Long utiSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<ShowStoreListVO> returnList = new ArrayList<ShowStoreListVO>();
 
-
         for (StoreTimeDetailEntity data : storeTimeDetailRepository.findAll()) {
             if (data.getUnivTimeInfoEntity().getUtiSeq() == utiSeq) {
                 ShowStoreListVO vo = new ShowStoreListVO(data);
+                vo.setReviewCount(reviewRepository.countBySiSeq(data.getStoreInfoEntity().getSiSeq()));
+                if (reviewRepository.findAvgRiScoreBySiSeq(data.getStoreInfoEntity().getSiSeq())==null) {
+                    vo.setScoreAvg(0.0);
+                }
+                else {
+                    
+                    vo.setScoreAvg(((int)(reviewRepository.findAvgRiScoreBySiSeq(data.getStoreInfoEntity().getSiSeq())*10))/10.0);
+                }
 
                 StoreImageEntity imgEntity = storeImageRepository.findBySimgSiSeqAndSimgDivision(data.getStoreInfoEntity().getSiSeq(), 99);
-                 String img = "";
+                String img = "";
                 if(imgEntity != null) {
                     img = imgEntity.getSimgUri();
                     }
