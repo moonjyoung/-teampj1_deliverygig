@@ -1,6 +1,8 @@
 package com.deliverygig.moonjyoung.api.adminpage.service;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -96,15 +98,17 @@ public class UniversityListService {
   public Map<String, Object> selectUnivInfo(Long univ_no) {
     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
     Optional<UnivInfoEntity> entityOpt = univInfoRepository.findById(univ_no);
+    List<UnivTimeInfoEntity> list = new ArrayList<UnivTimeInfoEntity>();
+    list = univTimeInfoRepository.findAllByUtiUiSeq(univ_no);
     if(entityOpt.isEmpty()) {
-        resultMap.put("status", false);
+      resultMap.put("status", false);
     }
     else {
-        resultMap.put("status", true);
-        resultMap.put("no", entityOpt.get().getUiSeq());
-        resultMap.put("univ", entityOpt.get().getUiName());
-        resultMap.put("pickupAreas", entityOpt.get().getPuaEntityList());
-
+      resultMap.put("status", true);
+      resultMap.put("no", entityOpt.get().getUiSeq());
+      resultMap.put("univ", entityOpt.get().getUiName());
+      resultMap.put("pickupAreas", entityOpt.get().getPuaEntityList());
+      resultMap.put("pickupTimes", list);
     }
     return resultMap;
   }

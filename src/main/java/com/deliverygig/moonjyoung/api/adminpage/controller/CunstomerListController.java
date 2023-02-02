@@ -25,7 +25,7 @@ public class CunstomerListController {
 
     @GetMapping("/list")
     public String getCustomerList(Model model, @RequestParam @Nullable String keyword, @PageableDefault
-    (size = 30, sort = "ciSeq", direction = Sort.Direction.DESC) Pageable pageable, HttpSession session) {
+    (size = 10, sort = "ciSeq", direction = Sort.Direction.DESC) Pageable pageable, HttpSession session) {
         if (keyword == null) keyword = "";
         model.addAttribute("result", customerListService.getCustomerList(keyword, pageable));
         model.addAttribute("keyword", keyword);
