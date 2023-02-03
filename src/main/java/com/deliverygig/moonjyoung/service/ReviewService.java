@@ -1,5 +1,8 @@
 package com.deliverygig.moonjyoung.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -52,27 +55,28 @@ public class ReviewService {
     public Map<String, Object> getStoreReview(Long siSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<StoreReviewListVO> returnList = new ArrayList<StoreReviewListVO>();
-        for (ReviewEntity data : rRepo.findAll()) {
-            StoreReviewListVO vo = new StoreReviewListVO();
-            if (data.getBasketMenuOptionsCombineEntity().getFoodMenuInfoEntity().getFoodCategoryEntity()
-                    .getStoreInfoEntity().getSiSeq() == siSeq) {
-                if (data.getRiStatus() == 1) {
-                    vo.setCiSeq(data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getBiCiSeq());
-                    vo.setMenu(data.getBasketMenuOptionsCombineEntity().getFoodMenuInfoEntity().getFmiName());
-                    vo.setMenuOption(data.getBasketMenuOptionsCombineEntity().getBmocOptionAll());
-                    vo.setReviewScore(data.getRiScore());
-                    vo.setReviewContent(data.getRiContents());
-                    vo.setReviewRegDt(data.getRiRegDt());
-                }
-            } else {
-                continue;
-            }
-            returnList.add(vo);
+        if (rRepo.findAllBySiSeqAndRiStatus(siSeq, 1).size()==0) {
+            resultMap.put("status", true);
+            resultMap.put("code", HttpStatus.OK);
+            resultMap.put("message", "조회 완료(조건을 만족하는 리뷰가 없습니다)");
         }
-        resultMap.put("status", true);
-        resultMap.put("code", HttpStatus.OK);
-        resultMap.put("message", "조회 완료");
-        resultMap.put("list", returnList);
+        else {
+            for (ReviewEntity data : rRepo.findAllBySiSeqAndRiStatus(siSeq, 1)) {
+                StoreReviewListVO vo = new StoreReviewListVO();
+                vo.setCiSeq(data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getBiCiSeq());
+                vo.setCiNickName(data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getCustomerInfoEntity().getCiNickName());
+                vo.setMenu(data.getBasketMenuOptionsCombineEntity().getFoodMenuInfoEntity().getFmiName());
+                vo.setMenuOption(data.getBasketMenuOptionsCombineEntity().getBmocOptionAll());
+                vo.setReviewScore(data.getRiScore());
+                vo.setReviewContent(data.getRiContents());
+                vo.setReviewRegDt(data.getRiRegDt());
+                returnList.add(vo);
+            }
+            resultMap.put("status", true);
+            resultMap.put("code", HttpStatus.OK);
+            resultMap.put("message", "조회 완료");
+            resultMap.put("list", returnList);
+        }
         return resultMap;
     }
 
@@ -84,6 +88,7 @@ public class ReviewService {
             StoreReviewListVO vo = new StoreReviewListVO();
             if (data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getBiCiSeq() == ciSeq) {
                 vo.setCiSeq(data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getBiCiSeq());
+                vo.setCiNickName(data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getCustomerInfoEntity().getCiNickName());
                 vo.setMenu(data.getBasketMenuOptionsCombineEntity().getFoodMenuInfoEntity().getFmiName());
                 vo.setMenuOption(data.getBasketMenuOptionsCombineEntity().getBmocOptionAll());
                 vo.setReviewScore(data.getRiScore());
