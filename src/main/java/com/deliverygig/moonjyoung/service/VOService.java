@@ -204,7 +204,7 @@ public class VOService {
                 }
 
                 StoreImageEntity imgEntity = storeImageRepository.findBySimgSiSeqAndSimgDivision(data.getStoreInfoEntity().getSiSeq(), 9);
-                 String img = "";
+                String img = "";
                 if(imgEntity != null) {
                     img = imgEntity.getSimgUri();
                     }
