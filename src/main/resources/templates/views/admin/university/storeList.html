@@ -82,7 +82,7 @@
             <th>번호</th>
             <th>가게명</th>
             <th>가게상태</th>
-            <th>승인</th>
+            <th>상태변경</th>
             <th style="color: crimson;">삭제</th>
         </tr>
     </thead>
@@ -94,6 +94,7 @@
           <th:block th:switch="${store.siStatus}">
           <span th:case="1" class="normal">정상</span>
           <span th:case="2" class="banned">휴무</span>
+          <span th:case="3" class="banned">블라인드</span>
           <span th:case="9" class="wait">가입대기</span>
           </th:block>
         </td>
@@ -102,7 +103,10 @@
             <a th:href="@{ /store/status (seq=${store.siSeq}, status=1) }" onclick="return confirm('사용승인 하시겠습니까?')">사용승인</a>
           </th:block>
           <th:block th:if="${store.siStatus == 1}">
-            <a th:href="@{ /store/status (seq=${store.siSeq}, status=9) }" onclick="return confirm('가입대기로 변경하시겠습니까?')">가입대기</a>
+            <a th:href="@{ /store/status (seq=${store.siSeq}, status=3) }" onclick="return confirm('블라인드 처리하시겠습니까?')">블라인드</a>
+          </th:block>
+          <th:block th:if="${store.siStatus == 3}">
+            <a th:href="@{ /store/status (seq=${store.siSeq}, status=1) }" onclick="return confirm('블라인드 해제 하시겠습니까?')">정지해제</a>
           </th:block>
         </td>
         <td>
