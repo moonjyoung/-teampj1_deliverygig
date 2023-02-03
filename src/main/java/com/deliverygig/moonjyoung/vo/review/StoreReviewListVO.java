@@ -1,6 +1,6 @@
 package com.deliverygig.moonjyoung.vo.review;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import lombok.Data;
 
@@ -12,7 +12,7 @@ public class StoreReviewListVO {
     private String menuOption;
     private Integer reviewScore;
     private String reviewContent;
-    private LocalDateTime reviewRegDt;
+    private LocalDate reviewRegDt;
 }
 
 

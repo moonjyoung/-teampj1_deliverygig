@@ -28,4 +28,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
     // 가게 리뷰 조회
     @Query(value = "select * from review_info a left join basket_menu_options_combine b on a.ri_bmoc_seq=b.bmoc_seq left join store_time_detail c on b.bmoc_std_seq=c.std_seq left join store_info d on c.std_si_seq=d.si_seq where d.si_seq = :siSeq and a.ri_status = :riStatus order by a.ri_reg_dt desc", nativeQuery = true)
     public List<ReviewEntity> findAllBySiSeqAndRiStatus(@Param("siSeq") Long siSeq, @Param("riStatus") Integer riStatus);
+    // 내 리뷰 조회
+    @Query(value = "select * from review_info a left join basket_menu_options_combine b on a.ri_bmoc_seq=b.bmoc_seq left join basket_info c on b.bmoc_bi_seq=c.bi_seq where c.bi_ci_seq = :ciSeq order by a.ri_reg_dt desc", nativeQuery = true)
+    public List<ReviewEntity> findAllByCiSeq(@Param("ciSeq") Long ciSeq);
 }

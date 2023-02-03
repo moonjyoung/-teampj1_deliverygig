@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.deliverygig.moonjyoung.entity.review.ReviewEntity;
+import com.deliverygig.moonjyoung.repository.account.CustomerRepository;
 import com.deliverygig.moonjyoung.repository.mycart.BasketMenuOptionsCombineRepository;
 import com.deliverygig.moonjyoung.repository.review.ReviewRepository;
 import com.deliverygig.moonjyoung.vo.review.AddReviewVO;
@@ -20,6 +21,7 @@ import com.deliverygig.moonjyoung.vo.review.StoreReviewListVO;
 
 @Service
 public class ReviewService {
+    @Autowired CustomerRepository customerRepository;
     @Autowired
     ReviewRepository rRepo;
     @Autowired
@@ -56,9 +58,9 @@ public class ReviewService {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<StoreReviewListVO> returnList = new ArrayList<StoreReviewListVO>();
         if (rRepo.findAllBySiSeqAndRiStatus(siSeq, 1).size()==0) {
-            resultMap.put("status", true);
-            resultMap.put("code", HttpStatus.OK);
-            resultMap.put("message", "조회 완료(조건을 만족하는 리뷰가 없습니다)");
+            resultMap.put("status", false);
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            resultMap.put("message", "조건을 만족하는 리뷰가 없습니다");
         }
         else {
             for (ReviewEntity data : rRepo.findAllBySiSeqAndRiStatus(siSeq, 1)) {
@@ -69,7 +71,7 @@ public class ReviewService {
                 vo.setMenuOption(data.getBasketMenuOptionsCombineEntity().getBmocOptionAll());
                 vo.setReviewScore(data.getRiScore());
                 vo.setReviewContent(data.getRiContents());
-                vo.setReviewRegDt(data.getRiRegDt());
+                vo.setReviewRegDt(data.getRiRegDt().toLocalDate());
                 returnList.add(vo);
             }
             resultMap.put("status", true);
@@ -84,25 +86,35 @@ public class ReviewService {
     public Map<String, Object> getMyReview(Long ciSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         List<StoreReviewListVO> returnList = new ArrayList<StoreReviewListVO>();
-        for (ReviewEntity data : rRepo.findAll()) {
-            StoreReviewListVO vo = new StoreReviewListVO();
-            if (data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getBiCiSeq() == ciSeq) {
+        if (customerRepository.findById(ciSeq).isEmpty()) {
+            resultMap.put("status", false);
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            resultMap.put("message", "존재하지 않는 회원입니다");
+        }
+        else if (rRepo.findAllByCiSeq(ciSeq).size()==0) {
+            resultMap.put("status", false);
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            resultMap.put("message", "작성한 리뷰가 없습니다");
+        }
+        else {
+            for (ReviewEntity data : rRepo.findAllByCiSeq(ciSeq)) {
+                StoreReviewListVO vo = new StoreReviewListVO();
+    
                 vo.setRiSeq(data.getRiSeq());
                 vo.setCiNickName(data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getCustomerInfoEntity().getCiNickName());
                 vo.setMenu(data.getBasketMenuOptionsCombineEntity().getFoodMenuInfoEntity().getFmiName());
                 vo.setMenuOption(data.getBasketMenuOptionsCombineEntity().getBmocOptionAll());
                 vo.setReviewScore(data.getRiScore());
                 vo.setReviewContent(data.getRiContents());
-                vo.setReviewRegDt(data.getRiRegDt());
-            } else {
-                continue;
+                vo.setReviewRegDt(data.getRiRegDt().toLocalDate());
+    
+                returnList.add(vo);
             }
-            returnList.add(vo);
+            resultMap.put("status", true);
+            resultMap.put("code", HttpStatus.OK);
+            resultMap.put("message", "조회 완료");
+            resultMap.put("list", returnList);
         }
-        resultMap.put("status", true);
-        resultMap.put("code", HttpStatus.OK);
-        resultMap.put("message", "조회 완료");
-        resultMap.put("list", returnList);
         return resultMap;
     }
 }
