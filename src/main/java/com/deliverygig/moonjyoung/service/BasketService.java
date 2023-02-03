@@ -190,9 +190,15 @@ public class BasketService {
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
             return resultMap;
         }
-        else if (data.getStdSeq()==null) {
+        else if (data.getStdSeq()==null || storeTimeDetailRepository.findById(data.getStdSeq()).isEmpty()) {
             resultMap.put("status", false);
             resultMap.put("message", "배달시간 정보가 없음");
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            return resultMap;
+        }
+        else if (storeTimeDetailRepository.findById(data.getStdSeq()).get().getStoreInfoEntity()==null || storeTimeDetailRepository.findById(data.getStdSeq()).get().getStoreInfoEntity().getSiStatus()!=1) {
+            resultMap.put("status", false);
+            resultMap.put("message", "가게 정보가 없거나 영업중이 아닙니다.");
             resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
             return resultMap;
         }
