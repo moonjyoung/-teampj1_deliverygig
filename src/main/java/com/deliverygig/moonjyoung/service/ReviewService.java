@@ -63,7 +63,7 @@ public class ReviewService {
         else {
             for (ReviewEntity data : rRepo.findAllBySiSeqAndRiStatus(siSeq, 1)) {
                 StoreReviewListVO vo = new StoreReviewListVO();
-                vo.setCiSeq(data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getBiCiSeq());
+                vo.setRiSeq(data.getRiSeq());
                 vo.setCiNickName(data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getCustomerInfoEntity().getCiNickName());
                 vo.setMenu(data.getBasketMenuOptionsCombineEntity().getFoodMenuInfoEntity().getFmiName());
                 vo.setMenuOption(data.getBasketMenuOptionsCombineEntity().getBmocOptionAll());
@@ -87,7 +87,7 @@ public class ReviewService {
         for (ReviewEntity data : rRepo.findAll()) {
             StoreReviewListVO vo = new StoreReviewListVO();
             if (data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getBiCiSeq() == ciSeq) {
-                vo.setCiSeq(data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getBiCiSeq());
+                vo.setRiSeq(data.getRiSeq());
                 vo.setCiNickName(data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getCustomerInfoEntity().getCiNickName());
                 vo.setMenu(data.getBasketMenuOptionsCombineEntity().getFoodMenuInfoEntity().getFmiName());
                 vo.setMenuOption(data.getBasketMenuOptionsCombineEntity().getBmocOptionAll());
