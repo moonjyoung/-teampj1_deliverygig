@@ -47,7 +47,7 @@ public class BasketService {
     // 장바구니 조회
     public Map<String, Object> getBasketInfo(Long ciSeq) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        autoDeleteMenu(); // 조회 시작하면서 주문시간이 지난 메뉴는 자동 삭제
+        // autoDeleteMenu(); // 조회 시작하면서 주문시간이 지난 메뉴는 자동 삭제
         
         if (basketInfoRepository.findByBiCiSeqAndBiStatus(ciSeq, 1)==null) {
             resultMap.put("status", false);
@@ -181,7 +181,7 @@ public class BasketService {
     public Map<String, Object> getMenuOptions(AddBasketMenuOptionVO data) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
 
-        autoDeleteMenu(); // 추가되면서 주문시간이 지난 메뉴는 자동 삭제
+        // autoDeleteMenu(); // 추가되면서 주문시간이 지난 메뉴는 자동 삭제
 
         // 유효성 검사
         if (data.getCiSeq()==null) {
