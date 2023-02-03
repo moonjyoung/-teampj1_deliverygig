@@ -180,8 +180,36 @@ public class BasketService {
     // 메뉴 추가
     public Map<String, Object> getMenuOptions(AddBasketMenuOptionVO data) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+
+        autoDeleteMenu(); // 추가되면서 주문시간이 지난 메뉴는 자동 삭제
+
+        // 유효성 검사
+        if (data.getCiSeq()==null) {
+            resultMap.put("status", false);
+            resultMap.put("message", "회원 정보가 없음");
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            return resultMap;
+        }
+        else if (data.getStdSeq()==null) {
+            resultMap.put("status", false);
+            resultMap.put("message", "배달시간 정보가 없음");
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            return resultMap;
+        }
+        else if (data.getFmiSeq()==null) {
+            resultMap.put("status", false);
+            resultMap.put("message", "메뉴 정보가 없음");
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            return resultMap;
+        }
+        else if (data.getFdoSeqList()==null) {
+            resultMap.put("status", false);
+            resultMap.put("message", "메뉴옵션 정보가 올바르지 않음");
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            return resultMap;
+        }
+        
         ShowBasketMenuOptionVO vo = new ShowBasketMenuOptionVO();
-        // Long fmiSeq = data.getBfVO().getSeq();
         Long fmiSeq = data.getFmiSeq();
         Integer price = (int)(foodMenuInfoRepository.findByFmiSeq(fmiSeq).getFmiPrice()*(1-(foodMenuInfoRepository.findByFmiSeq(fmiSeq).getFoodCategoryEntity().getStoreInfoEntity().getSiDiscount())/100.0));
         
@@ -295,6 +323,9 @@ public class BasketService {
                     }
                 }
             }
+        }
+        if (sfdoVOList.size()==1) {
+            optionAll += "]";
         }
         return optionAll;
     }
