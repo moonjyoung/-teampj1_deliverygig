@@ -49,4 +49,10 @@ public class BasketController {
         Map<String, Object> resultMap = basketService.deleteMenuOptions(bmocSeq);
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
+
+    @DeleteMapping("/basket/deleteAll")
+    public ResponseEntity<Object> deleteBasketMenuAll(@RequestParam Long ciSeq) {
+        Map<String, Object> resultMap = basketService.deleteAllMenuOptions(ciSeq);
+        return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+    }
 }

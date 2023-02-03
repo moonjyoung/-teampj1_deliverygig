@@ -305,6 +305,34 @@ public class BasketService {
         return resultMap;
     }
 
+    // 메뉴 전체 삭제
+    public Map<String, Object> deleteAllMenuOptions(Long ciSeq) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        
+        if (ciSeq==null || customerRepository.findByCiSeq(ciSeq)==null) {
+            resultMap.put("status", false);
+            resultMap.put("message", "유효하지 않은 회원번호");
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            return resultMap;
+        }
+        else if (basketInfoRepository.findByBiCiSeqAndBiStatus(ciSeq, 1)==null) {
+            resultMap.put("status", false);
+            resultMap.put("message", "장바구니가 존재하지 않음");
+            resultMap.put("code", HttpStatus.NOT_ACCEPTABLE);
+            return resultMap;
+        }
+        else {
+            BasketInfoEntity basketEntity = basketInfoRepository.findByBiCiSeqAndBiStatus(ciSeq, 1);
+            for (BasketMenuOptionsCombineEntity data : basketMenuOptionsCombineRepository.findAllByBmocBiSeq(basketEntity.getBiSeq())) {
+                basketMenuOptionsCombineRepository.delete(data);
+            }
+            resultMap.put("status", true);
+            resultMap.put("message", "전체 삭제 완료");
+            resultMap.put("code", HttpStatus.CREATED);
+            return resultMap;
+        }
+    }
+
     public String getOptionName(Long fmiSeq, List<ShowFoodDetailOptionVO> sfdoVOList) {
         String optionAll = "";
         if (foodOptionConnectRepository.findAllByFocFmiSeq(fmiSeq).size()!=0) {
