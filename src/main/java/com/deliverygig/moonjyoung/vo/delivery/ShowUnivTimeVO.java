@@ -1,6 +1,4 @@
 package com.deliverygig.moonjyoung.vo.delivery;
-
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import com.deliverygig.moonjyoung.entity.delivery.UnivTimeInfoEntity;
