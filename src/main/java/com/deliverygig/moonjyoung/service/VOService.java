@@ -3,6 +3,7 @@ package com.deliverygig.moonjyoung.service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import com.deliverygig.moonjyoung.entity.food.FoodMenuInfoEntity;
 import com.deliverygig.moonjyoung.entity.food.FoodOptionConnectEntity;
 import com.deliverygig.moonjyoung.entity.image.PickUpAreaImageEntity;
 import com.deliverygig.moonjyoung.entity.image.StoreImageEntity;
+import com.deliverygig.moonjyoung.entity.review.ReviewEntity;
 import com.deliverygig.moonjyoung.entity.store.StoreInfoEntity;
 import com.deliverygig.moonjyoung.repository.delivery.PickUpAreaRepository;
 import com.deliverygig.moonjyoung.repository.delivery.StoreTimeDetailRepository;
@@ -249,7 +251,16 @@ public class VOService {
                         if(imgEntity != null) {
                             img = imgEntity.getSimgUri();
                         }
-                            vo.setSimgUriLogo(img);
+                        vo.setSimgUriLogo(img);
+                        if (reviewRepository.findAvgRiScoreBySiSeq(data.getStoreInfoEntity().getSiSeq())==null) {
+                               vo.setScoreAvg(0.0);
+                        }
+                        else {
+                            Double reviewAvg = (int) (reviewRepository
+                                    .findAvgRiScoreBySiSeq(data.getStoreInfoEntity().getSiSeq()) * 10) / 10.0;
+                            vo.setScoreAvg(reviewAvg);
+                        }
+                        vo.setReviewCount(reviewRepository.countBySiSeq(data.getStoreInfoEntity().getSiSeq()));
                     returnList.add(vo);
                 }
             }
