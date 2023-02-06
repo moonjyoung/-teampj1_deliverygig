@@ -65,6 +65,10 @@ public class ReviewService {
         else {
             for (ReviewEntity data : rRepo.findAllBySiSeqAndRiStatus(siSeq, 1)) {
                 StoreReviewListVO vo = new StoreReviewListVO();
+                // customerInfo 유효성검사 임시 땜빵
+                if (data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getCustomerInfoEntity()==null) {
+                    continue;
+                }
                 vo.setRiSeq(data.getRiSeq());
                 vo.setCiNickName(data.getBasketMenuOptionsCombineEntity().getBasketInfoEntity().getCustomerInfoEntity().getCiNickName());
                 vo.setMenu(data.getBasketMenuOptionsCombineEntity().getFoodMenuInfoEntity().getFmiName());
