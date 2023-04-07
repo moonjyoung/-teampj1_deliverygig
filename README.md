@@ -27,3 +27,7 @@ VSCode, DBeaver, Postman
 ## 프로젝트 관리
 
 GitHub, Slack, Figma, Notion, Google Sheets, Excel
+
+## 프론트 git link
+
+https://github.com/Banjae/BaedalUniv.git
